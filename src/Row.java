@@ -62,7 +62,7 @@ public class Row {
     }
 
     public void setPeopleVaccinated(String peopleVaccinated) {
-        if (peopleVaccinated.isEmpty()) {
+        if (peopleVaccinated.isEmpty() || Integer.parseInt(peopleVaccinated.trim()) < 0) {
             this.peopleVaccinated = 0;
         } else {
             this.peopleVaccinated = Integer.parseInt(peopleVaccinated.trim());
@@ -78,7 +78,7 @@ public class Row {
     }
 
     public void setNewCases(String newCases) {
-        if (newCases.isEmpty()) {
+        if (newCases.isEmpty() || Integer.parseInt(newCases.trim()) < 0) {
             this.newCases = 0;
         } else {
             this.newCases = Integer.parseInt(newCases.trim());
@@ -98,7 +98,7 @@ public class Row {
     }
 
     public void setNewDeaths(String newDeaths) {
-        if (newDeaths.isEmpty()) {
+        if (newDeaths.isEmpty() || Integer.parseInt(newDeaths.trim()) < 0) {
             this.newDeaths = 0;
         } else {
             this.newDeaths = Integer.parseInt(newDeaths.trim());
@@ -138,7 +138,7 @@ public class Row {
     }
 
     public void setPopulation(String population) {
-        if (population.isEmpty()) {
+        if (population.isEmpty() || Long.parseLong(population.trim()) < 0) {
             this.population = 0;
         } else {
             this.population = Long.parseLong(population.trim());
