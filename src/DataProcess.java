@@ -14,14 +14,14 @@ public class DataProcess {
         String[] title = dataByRow.get(0).split(",");
 
         // Array list to add Row object
-        ArrayList<Row> rows = new ArrayList<Row>();
+        ArrayList<Row> rows = new ArrayList<>();
 
         // Hash map to temporary row
-        HashMap<String, String> tempMap = new HashMap<String, String>();
+        HashMap<String, String> tempMap = new HashMap<>();
 
         // Temporary variable
         String[] tempData;
-        Row tempRow = new Row();
+        Row tempRow;
 
         // Loop through rows
         for (int i = 1; i < dataByRow.size(); i++) {
@@ -53,7 +53,7 @@ public class DataProcess {
 
     public static ArrayList<String> readCsvFile(String pathName) throws FileNotFoundException {
         Scanner sc = new Scanner(new File(pathName));
-        ArrayList<String> dataByRow = new ArrayList<String>();
+        ArrayList<String> dataByRow = new ArrayList<>();
 
         while (sc.hasNextLine()) {
             dataByRow.add(sc.nextLine());
