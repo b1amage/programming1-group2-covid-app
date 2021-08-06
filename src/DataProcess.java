@@ -11,17 +11,14 @@ public class DataProcess {
         ArrayList<String> dataByRow = readCsvFile("src/data.csv");
 
         // Get title
-        String[] title = dataByRow.get(0).split(",");
+        String[] title = getTitle(dataByRow);
 
         // Array list to add Row object
         ArrayList<Row> rows = new ArrayList<>();
 
-        // Hash map to temporary row
-        HashMap<String, String> tempMap = new HashMap<>();
-
         // Temporary variable
         String[] tempData;
-        Row tempRow;
+        HashMap<String, String> tempMap = new HashMap<>();
 
         // Loop through rows
         for (int i = 1; i < dataByRow.size(); i++) {
@@ -36,19 +33,32 @@ public class DataProcess {
                 }
             }
 
-            tempRow = createNewRowFromMap(tempMap);
-
             // Add row object to array list
-            rows.add(tempRow);
+            rows.add(createNewRowFromMap(tempMap));
         }
+
+        // Process the vaccinated people
+        processVaccinatedPeople(rows);
 
         // Print processed data
         displayRows(rows);
     }
 
+    public static void processVaccinatedPeople(ArrayList<Row> rows) {
+        for (int i = 0; i < rows.size(); i++) {
+            if (rows.get(i).getPeopleVaccinated() == -1 && i > 0) {
+                rows.get(i).setPeopleVaccinated(rows.get(i-1).getPeopleVaccinated());
+            }
+        }
+    }
+
     public static Row createNewRowFromMap(HashMap<String, String> map) {
         return new Row(map.get("continent"), map.get("date"), map.get("people_vaccinated"), map.get("new_cases"),
                 map.get("new_deaths"), map.get("location"), map.get("iso_code"), map.get("population"));
+    }
+
+    public static String[] getTitle(ArrayList<String> dataByRow) {
+        return dataByRow.get(0).split(",");
     }
 
     public static ArrayList<String> readCsvFile(String pathName) throws FileNotFoundException {

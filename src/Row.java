@@ -63,7 +63,7 @@ public class Row {
 
     public void setPeopleVaccinated(String peopleVaccinated) {
         if (peopleVaccinated.isEmpty() || Integer.parseInt(peopleVaccinated.trim()) < 0) {
-            this.peopleVaccinated = 0;
+            this.peopleVaccinated = -1;
         } else {
             this.peopleVaccinated = Integer.parseInt(peopleVaccinated.trim());
         }
@@ -148,7 +148,7 @@ public class Row {
     // toString method
     public void display() {
         System.out.println("continent: " + continent);
-        System.out.println("data: " + date);
+        System.out.println("date: " + date);
         System.out.println("people_vaccinated: " + peopleVaccinated);
         System.out.println("new_cases: " + newCases);
         System.out.println("new_deaths: " + newDeaths);
