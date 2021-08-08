@@ -3,32 +3,36 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Data {
-    protected static ArrayList<Row> rows;
-
-    static {
-        try {
-            rows = DataProcess.createRowList();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
+    protected ArrayList<Row> rows = DataProcess.createRowList();
+    protected ArrayList<Row> rowsFromStartDate = new ArrayList<Row>();
     private String continent;
     private String country;
     private String startDate;
     private String endDate;
     private int nextDayCount;
 
-    public Data() {}
+    public Data() throws FileNotFoundException {}
 
-    public Data(String continent, String country, String startDate, String endDate) {
+    public void createRowData() {
+        for (Row row : rows) {
+            if (row.getDate().equals(startDate) && (row.getContinent().equals(continent) || row.getLocation().equals(country))) {
+                for (int i = Math.min(rows.indexOf(row),rows.indexOf(row) + nextDayCount); i < Math.max(rows.indexOf(row),rows.indexOf(row) + nextDayCount) && i < rows.size() && i > -1; i++) {
+                    if (rows.get(i) != null) {
+                        rowsFromStartDate.add(rows.get(i));
+                    }
+                }
+            }
+        }
+    }
+
+    public Data(String continent, String country, String startDate, String endDate) throws FileNotFoundException {
         this.continent = continent;
         this.country = country;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    public Data(String continent, String country, String startDate, int nextDayCount) {
+    public Data(String continent, String country, String startDate, int nextDayCount) throws FileNotFoundException {
         this.continent = continent;
         this.country = country;
         this.startDate = startDate;
@@ -45,7 +49,7 @@ public class Data {
                 "(e.g., 1 week to 1/8/2021 means there are 8 days from 1/1/2021 to 1/8/2021)");
     }
 
-    public static Data createData() {
+    public static Data createData() throws FileNotFoundException {
         Data data = new Data();
         Scanner sc = new Scanner(System.in);
         System.out.println("Use country (1) or continent (2)?");
@@ -81,6 +85,10 @@ public class Data {
                 endDate = sc.nextLine();
                 data.setStartDate(startDate);
                 data.setEndDate(endDate);
+                String[] splitStartDate = startDate.split("/");
+                String[] splitEndDate = endDate.split("/");
+                int dayCount = (Integer.parseInt(splitEndDate[2]) - Integer.parseInt(splitStartDate[2]))*365 + (Integer.parseInt(splitEndDate[0]) - Integer.parseInt(splitStartDate[0])) * 30 +  (Integer.parseInt(splitEndDate[1]) - Integer.parseInt(splitStartDate[1]));
+                data.setNextDayCount(dayCount);
                 break;
             case 2:
                 System.out.println("Enter date: ");
