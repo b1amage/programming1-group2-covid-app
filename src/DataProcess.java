@@ -6,7 +6,14 @@ import java.util.*;
 public class DataProcess {
 
     public static void main(String[] args) throws IOException {
+        // Call createRowList method to create row
+        ArrayList<Row> rows = createRowList();
 
+        // Print processed data
+        displayRows(rows);
+    }
+
+    public static ArrayList<Row> createRowList() throws FileNotFoundException {
         // Read CSV file to an array list
         ArrayList<String> dataByRow = readCsvFile("src/data.csv");
 
@@ -40,8 +47,7 @@ public class DataProcess {
         // Process the vaccinated people
         processVaccinatedPeople(rows);
 
-        // Print processed data
-        displayRows(rows);
+        return rows;
     }
 
     public static void processVaccinatedPeople(ArrayList<Row> rows) {
