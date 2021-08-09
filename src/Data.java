@@ -83,6 +83,8 @@ public class Data {
             if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
                 // Add each row to the array list
                 for (int i = startIndex; i <= endIndex; i++) {
+
+                    // Check if the data of country or continent is end
                     if (rows.get(i).getContinent().equals(continent) || rows.get(i).getLocation().equals(country)) {
                         rowsFromStartDate.add(rows.get(i));
                     }
@@ -101,6 +103,7 @@ public class Data {
                     for (int i = Math.min(rows.indexOf(row),rows.indexOf(row) + nextDayCount); i <= Math.max(rows.indexOf(row),rows.indexOf(row) + nextDayCount) && i < rows.size() && i > -1; i++) {
 
                         if (rows.get(i) != null) { // Add if the row is not null
+                            // Check if the data of country or continent is end
                             if (rows.get(i).getContinent().equals(continent) || rows.get(i).getLocation().equals(country)) {
                                 rowsFromStartDate.add(rows.get(i));
                             }
