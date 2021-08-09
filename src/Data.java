@@ -3,53 +3,19 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Data {
-    private ArrayList<Row> rows = DataProcess.createRowList();
-    private ArrayList<Row> rowsFromStartDate = new ArrayList<Row>();
+    // Attributes
+    private ArrayList<Row> rows = DataProcess.createRowList(); // Whole data
+    private ArrayList<Row> rowsFromStartDate = new ArrayList<Row>(); // Data of the area and time range
     private String continent;
     private String country;
     private String startDate;
     private String endDate;
-    private int nextDayCount;
+    private int nextDayCount; // Use to store the next day (positive int) or previous day (negative int)
 
+    // Empty constructor
     public Data() throws FileNotFoundException {}
 
-    public void test() {
-        System.out.println(endDate == null);
-    }
-
-    public void createRowData() {
-        if (endDate != null) {
-            int startIndex = -1;
-            int endIndex = -1;
-            for (Row row : rows) {
-                if (row.getDate().equals(startDate) && (row.getContinent().equals(continent) || row.getLocation().equals(country))) {
-                    startIndex = rows.indexOf(row);
-                }
-                if (row.getDate().equals(endDate) && (row.getContinent().equals(continent) || row.getLocation().equals(country))) {
-                    endIndex = rows.indexOf(row);
-                }
-            }
-
-            if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
-                for (int i = startIndex; i <= endIndex; i++) {
-                    rowsFromStartDate.add(rows.get(i));
-                }
-            } else {
-                System.out.println("Error in date, country, or continent");
-            }
-        } else {
-            for (Row row : rows) {
-                if (row.getDate().equals(startDate) && (row.getContinent().equals(continent) || row.getLocation().equals(country))) {
-                    for (int i = Math.min(rows.indexOf(row),rows.indexOf(row) + nextDayCount); i <= Math.max(rows.indexOf(row),rows.indexOf(row) + nextDayCount) && i < rows.size() && i > -1; i++) {
-                        if (rows.get(i) != null) {
-                            rowsFromStartDate.add(rows.get(i));
-                        }
-                    }
-                }
-            }
-        }
-    }
-
+    // Constructors
     public Data(String continent, String country, String startDate, String endDate) throws FileNotFoundException {
         this.continent = continent;
         this.country = country;
@@ -64,6 +30,77 @@ public class Data {
         this.nextDayCount = nextDayCount;
     }
 
+    public static Data createData() throws FileNotFoundException {
+        // Create new data object to process
+        Data data = new Data();
+
+        // Ask for country or continent
+        String[] countryAndContinent = areaInput();
+
+        // Set values to the data object
+        data.setCountry(countryAndContinent[0]);
+        data.setContinent(countryAndContinent[1]);
+
+        // Ask kind of date
+        String[] dateInformation = dateOptionInput();
+
+        // Use setters to set value to the data
+        data.setStartDate(dateInformation[0]);
+        data.setEndDate(dateInformation[1]);
+        data.setNextDayCount(Integer.parseInt(dateInformation[2]));
+
+        return data;
+    }
+
+    public void createRowData() {
+        if (endDate != null) { // If user use option (1) start date and end date
+            // Set initial to -1
+            int startIndex = -1;
+            int endIndex = -1;
+
+            // Find start and end index
+            for (Row row : rows) {
+                // If start date and (continent or country) match, assign the index to the start
+                if (row.getDate().equals(startDate) && (row.getContinent().equals(continent) || row.getLocation().equals(country))) {
+                    startIndex = rows.indexOf(row);
+                }
+                // If end date and (continent or country) match, assign the index to the start
+                if (row.getDate().equals(endDate) && (row.getContinent().equals(continent) || row.getLocation().equals(country))) {
+                    endIndex = rows.indexOf(row);
+                }
+            }
+
+            // If start and end index found
+            if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+                // Add each row to the array list
+                for (int i = startIndex; i <= endIndex; i++) {
+                    rowsFromStartDate.add(rows.get(i));
+                }
+            } else { // No start or end date found
+                System.out.println("Error in date, country, or continent");
+            }
+
+        } else { // User choose option (2) or (3)
+            for (Row row : rows) { // Loop through rows
+
+                // If start date and (continent or country) match, start processing array list
+                if (row.getDate().equals(startDate) && (row.getContinent().equals(continent) || row.getLocation().equals(country))) {
+
+                    // Get min value between rows.indexOf(row) and rows.indexOf(row) + nextDayCount (case negative nextDayCount)
+                    for (int i = Math.min(rows.indexOf(row),rows.indexOf(row) + nextDayCount); i <= Math.max(rows.indexOf(row),rows.indexOf(row) + nextDayCount) && i < rows.size() && i > -1; i++) {
+
+                        if (rows.get(i) != null) { // Add if the row is not null
+                            rowsFromStartDate.add(rows.get(i));
+                        }
+
+                    }
+
+                    // Break after loop to save time
+                    break;
+                }
+            }
+        }
+    }
 
     public static void showDateChoiceMenu() {
         System.out.println("Enter your date choice: ");
@@ -74,13 +111,19 @@ public class Data {
                 "(e.g., 1 week to 1/8/2021 means there are 8 days from 1/1/2021 to 1/8/2021)");
     }
 
-    public static Data createData() throws FileNotFoundException {
-        Data data = new Data();
+    /**
+     * This method is used to get the area input from user
+     * @return String[] {country, continent}
+     */
+    private static String[] areaInput() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Use country (1) or continent (2)?");
-        int areaChoice = Integer.parseInt(sc.nextLine());
         String country;
         String continent;
+
+        System.out.println("Use country (1) or continent (2)?");
+        int areaChoice = Integer.parseInt(sc.nextLine());
+
+        // If user use country, set continent to empty string, and vice versa
         if (areaChoice == 1) {
             System.out.println("Enter country: ");
             country = sc.nextLine();
@@ -91,69 +134,75 @@ public class Data {
             country = "";
         }
 
-        data.setCountry(country);
-        data.setContinent(continent);
+        return new String[] {country, continent};
+    }
 
+    /**
+     * This method is used to get user date option input
+     * @return String[] {startDate, endDate, nextDayCount}
+     */
+    private static String[] dateOptionInput() {
         showDateChoiceMenu();
+        // Get option
+        Scanner sc = new Scanner(System.in);
         int dateChoice = Integer.parseInt(sc.nextLine());
-        String startDate;
-        String endDate;
-        int day;
+
+        // Initialize necessary variable and set default values to them
+        String startDate = null;
+        String endDate = null;
+        String day = "0"; // Set day to 0 String to avoid null pointer exception when user use option 1;
         int dayOrWeekChoice;
 
-
         switch (dateChoice) {
-            case 1:
+            case 1: // Use start date and end date
                 System.out.println("Enter start date: ");
                 startDate = sc.nextLine();
                 System.out.println("Enter end date: ");
                 endDate = sc.nextLine();
-                data.setStartDate(startDate);
-                data.setEndDate(endDate);
-//                String[] splitStartDate = startDate.split("/");
-//                String[] splitEndDate = endDate.split("/");
-//                int dayCount = (Integer.parseInt(splitEndDate[2]) - Integer.parseInt(splitStartDate[2]))*365 + (Integer.parseInt(splitEndDate[0]) - Integer.parseInt(splitStartDate[0])) * 30 +  (Integer.parseInt(splitEndDate[1]) - Integer.parseInt(splitStartDate[1]));
-//                data.setNextDayCount(dayCount);
                 break;
-            case 2:
+
+            case 2: // Use start date and next day
                 System.out.println("Enter date: ");
                 startDate = sc.nextLine();
+
+                // Ask user to use week or day
                 System.out.println("Use week (1) or day (2)?");
                 dayOrWeekChoice = Integer.parseInt(sc.nextLine());
 
+                // Convert week to day and assign to the variable day
                 if (dayOrWeekChoice == 1) {
                     System.out.println("Enter weeks: ");
-                    day = Integer.parseInt(sc.nextLine()) * 7;
+                    day = String.valueOf(Integer.parseInt(sc.nextLine()) * 7);
                 } else {
                     System.out.println("Enter days: ");
-                    day = Integer.parseInt(sc.nextLine());
+                    day = String.valueOf(Integer.parseInt(sc.nextLine()));
                 }
-
-                data.setStartDate(startDate);
-                data.setNextDayCount(day);
                 break;
 
-            case 3:
+            case 3: // Use start date and previous day (set nextDayCount to negative value)
                 System.out.println("Enter date: ");
                 startDate = sc.nextLine();
+
+                // Ask user to use week or day
                 System.out.println("Use week (1) or day (2)?");
                 dayOrWeekChoice = Integer.parseInt(sc.nextLine());
 
+                // Convert week to day and assign to the variable day
                 if (dayOrWeekChoice == 1) {
                     System.out.println("Enter weeks: ");
-                    day = -Integer.parseInt(sc.nextLine()) * 7;
+                    day = String.valueOf(-Integer.parseInt(sc.nextLine()) * 7);
                 } else {
                     System.out.println("Enter days: ");
-                    day = -Integer.parseInt(sc.nextLine());
+                    day = String.valueOf(-Integer.parseInt(sc.nextLine()));
                 }
-
-                data.setStartDate(startDate);
-                data.setNextDayCount(day);
                 break;
         }
-        return data;
+        return new String[] {startDate, endDate, day};
     }
 
+    /**
+     * Display method to show all attributes in String
+     */
     public void display() {
         System.out.println("Continent: " + continent);
         System.out.println("Country: " + country);
@@ -162,6 +211,7 @@ public class Data {
         System.out.println("Next day count: " + nextDayCount);
     }
 
+    // Getters and Setters
     public String getStartDate() {
         return startDate;
     }
