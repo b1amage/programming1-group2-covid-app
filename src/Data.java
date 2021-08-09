@@ -4,7 +4,16 @@ import java.util.Scanner;
 
 public class Data {
     // Attributes
-    private ArrayList<Row> rows = DataProcess.createRowList(); // Whole data
+    private static ArrayList<Row> rows; // Whole data
+
+    static {
+        try {
+            rows = DataProcess.createRowList();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     private ArrayList<Row> rowsFromStartDate = new ArrayList<Row>(); // Data of the area and time range
     private String continent;
     private String country;
