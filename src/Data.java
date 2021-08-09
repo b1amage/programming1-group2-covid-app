@@ -3,8 +3,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Data {
-    protected ArrayList<Row> rows = DataProcess.createRowList();
-    protected ArrayList<Row> rowsFromStartDate = new ArrayList<Row>();
+    private ArrayList<Row> rows = DataProcess.createRowList();
+    private ArrayList<Row> rowsFromStartDate = new ArrayList<Row>();
     private String continent;
     private String country;
     private String startDate;
@@ -202,4 +202,11 @@ public class Data {
         this.nextDayCount = nextDayCount;
     }
 
+    public ArrayList<Row> getRows() {
+        return rows;
+    }
+
+    public ArrayList<Row> getRowsFromStartDate() {
+        return rowsFromStartDate;
+    }
 }

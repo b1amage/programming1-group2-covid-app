@@ -5,7 +5,7 @@ public class Test {
         Data data = Data.createData();
 //        data.display();
         data.createRowData();
-        DataProcess.displayRows(data.rowsFromStartDate);
-//        DataProcess.displayRows(data.rows);
+        DataProcess.displayRows(data.getRowsFromStartDate());
+//        DataProcess.displayRows(data.getRows());
     }
 }
