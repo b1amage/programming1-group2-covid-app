@@ -13,12 +13,37 @@ public class Data {
 
     public Data() throws FileNotFoundException {}
 
+    public void test() {
+        System.out.println(endDate == null);
+    }
+
     public void createRowData() {
-        for (Row row : rows) {
-            if (row.getDate().equals(startDate) && (row.getContinent().equals(continent) || row.getLocation().equals(country))) {
-                for (int i = Math.min(rows.indexOf(row),rows.indexOf(row) + nextDayCount); i < Math.max(rows.indexOf(row),rows.indexOf(row) + nextDayCount) && i < rows.size() && i > -1; i++) {
-                    if (rows.get(i) != null) {
-                        rowsFromStartDate.add(rows.get(i));
+        if (endDate != null) {
+            int startIndex = -1;
+            int endIndex = -1;
+            for (Row row : rows) {
+                if (row.getDate().equals(startDate) && (row.getContinent().equals(continent) || row.getLocation().equals(country))) {
+                    startIndex = rows.indexOf(row);
+                }
+                if (row.getDate().equals(endDate) && (row.getContinent().equals(continent) || row.getLocation().equals(country))) {
+                    endIndex = rows.indexOf(row);
+                }
+            }
+
+            if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+                for (int i = startIndex; i <= endIndex; i++) {
+                    rowsFromStartDate.add(rows.get(i));
+                }
+            } else {
+                System.out.println("Error in date, country, or continent");
+            }
+        } else {
+            for (Row row : rows) {
+                if (row.getDate().equals(startDate) && (row.getContinent().equals(continent) || row.getLocation().equals(country))) {
+                    for (int i = Math.min(rows.indexOf(row),rows.indexOf(row) + nextDayCount); i <= Math.max(rows.indexOf(row),rows.indexOf(row) + nextDayCount) && i < rows.size() && i > -1; i++) {
+                        if (rows.get(i) != null) {
+                            rowsFromStartDate.add(rows.get(i));
+                        }
                     }
                 }
             }
@@ -85,10 +110,10 @@ public class Data {
                 endDate = sc.nextLine();
                 data.setStartDate(startDate);
                 data.setEndDate(endDate);
-                String[] splitStartDate = startDate.split("/");
-                String[] splitEndDate = endDate.split("/");
-                int dayCount = (Integer.parseInt(splitEndDate[2]) - Integer.parseInt(splitStartDate[2]))*365 + (Integer.parseInt(splitEndDate[0]) - Integer.parseInt(splitStartDate[0])) * 30 +  (Integer.parseInt(splitEndDate[1]) - Integer.parseInt(splitStartDate[1]));
-                data.setNextDayCount(dayCount);
+//                String[] splitStartDate = startDate.split("/");
+//                String[] splitEndDate = endDate.split("/");
+//                int dayCount = (Integer.parseInt(splitEndDate[2]) - Integer.parseInt(splitStartDate[2]))*365 + (Integer.parseInt(splitEndDate[0]) - Integer.parseInt(splitStartDate[0])) * 30 +  (Integer.parseInt(splitEndDate[1]) - Integer.parseInt(splitStartDate[1]));
+//                data.setNextDayCount(dayCount);
                 break;
             case 2:
                 System.out.println("Enter date: ");
