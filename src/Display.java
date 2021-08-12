@@ -5,7 +5,7 @@ public class Display {
         System.out.println("Range" + "\t\t\t\t" + "Value");
 
         for (Row row : data.getRowsFromStartDate()) {
-            System.out.println(row.getDate() + "\t\t\t" + row.getNewCases() + 100000);
+            System.out.println(row.getDate() + "\t\t\t" + row.getNewCases());
         }
     }
 

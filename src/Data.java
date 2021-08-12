@@ -14,41 +14,37 @@ public class Data {
         }
     }
 
-    private ArrayList<Row> rowsFromStartDate = new ArrayList<Row>(); // Data of the area and time range
-    private String continent;
-    private String country;
+    private ArrayList<Row> rowsFromStartDate = new ArrayList<>(); // Data of the area and time range
+    private String location;
     private String startDate;
     private String endDate;
     private int nextDayCount; // Use to store the next day (positive int) or previous day (negative int)
 
     // Empty constructor
-    public Data() throws FileNotFoundException {}
+    public Data() {}
 
     // Constructors
-    public Data(String continent, String country, String startDate, String endDate) throws FileNotFoundException {
-        this.continent = continent;
-        this.country = country;
+    public Data(String location, String startDate, String endDate) {
+        this.location = location;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    public Data(String continent, String country, String startDate, int nextDayCount) throws FileNotFoundException {
-        this.continent = continent;
-        this.country = country;
+    public Data(String location, String startDate, int nextDayCount) {
+        this.location = location;
         this.startDate = startDate;
         this.nextDayCount = nextDayCount;
     }
 
-    public static Data createData() throws FileNotFoundException {
+    public static Data createData() {
         // Create new data object to process
         Data data = new Data();
 
-        // Ask for country or continent
-        String[] countryAndContinent = areaInput();
+        // Ask for location
+        String location = areaInput();
 
-        // Set values to the data object
-        data.setCountry(countryAndContinent[0]);
-        data.setContinent(countryAndContinent[1]);
+        // Set location to the data object
+        data.setLocation(location);
 
         // Ask kind of date
         String[] dateInformation = dateOptionInput();
@@ -69,12 +65,12 @@ public class Data {
 
             // Find start and end index
             for (Row row : rows) {
-                // If start date and (continent or country) match, assign the index to the start
-                if (row.getDate().equals(startDate) && (row.getContinent().equals(continent) || row.getLocation().equals(country))) {
+                // If start date and location match, assign the index to the start
+                if (row.getDate().equals(startDate) && row.getLocation().equals(location)) {
                     startIndex = rows.indexOf(row);
                 }
-                // If end date and (continent or country) match, assign the index to the start
-                if (row.getDate().equals(endDate) && (row.getContinent().equals(continent) || row.getLocation().equals(country))) {
+                // If end date and location match, assign the index to the start
+                if (row.getDate().equals(endDate) && row.getLocation().equals(location)) {
                     endIndex = rows.indexOf(row);
                 }
             }
@@ -84,27 +80,27 @@ public class Data {
                 // Add each row to the array list
                 for (int i = startIndex; i <= endIndex; i++) {
 
-                    // Check if the data of country or continent is end
-                    if (rows.get(i).getContinent().equals(continent) || rows.get(i).getLocation().equals(country)) {
+                    // Check if the data of location is end
+                    if (rows.get(i).getLocation().equals(location)) {
                         rowsFromStartDate.add(rows.get(i));
                     }
                 }
             } else { // No start or end date found
-                System.out.println("Error in date, country, or continent");
+                System.out.println("Error in date or location");
             }
 
         } else { // User choose option (2) or (3)
             for (Row row : rows) { // Loop through rows
 
-                // If start date and (continent or country) match, start processing array list
-                if (row.getDate().equals(startDate) && (row.getContinent().equals(continent) || row.getLocation().equals(country))) {
+                // If start date and location match, start processing array list
+                if (row.getDate().equals(startDate) && (row.getLocation().equals(location))) {
 
                     // Get min value between rows.indexOf(row) and rows.indexOf(row) + nextDayCount (case negative nextDayCount)
                     for (int i = Math.min(rows.indexOf(row),rows.indexOf(row) + nextDayCount); i <= Math.max(rows.indexOf(row),rows.indexOf(row) + nextDayCount) && i < rows.size() && i > -1; i++) {
 
                         if (rows.get(i) != null) { // Add if the row is not null
-                            // Check if the data of country or continent is end
-                            if (rows.get(i).getContinent().equals(continent) || rows.get(i).getLocation().equals(country)) {
+                            // Check if the data of location is end
+                            if (rows.get(i).getLocation().equals(location)) {
                                 rowsFromStartDate.add(rows.get(i));
                             }
                         }
@@ -129,28 +125,14 @@ public class Data {
 
     /**
      * This method is used to get the area input from user
-     * @return String[] {country, continent}
+     * @return String location
      */
-    private static String[] areaInput() {
+    private static String areaInput() {
         Scanner sc = new Scanner(System.in);
-        String country;
-        String continent;
 
-        System.out.println("Use country (1) or continent (2)?");
-        int areaChoice = Integer.parseInt(sc.nextLine());
+        System.out.println("Enter location: ");
 
-        // If user use country, set continent to empty string, and vice versa
-        if (areaChoice == 1) {
-            System.out.println("Enter country: ");
-            country = sc.nextLine();
-            continent = "";
-        } else {
-            System.out.println("Enter continent: ");
-            continent = sc.nextLine();
-            country = "";
-        }
-
-        return new String[] {country, continent};
+        return sc.nextLine().trim();
     }
 
     /**
@@ -220,8 +202,7 @@ public class Data {
      * Display method to show all attributes in String
      */
     public void display() {
-        System.out.println("Continent: " + continent);
-        System.out.println("Country: " + country);
+        System.out.println("Location: " + location);
         System.out.println("Start date: " + startDate);
         System.out.println("End date: " + endDate);
         System.out.println("Next day count: " + nextDayCount);
@@ -244,22 +225,6 @@ public class Data {
         this.endDate = endDate;
     }
 
-    public String getContinent() {
-        return continent;
-    }
-
-    public void setContinent(String continent) {
-        this.continent = continent;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
     public int getNextDayCount() {
         return nextDayCount;
     }
@@ -274,5 +239,13 @@ public class Data {
 
     public ArrayList<Row> getRowsFromStartDate() {
         return rowsFromStartDate;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }
