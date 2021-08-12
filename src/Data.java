@@ -1,4 +1,5 @@
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -36,7 +37,7 @@ public class Data {
         this.nextDayCount = nextDayCount;
     }
 
-    public static Data createData() {
+    public static Data createData() throws IOException {
         // Create new data object to process
         Data data = new Data();
 
