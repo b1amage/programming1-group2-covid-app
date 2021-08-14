@@ -19,7 +19,7 @@ public class User_interface {
             };
 
             // Ask the user if they want to continue
-            System.out.println("Do you wish to conitnue \n (1) Yes \n (2) No");
+            System.out.println("Do you wish to continue \n (1) Yes \n (2) No");
             int cont = sc.nextInt();
             isRunning = (1 == cont);
 
