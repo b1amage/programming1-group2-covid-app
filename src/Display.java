@@ -18,8 +18,8 @@ public class Display {
 
         String valueName = "New Cases";
 
-        if (numOfGroups == 0) {
-            System.out.println("There is no data");
+        if (numOfGroups == 0 || numOfGroups > 26) {
+            System.out.println("Cannot display this data");
             return;
         }
 
@@ -53,7 +53,7 @@ public class Display {
         LinkedList<Integer> results = new LinkedList<>(summaryResults);
 
         System.out.printf("\n%s\n", "CHART DISPLAY");
-        System.out.println(" ".repeat(indentation + 1) + "\t" + valueName);
+        System.out.println(" ".repeat(indentation) + "\t" + valueName);
         for (int i = numOfRows - 1; i >= 0; i--) {
             int resultOnThisRow = 0;
             Iterator<Integer> iterator = results.descendingIterator();
@@ -70,13 +70,8 @@ public class Display {
 
             for (int j = 0; j < numOfCols; j++) {
                 if (j == 0) {
-                    if (i == 0) {
-                        System.out.print(" ".repeat(indentation + 1) + "\t|");
-                        continue;
-                    }
-
                     if (i != positionOfLabelOnY_axis) {
-                        System.out.print(" ".repeat(indentation + 1) + "\t|");
+                        System.out.print(" ".repeat(indentation) + "\t|");
                     }
                     continue;
                 }
@@ -103,6 +98,7 @@ public class Display {
                         }
                     }
                 }
+
                 System.out.print(' ');
             }
 
@@ -111,7 +107,12 @@ public class Display {
 
         for (int i = 0; i < numOfGroups; i++) {
             if (i == 0) {
-                System.out.print(" ".repeat(indentation + 1) + "\t " + (i + 1));
+                System.out.print(" ".repeat(indentation) + "\t " + (i + 1));
+                continue;
+            }
+
+            if (Integer.toString(i).length() > 1) {
+                System.out.print(" ".repeat(spaceBetweenLabelOnX_axis - Integer.toString(i).length() + 1) + (i + 1));
                 continue;
             }
             System.out.print(" ".repeat(spaceBetweenLabelOnX_axis) + (i + 1));
