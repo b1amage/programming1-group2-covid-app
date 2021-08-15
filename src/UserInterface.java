@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 
-public class User_interface {
+public class UserInterface {
     public static void main(String[] args) throws IOException {
         boolean isRunning = true;
         Scanner sc = new Scanner(System.in);
@@ -11,20 +11,18 @@ public class User_interface {
             data.createRowData();
             DataProcess.displayRows(data.getRowsFromStartDate());
             System.out.println("(1) Chart display \n (2) Tabular display");
-            int displayMethod = sc.nextInt();
-            if (displayMethod == 1){
+            int displayMethodOption = Integer.parseInt(sc.nextLine());
+
+            if (displayMethodOption == 1){
                 //Chart display
-            } else if (displayMethod == 2){
+            } else if (displayMethodOption == 2){
                 //Tabular display
             };
 
             // Ask the user if they want to continue
             System.out.println("Do you wish to continue \n (1) Yes \n (2) No");
-            int cont = sc.nextInt();
+            int cont = Integer.parseInt(sc.nextLine());
             isRunning = (1 == cont);
-
-
-
         }
     }
 }
