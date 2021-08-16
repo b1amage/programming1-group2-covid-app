@@ -39,3 +39,23 @@ public abstract class TimeRange {
         System.out.println("Next day count: " + nextDayCount);
     }
 }
+
+class StartAndEndDate extends TimeRange{
+
+    public StartAndEndDate(String startDate, String endDate, int nextDayCount) {
+        super(startDate, endDate, nextDayCount);
+    }
+}
+
+class PreviousDay extends TimeRange{
+    public PreviousDay(String startDate, int nextDayCount) {
+        super(startDate, null, -nextDayCount);
+    }
+}
+
+class NextDay extends TimeRange{
+    public NextDay(String startDate, int nextDayCount) {
+        super(startDate, null, nextDayCount);
+    }
+}
+
