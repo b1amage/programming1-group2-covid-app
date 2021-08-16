@@ -17,24 +17,15 @@ public class Data {
 
     private ArrayList<Row> rowsFromStartDate = new ArrayList<>(); // Data of the area and time range
     private String location;
-    private String startDate;
-    private String endDate;
-    private int nextDayCount; // Use to store the next day (positive int) or previous day (negative int)
+    private TimeRange timeRange;
 
     // Empty constructor
     public Data() {}
 
     // Constructors
-    public Data(String location, String startDate, String endDate) {
+    public Data(String location, TimeRange timeRange) {
         this.location = location;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
-
-    public Data(String location, String startDate, int nextDayCount) {
-        this.location = location;
-        this.startDate = startDate;
-        this.nextDayCount = nextDayCount;
+        this.timeRange = timeRange;
     }
 
     public static Data createData() throws IOException {
@@ -48,18 +39,16 @@ public class Data {
         data.setLocation(location);
 
         // Ask kind of date
-        String[] dateInformation = dateOptionInput();
+        TimeRange dateInformation = dateOptionInput();
 
-        // Use setters to set value to the data
-        data.setStartDate(dateInformation[0]);
-        data.setEndDate(dateInformation[1]);
-        data.setNextDayCount(Integer.parseInt(dateInformation[2]));
+        // Use setter to set value to the time range
+        data.setTimeRange(dateInformation);
 
         return data;
     }
 
     public void createRowData() {
-        if (endDate != null) { // If user use option (1) start date and end date
+        if (timeRange.getEndDate() != null) { // If user use option (1) start date and end date
             // Set initial to -1
             int startIndex = -1;
             int endIndex = -1;
@@ -67,11 +56,11 @@ public class Data {
             // Find start and end index
             for (Row row : rows) {
                 // If start date and location match, assign the index to the start
-                if (row.getDate().equals(startDate) && row.getLocation().equals(location)) {
+                if (row.getDate().equals(timeRange.getStartDate()) && row.getLocation().equals(location)) {
                     startIndex = rows.indexOf(row);
                 }
                 // If end date and location match, assign the index to the start
-                if (row.getDate().equals(endDate) && row.getLocation().equals(location)) {
+                if (row.getDate().equals(timeRange.getEndDate()) && row.getLocation().equals(location)) {
                     endIndex = rows.indexOf(row);
                 }
             }
@@ -94,10 +83,10 @@ public class Data {
             for (Row row : rows) { // Loop through rows
 
                 // If start date and location match, start processing array list
-                if (row.getDate().equals(startDate) && (row.getLocation().equals(location))) {
+                if (row.getDate().equals(timeRange.getStartDate()) && (row.getLocation().equals(location))) {
 
                     // Get min value between rows.indexOf(row) and rows.indexOf(row) + nextDayCount (case negative nextDayCount)
-                    for (int i = Math.min(rows.indexOf(row),rows.indexOf(row) + nextDayCount); i <= Math.max(rows.indexOf(row),rows.indexOf(row) + nextDayCount) && i < rows.size() && i > -1; i++) {
+                    for (int i = Math.min(rows.indexOf(row),rows.indexOf(row) + timeRange.getNextDayCount()); i <= Math.max(rows.indexOf(row),rows.indexOf(row) + timeRange.getNextDayCount()) && i < rows.size() && i > -1; i++) {
 
                         if (rows.get(i) != null) { // Add if the row is not null
                             // Check if the data of location is end
@@ -138,18 +127,20 @@ public class Data {
 
     /**
      * This method is used to get user date option input
-     * @return String[] {startDate, endDate, nextDayCount}
+     * @return TimeRange
      */
-    private static String[] dateOptionInput() {
+    private static TimeRange dateOptionInput() {
         showDateChoiceMenu();
+
         // Get option
         Scanner sc = new Scanner(System.in);
         int dateChoice = Integer.parseInt(sc.nextLine());
 
         // Initialize necessary variable and set default values to them
         String startDate = null;
-        String endDate = null;
-        String day = "0"; // Set day to 0 String to avoid null pointer exception when user use option 1;
+        String endDate;
+        int day = 0; // Set day to 0 to avoid null pointer exception when user use option 1;
+        TimeRange timeRange = null;
         int dayOrWeekChoice;
 
         switch (dateChoice) {
@@ -158,9 +149,13 @@ public class Data {
                 startDate = sc.nextLine();
                 System.out.println("Enter end date: ");
                 endDate = sc.nextLine();
+
+                timeRange = new StartAndEndDate(startDate, endDate, day);
                 break;
 
-            case 2: // Use start date and next day
+            case 2:
+            case 3:
+                // Use start date and next day
                 System.out.println("Enter date: ");
                 startDate = sc.nextLine();
 
@@ -171,32 +166,17 @@ public class Data {
                 // Convert week to day and assign to the variable day
                 if (dayOrWeekChoice == 1) {
                     System.out.println("Enter weeks: ");
-                    day = String.valueOf(Integer.parseInt(sc.nextLine()) * 7);
+                    day = Integer.parseInt(sc.nextLine()) * 7;
                 } else {
                     System.out.println("Enter days: ");
-                    day = String.valueOf(Integer.parseInt(sc.nextLine()));
+                    day = Integer.parseInt(sc.nextLine());
                 }
-                break;
-
-            case 3: // Use start date and previous day (set nextDayCount to negative value)
-                System.out.println("Enter date: ");
-                startDate = sc.nextLine();
-
-                // Ask user to use week or day
-                System.out.println("Use week (1) or day (2)?");
-                dayOrWeekChoice = Integer.parseInt(sc.nextLine());
-
-                // Convert week to day and assign to the variable day
-                if (dayOrWeekChoice == 1) {
-                    System.out.println("Enter weeks: ");
-                    day = String.valueOf(-Integer.parseInt(sc.nextLine()) * 7);
-                } else {
-                    System.out.println("Enter days: ");
-                    day = String.valueOf(-Integer.parseInt(sc.nextLine()));
-                }
+                // Use tertiary to decide if it is a NextDay (2) or PreviousDay (3)
+                timeRange = dateChoice == 2 ? new NextDay(startDate, day) : new PreviousDay(startDate, day);
                 break;
         }
-        return new String[] {startDate, endDate, day};
+
+        return timeRange;
     }
 
     /**
@@ -204,35 +184,10 @@ public class Data {
      */
     public void display() {
         System.out.println("Location: " + location);
-        System.out.println("Start date: " + startDate);
-        System.out.println("End date: " + endDate);
-        System.out.println("Next day count: " + nextDayCount);
+        timeRange.display();
     }
 
     // Getters and Setters
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-    public int getNextDayCount() {
-        return nextDayCount;
-    }
-
-    public void setNextDayCount(int nextDayCount) {
-        this.nextDayCount = nextDayCount;
-    }
 
     public ArrayList<Row> getRows() {
         return rows;
@@ -248,5 +203,14 @@ public class Data {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+
+    public TimeRange getTimeRange() {
+        return timeRange;
+    }
+
+    public void setTimeRange(TimeRange timeRange) {
+        this.timeRange = timeRange;
     }
 }
