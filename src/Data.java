@@ -150,7 +150,7 @@ public class Data {
                 System.out.println("Enter end date: ");
                 endDate = sc.nextLine();
 
-                timeRange = new StartAndEndDate(startDate, endDate, day);
+                timeRange = new StartAndEndDate(startDate, endDate);
                 break;
 
             case 2:
