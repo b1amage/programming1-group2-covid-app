@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -17,26 +16,51 @@ public class UserInterface {
 
 
     //getter setter
-    public void setData(ArrayList<Row> data){
+    public ArrayList<Row> getData() {
+        return data;
+    }
+
+    public void setData(ArrayList<Row> data) {
         this.data = data;
     }
-    public ArrayList<Row> getData(){
-        return this.data;
-    }
-    public void setGroupingMethod(int groupingMethod){ this.groupingMethod = groupingMethod; }
-    public int getGroupingMethod(){ return this.groupingMethod; }
-    public void setMetric(int metric){ this.metric = metric; }
-    public int getMetric(){ return this.metric; }
-    public void setResult(int result){ this.result = result; }
-    public int getResult(){ return this.result; }
-    public void setDisplay(int display){ this.display = display; }
-    public int getDisplay(){ return this.display; }
 
+    public int getGroupingMethod() {
+        return groupingMethod;
+    }
+
+    public void setGroupingMethod(int groupingMethod) {
+        this.groupingMethod = groupingMethod;
+    }
+
+    public int getMetric() {
+        return metric;
+    }
+
+    public void setMetric(int metric) {
+        this.metric = metric;
+    }
+
+    public int getResult() {
+        return result;
+    }
+
+    public void setResult(int result) {
+        this.result = result;
+    }
+
+    public int getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(int display) {
+        this.display = display;
+    }
+
+    private static Scanner sc = new Scanner(System.in);
 
     //display UI
     public void displayUI() throws IOException {
         boolean isRunning = true;
-        Scanner sc = new Scanner(System.in);
         while (isRunning){
             Data data = Data.createData();
             data.createRowData();
@@ -54,30 +78,49 @@ public class UserInterface {
             int cont = Integer.parseInt(sc.nextLine());
             setData(data.getRowsFromStartDate());
 
-            // If user choose 1 then contimue, if 2 then break and stop the cycle
+            // If user choose 1 then continue, if 2 then break and stop the cycle
             isRunning = (1 == cont);
         }
     }
 
     // input grouping method
     public void inputGroupingMethod(){
-        Scanner sc = new Scanner(System.in);
         System.out.println("Choose your grouping method \n (1) No grouping \n (2) Number of groups \n (3) Number of days");
-        int grouping = Integer.parseInt(sc.nextLine());
-        setGroupingMethod(grouping);
+        char groupingChar = sc.nextLine().charAt(0);
+        if (Character.isDigit(groupingChar)) {
+            int grouping = Integer.parseInt(String.valueOf(groupingChar));
+            setGroupingMethod(grouping);
+        }
+
         System.out.println("Choose your metric \n (1) Positive cases \n (2) New deaths \n (3) People vaccinated");
-        int metric = Integer.parseInt(sc.nextLine());
-        setMetric(metric);
+        char metricChar = sc.nextLine().charAt(0);
+        if (Character.isDigit(metricChar)) {
+            int metric = Integer.parseInt(String.valueOf(metricChar));
+            setMetric(metric);
+        }
+
         System.out.println("Choose your result type \n (1) New total \n (2) Up to");
-        int result = Integer.parseInt(sc.nextLine());
-        setResult(result);
+        char resultChar = sc.nextLine().charAt(0);
+        if (Character.isDigit(resultChar)) {
+            int result = Integer.parseInt(String.valueOf(resultChar));
+            setResult(result);
+        }
     }
 
     // input display method
     public void displayMethod(){
-        Scanner sc = new Scanner(System.in);
         System.out.println("Choose your display method \n (1) Tabular \n (2) Chart");
-        int display = Integer.parseInt(sc.nextLine());
-        setDisplay(display);
+        char displayChar = sc.nextLine().charAt(0);
+        if (Character.isDigit(displayChar)) {
+            int display = Integer.parseInt(String.valueOf(displayChar));
+            setDisplay(display);
+        }
+    }
+
+
+    // main
+    public static void main(String[] args) throws IOException {
+        UserInterface ui = new UserInterface();
+        ui.displayUI();
     }
 }
