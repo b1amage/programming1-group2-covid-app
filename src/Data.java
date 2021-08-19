@@ -150,7 +150,7 @@ public class Data {
                 System.out.println("Enter end date: ");
                 endDate = sc.nextLine();
 
-                timeRange = new StartAndEndDate(startDate, endDate);
+                timeRange = new TimeRange(startDate, endDate, 0);
                 break;
 
             case 2:
@@ -172,7 +172,7 @@ public class Data {
                     day = Integer.parseInt(sc.nextLine());
                 }
                 // Use tertiary to decide if it is a NextDay (2) or PreviousDay (3)
-                timeRange = dateChoice == 2 ? new NextDay(startDate, day) : new PreviousDay(startDate, day);
+                timeRange = dateChoice == 2 ? new TimeRange(startDate,null, day) : new TimeRange(startDate,null, day);
                 break;
         }
 
