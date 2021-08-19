@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class UserInterface {
     private ArrayList<Row> data;
-    private int grouping_method;
+    private int groupingMethod;
     private int metric;
     private int result;
     private int display;
@@ -23,8 +23,8 @@ public class UserInterface {
     public ArrayList<Row> getData(){
         return this.data;
     }
-    public void setGrouping_method(int grouping_method){ this.grouping_method = grouping_method; }
-    public int getGrouping_method(){ return this.grouping_method; }
+    public void setGroupingMethod(int groupingMethod){ this.groupingMethod = groupingMethod; }
+    public int getGroupingMethod(){ return this.groupingMethod; }
     public void setMetric(int metric){ this.metric = metric; }
     public int getMetric(){ return this.metric; }
     public void setResult(int result){ this.result = result; }
@@ -64,7 +64,7 @@ public class UserInterface {
         Scanner sc = new Scanner(System.in);
         System.out.println("Choose your grouping method \n (1) No grouping \n (2) Number of groups \n (3) Number of days");
         int grouping = Integer.parseInt(sc.nextLine());
-        setGrouping_method(grouping);
+        setGroupingMethod(grouping);
         System.out.println("Choose your metric \n (1) Positive cases \n (2) New deaths \n (3) People vaccinated");
         int metric = Integer.parseInt(sc.nextLine());
         setMetric(metric);
