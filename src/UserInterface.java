@@ -1,9 +1,23 @@
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
 public class UserInterface {
-    public static void main(String[] args) throws IOException {
+    private ArrayList<Row> data;
+
+    public UserInterface(){}
+
+    public void setData(ArrayList<Row> data){
+        this.data = data;
+    }
+
+    public ArrayList<Row> getData(){
+        return this.data;
+    }
+
+    public void displayUI() throws IOException {
         boolean isRunning = true;
         Scanner sc = new Scanner(System.in);
         while (isRunning){
@@ -22,6 +36,7 @@ public class UserInterface {
             // Ask the user if they want to continue
             System.out.println("Do you wish to continue \n (1) Yes \n (2) No");
             int cont = Integer.parseInt(sc.nextLine());
+            setData(data.getRowsFromStartDate());
             isRunning = (1 == cont);
         }
     }
