@@ -1,32 +1,154 @@
-import java.util.ArrayList;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 public class Summary {
+    private final static Scanner scanner = new Scanner(System.in);
+    private ArrayList<Row> data;
+    private int groupingMethod;
+    private int metricType;
+    private int resultType;
+    private int dividingNumber;
+    private LinkedHashMap<String, Integer> groupings;
 
-    public static ArrayList<Row> summaryData() throws IOException {
-        Data data = Data.createData();
-        data.createRowData();
-        return data.getRowsFromStartDate();
+    public Summary(ArrayList<Row> data, int groupingMethod, int metricType, int resultType, int dividingNumber) {
+        setData(data);
+        setGroupingMethod(groupingMethod);
+        setMetricType(metricType);
+        setResultType(resultType);
+        setDividingNumber(dividingNumber);
     }
 
-    public static void getInput() {
-
+    public void setData(ArrayList<Row> data) {
+        this.data = data;
     }
 
-    public static void grouping(ArrayList<Row> sumData) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter your grouping method option:\n" +
-                "(1) No grouping \n" + "(2) Number of groups \n" + "(3) Number of Days");
-        int method = Integer.parseInt(sc.nextLine());
-        if (method == 1) {
-            // No grouping method, takes sumData as parameter
+    public void setGroupingMethod(int groupingMethod) {
+        this.groupingMethod = groupingMethod;
+    }
+
+    public void setMetricType(int metricType) {
+        this.metricType = metricType;
+    }
+
+    public void setResultType(int resultType) {
+        this.resultType = resultType;
+    }
+
+    public void setDividingNumber(int dividingNumber) {
+        this.dividingNumber = dividingNumber;
+    }
+
+    public static Summary createSummary(ArrayList<Row> data, UserInterface userInterface) {
+        int groupingOption = userInterface.getGroupingMethod();
+        int metricOption = userInterface.getMetric();
+        int resultOption = userInterface.getResult();
+        int dividingNumber = userInterface.getDividingNumber();
+        return new Summary(data, groupingOption, metricOption, resultOption, dividingNumber);
+    }
+
+    public void processData() {
+        groupData groupData = new groupData(data);
+        ArrayList<ArrayList<Row>> groupedData = new ArrayList<>();
+        if (groupingMethod == 1) {
+            groupData.noGrouping();
+            groupedData = groupData.getGroupedData();
+
+        } else if (groupingMethod == 2) {
+            int numOfGroups = dividingNumber;
+            groupData.groupDataByNumberOfGroups(numOfGroups);
+            groupedData = groupData.getGroupedData();
+
+        } else if (groupingMethod == 3) {
+            int numOfDays = dividingNumber;
+            groupData.groupDataByNumberOfDays(numOfDays);
+            groupedData = groupData.getGroupedData();
         }
 
+        for (ArrayList<Row> rows : groupedData) {
+            System.out.println("---------");
+            for (Row row : rows) {
+                System.out.println(row.getDate());
+            }
+        }
     }
 
-
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws IOException {
+        UserInterface ui = new UserInterface();
+        ui.displayUI();
+        Summary summary = Summary.createSummary(ui.getData(), ui);
+        summary.processData();
     }
 }
+
+class groupData {
+    private ArrayList<Row> rawData;
+    private ArrayList<ArrayList<Row>> groupedData;
+
+    public groupData(ArrayList<Row> rawData) {
+        setRawData(rawData);
+    }
+
+    public void setRawData(ArrayList<Row> rawData) {
+        this.rawData = rawData;
+    }
+
+    public void noGrouping() {
+        groupedData = new ArrayList<>();
+        int groupIndex = 0;
+        for (Row row : rawData) {
+            groupedData.add(new ArrayList<>());
+            groupedData.get(groupIndex).add(row);
+            groupIndex++;
+        }
+    }
+
+    public void groupDataByNumberOfGroups(int numOfGroups) {
+        groupedData = new ArrayList<>();
+        int numOfRows = rawData.size() / numOfGroups;
+        int groupIndexToIncreaseSize = rawData.size() / numOfGroups;
+        int groupIndex = 0;
+
+        if (rawData.size() % numOfGroups != 0) {
+            groupIndexToIncreaseSize = numOfGroups - (rawData.size() % numOfGroups);
+        }
+
+        for (int i = 0; i < rawData.size(); i+=numOfRows) {
+            if (groupIndex == groupIndexToIncreaseSize) {
+                numOfRows++;
+            }
+
+            groupedData.add(new ArrayList<>());
+            for (int step = 0; step < numOfRows; step++) {
+                groupedData.get(groupIndex).add(rawData.get(i + step));
+            }
+
+            groupIndex++;
+        }
+    }
+
+    public void groupDataByNumberOfDays(int numOfDays) {
+        groupedData = new ArrayList<>();
+        int groupIndex = 0;
+
+        if (rawData.size() % numOfDays != 0) {
+            System.out.println("Cannot divide the data into that number of days");
+            return;
+        }
+
+        for (int i = 0; i < rawData.size(); i+=numOfDays) {
+            groupedData.add(new ArrayList<>());
+            for (int step = 0; step < numOfDays; step++) {
+                groupedData.get(groupIndex).add(rawData.get(i + step));
+            }
+
+            groupIndex++;
+        }
+    }
+
+    public ArrayList<ArrayList<Row>> getGroupedData() {
+        return groupedData;
+    }
+}
+
