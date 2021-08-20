@@ -205,7 +205,6 @@ public class UserInterface {
         String location = sc.nextLine();
         setLocation(location);
 
-
         // ask user to choose
         System.out.println("Enter your date choice: ");
         System.out.println("(1) A pair of start date and end date (inclusive) (e.g., 1/1/2021 and 8/1/2021)");
