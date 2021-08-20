@@ -10,6 +10,12 @@ public class UserInterface {
     private int metric;
     private int result;
     private int display;
+    private String location;
+    private int timeRangeChoice;
+    private String startDate;
+    private String endDate;
+    private int nextDayCount;
+    private int dayOrWeekChoice;
 
 
     //constructor
@@ -65,27 +71,77 @@ public class UserInterface {
         this.display = display;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public int getTimeRangeChoice() {
+        return timeRangeChoice;
+    }
+
+    public void setTimeRangeChoice(int timeRangeChoice) {
+        this.timeRangeChoice = timeRangeChoice;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public int getNextDayCount() {
+        return nextDayCount;
+    }
+
+    public void setNextDayCount(int nextDayCount) {
+        this.nextDayCount = nextDayCount;
+    }
+
+    public int getDayOrWeekChoice() {
+        return dayOrWeekChoice;
+    }
+
+    public void setDayOrWeekChoice(int dayOrWeekChoice) {
+        this.dayOrWeekChoice = dayOrWeekChoice;
+    }
+
     private static Scanner sc = new Scanner(System.in);
 
     //display UI
     public void displayUI() throws IOException {
         boolean isRunning = true;
         while (isRunning){
-            Data data = Data.createData();
-            data.createRowData();
-            DataProcess.displayRows(data.getRowsFromStartDate());
+//            Data data = Data.createData();
+//            data.createRowData();
+//            DataProcess.displayRows(data.getRowsFromStartDate());
+            // Ask for data range
+            dataRange();
 
             // Ask for summary method
             inputGroupingMethod();
 
-           // Ask for display method
+            // Ask for display method
             displayMethod();
 
             // Ask the user if they want to continue
             System.out.println("===========================");
             System.out.println("Do you wish to continue \n (1) Yes \n (2) No");
             int cont = Integer.parseInt(sc.nextLine());
-            setData(data.getRowsFromStartDate());
+//            setData(data.getRowsFromStartDate());
 
             // If user choose 1 then continue, if 2 then break and stop the cycle
             isRunning = (1 == cont);
@@ -142,6 +198,97 @@ public class UserInterface {
         }
     }
 
+
+    // input data method
+    public void dataRange(){
+        System.out.println("Choose your location:");
+        String location = sc.nextLine();
+        setLocation(location);
+
+
+        // ask user to choose
+        System.out.println("Enter your date choice: ");
+        System.out.println("(1) A pair of start date and end date (inclusive) (e.g., 1/1/2021 and 8/1/2021)");
+        System.out.println("(2) A number of days or weeks from a particular date (e.g., 2 days from 1/20/2021 " +
+                "means there are 3 days 1/20/2021, 1/21/2021, and 1/22/2021)");
+        System.out.println("(3) A number of days or weeks to a particular date " +
+                "(e.g., 1 week to 1/8/2021 means there are 8 days from 1/1/2021 to 1/8/2021)");
+        char timeRangeChar = sc.nextLine().charAt(0);
+        if (Character.isDigit(timeRangeChar)){
+            int timeRange = Integer.parseInt(String.valueOf(timeRangeChar));
+            setTimeRangeChoice(timeRange);
+        }
+
+        switch(timeRangeChoice){
+            case 1:
+                System.out.println("Enter start date");
+                String startDate = sc.nextLine();
+                setStartDate(startDate);
+
+                System.out.println("Enter end date");
+                String endDate = sc.nextLine();
+                setEndDate(endDate);
+                break;
+
+            case 2: //User enter start date and choose a how many days or week from a start day
+                System.out.println("Enter your date");
+                startDate = sc.nextLine();
+                setStartDate(startDate);
+
+                System.out.println("Use (1) days or (2) weeks");
+                char daysOrWeeksChar = sc.nextLine().charAt(0);
+                if (Character.isDigit(daysOrWeeksChar)){
+                    int daysOrWeeks = Integer.parseInt(String.valueOf(daysOrWeeksChar));
+                    setDayOrWeekChoice(daysOrWeeks);
+                }
+                if (dayOrWeekChoice == 1){
+                    System.out.println("Enter your days");
+                    char nextDayCountChar = sc.nextLine().charAt(0);
+                    if (Character.isDigit(nextDayCountChar)){
+                        int nextDayCount = Integer.parseInt(String.valueOf(nextDayCountChar));
+                        setNextDayCount(nextDayCount);
+                    }
+                }
+                if (dayOrWeekChoice == 2){
+                    System.out.println("Enter your weeks");
+                    char nextDayCountChar = sc.nextLine().charAt(0);
+                    if (Character.isDigit(nextDayCountChar)){
+                        int nextDayCount = Integer.parseInt(String.valueOf(nextDayCountChar));
+                        setNextDayCount(nextDayCount);
+                    }
+                }
+                break;
+
+            case 3: //User enter the date days and choose how many days or week from the end day
+                System.out.println("Enter your end date");
+                endDate = sc.nextLine();
+                setEndDate(endDate);
+
+                System.out.println("Use (1) days or (2) weeks");
+                daysOrWeeksChar = sc.nextLine().charAt(0);
+                if (Character.isDigit(daysOrWeeksChar)){
+                    int daysOrWeeks = Integer.parseInt(String.valueOf(daysOrWeeksChar));
+                    setDayOrWeekChoice(daysOrWeeks);
+                }
+                if (dayOrWeekChoice == 1){
+                    System.out.println("Enter your days");
+                    char nextDayCountChar = sc.nextLine().charAt(0);
+                    if (Character.isDigit(nextDayCountChar)){
+                        int nextDayCount = Integer.parseInt(String.valueOf(nextDayCountChar));
+                        setNextDayCount(nextDayCount);
+                    }
+                }
+                if (dayOrWeekChoice == 2){
+                    System.out.println("Enter your weeks");
+                    char nextDayCountChar = sc.nextLine().charAt(0);
+                    if (Character.isDigit(nextDayCountChar)){
+                        int nextDayCount = Integer.parseInt(String.valueOf(nextDayCountChar));
+                        setNextDayCount(nextDayCount);
+                    }
+                }
+                break;
+        }
+    }
 
     // main
     public static void main(String[] args) throws IOException {
