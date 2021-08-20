@@ -114,13 +114,16 @@ public class UserInterface {
 //            DataProcess.displayRows(data.getRowsFromStartDate());
             // Ask for data range
             dataRange();
-
+            Data data = Data.createData1(this);
+            data.createRowData();
+            setData(data.getRowsFromStartDate());
+            DataProcess.displayRows(data.getRowsFromStartDate());
             // Ask for summary method
             inputGroupingMethod();
-
             // Ask for display method
             displayMethod();
-
+            Summary summary = Summary.createSummary(this.getData(), this);
+            summary.processData();
             // Ask the user if they want to continue
             System.out.println("===========================");
             System.out.println("Do you wish to continue \n (1) Yes \n (2) No");
@@ -249,8 +252,5 @@ public class UserInterface {
     public static void main(String[] args) throws IOException {
         UserInterface userInterface = new UserInterface();
         userInterface.displayUI();
-        Data data = Data.createData1();
-        data.createRowData();
-        DataProcess.displayRows(data.getRowsFromStartDate());
     }
 }
