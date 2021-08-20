@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class UserInterface {
     private ArrayList<Row> data;
     private int groupingMethod;
-    private int group;
+    private int dividingNumber;
     private int metric;
     private int result;
     private int display;
@@ -33,12 +33,12 @@ public class UserInterface {
         this.groupingMethod = groupingMethod;
     }
 
-    public int getGroup() {
-        return group;
+    public int getDividingNumber() {
+        return dividingNumber;
     }
 
-    public void setGroup(int group) {
-        this.group = group;
+    public void setDividingNumber(int dividingNumber) {
+        this.dividingNumber = dividingNumber;
     }
 
     public int getMetric() {
@@ -103,17 +103,17 @@ public class UserInterface {
 
         if (groupingMethod == 2){
             System.out.println("How many groups do you want?");
-            char groupChar = sc.nextLine().charAt(0);
-            if (Character.isDigit(groupChar)) {
-                int group = Integer.parseInt(String.valueOf(groupChar));
-                setGroup(group);
+            char dividingChar = sc.nextLine().charAt(0);
+            if (Character.isDigit(dividingChar)) {
+                int dividing = Integer.parseInt(String.valueOf(dividingChar));
+                setDividingNumber(dividing);
             }
         } else if (groupingMethod == 3){
             System.out.println("How many days in a group do you want?");
-            char groupChar = sc.nextLine().charAt(0);
-            if (Character.isDigit(groupChar)) {
-                int group = Integer.parseInt(String.valueOf(groupChar));
-                setGroup(group);
+            char dividingChar = sc.nextLine().charAt(0);
+            if (Character.isDigit(dividingChar)) {
+                int dividing = Integer.parseInt(String.valueOf(dividingChar));
+                setDividingNumber(dividing);
             }
         }
 
