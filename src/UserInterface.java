@@ -247,7 +247,10 @@ public class UserInterface {
 
     // main
     public static void main(String[] args) throws IOException {
-        UserInterface ui = new UserInterface();
-        ui.displayUI();
+        UserInterface userInterface = new UserInterface();
+        userInterface.displayUI();
+        Data data = Data.createData1(userInterface);
+        data.createRowData();
+        DataProcess.displayRows(data.getRowsFromStartDate());
     }
 }
