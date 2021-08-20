@@ -172,7 +172,7 @@ public class Data {
                     day = Integer.parseInt(sc.nextLine());
                 }
                 // Use tertiary to decide if it is a NextDay (2) or PreviousDay (3)
-                timeRange = dateChoice == 2 ? new TimeRange(startDate,null, day) : new TimeRange(startDate,null, day);
+                timeRange = dateChoice == 2 ? new TimeRange(startDate,null, day) : new TimeRange(startDate,null, -day);
                 break;
         }
 
