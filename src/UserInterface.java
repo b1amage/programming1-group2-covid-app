@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -12,9 +13,7 @@ public class UserInterface {
     private int display;
     private String location;
     private int timeRangeChoice;
-    private String startDate;
-    private String endDate;
-    private int nextDayCount;
+    private TimeRange timeRange;
     private int dayOrWeekChoice;
 
 
@@ -23,6 +22,7 @@ public class UserInterface {
 
 
     //getter setter
+
     public ArrayList<Row> getData() {
         return data;
     }
@@ -87,28 +87,12 @@ public class UserInterface {
         this.timeRangeChoice = timeRangeChoice;
     }
 
-    public String getStartDate() {
-        return startDate;
+    public TimeRange getTimeRange() {
+        return timeRange;
     }
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-    public int getNextDayCount() {
-        return nextDayCount;
-    }
-
-    public void setNextDayCount(int nextDayCount) {
-        this.nextDayCount = nextDayCount;
+    public void setTimeRange(TimeRange timeRange) {
+        this.timeRange = timeRange;
     }
 
     public int getDayOrWeekChoice() {
@@ -207,12 +191,9 @@ public class UserInterface {
 
 
         // ask user to choose
-        System.out.println("Enter your date choice: ");
-        System.out.println("(1) A pair of start date and end date (inclusive) (e.g., 1/1/2021 and 8/1/2021)");
-        System.out.println("(2) A number of days or weeks from a particular date (e.g., 2 days from 1/20/2021 " +
-                "means there are 3 days 1/20/2021, 1/21/2021, and 1/22/2021)");
-        System.out.println("(3) A number of days or weeks to a particular date " +
-                "(e.g., 1 week to 1/8/2021 means there are 8 days from 1/1/2021 to 1/8/2021)");
+        showDateChoiceMenu();
+        int nextDayCount = 0;
+
         char timeRangeChar = sc.nextLine().charAt(0);
         if (Character.isDigit(timeRangeChar)){
             int timeRange = Integer.parseInt(String.valueOf(timeRangeChar));
@@ -223,71 +204,46 @@ public class UserInterface {
             case 1:
                 System.out.println("Enter start date");
                 String startDate = sc.nextLine();
-                setStartDate(startDate);
 
                 System.out.println("Enter end date");
                 String endDate = sc.nextLine();
-                setEndDate(endDate);
+                timeRange = new TimeRange(startDate, endDate, 0);
                 break;
 
-            case 2: //User enter start date and choose a how many days or week from a start day
-                System.out.println("Enter your date");
+            case 2:
+            case 3: //User enter the date days and choose how many days or week from the start
+                System.out.println("Enter your start date");
                 startDate = sc.nextLine();
-                setStartDate(startDate);
 
-                System.out.println("Use (1) days or (2) weeks");
+                System.out.println("Use (1) weeks or (2) days");
                 char daysOrWeeksChar = sc.nextLine().charAt(0);
                 if (Character.isDigit(daysOrWeeksChar)){
                     int daysOrWeeks = Integer.parseInt(String.valueOf(daysOrWeeksChar));
                     setDayOrWeekChoice(daysOrWeeks);
                 }
                 if (dayOrWeekChoice == 1){
-                    System.out.println("Enter your days");
-                    char nextDayCountChar = sc.nextLine().charAt(0);
-                    if (Character.isDigit(nextDayCountChar)){
-                        int nextDayCount = Integer.parseInt(String.valueOf(nextDayCountChar));
-                        setNextDayCount(nextDayCount);
-                    }
-                }
-                if (dayOrWeekChoice == 2){
                     System.out.println("Enter your weeks");
-                    char nextDayCountChar = sc.nextLine().charAt(0);
-                    if (Character.isDigit(nextDayCountChar)){
-                        int nextDayCount = Integer.parseInt(String.valueOf(nextDayCountChar));
-                        setNextDayCount(nextDayCount);
-                    }
+                    nextDayCount = Integer.parseInt(sc.nextLine());
                 }
+                else {
+                    System.out.println("Enter your days");
+                    nextDayCount = Integer.parseInt(sc.nextLine()) * 7;
+                }
+                timeRange = new TimeRange(startDate, null, nextDayCount);
+                timeRange = timeRangeChoice == 2 ? new TimeRange(startDate,null, nextDayCount) : new TimeRange(startDate,null, nextDayCount);
                 break;
 
-            case 3: //User enter the date days and choose how many days or week from the end day
-                System.out.println("Enter your end date");
-                endDate = sc.nextLine();
-                setEndDate(endDate);
-
-                System.out.println("Use (1) days or (2) weeks");
-                daysOrWeeksChar = sc.nextLine().charAt(0);
-                if (Character.isDigit(daysOrWeeksChar)){
-                    int daysOrWeeks = Integer.parseInt(String.valueOf(daysOrWeeksChar));
-                    setDayOrWeekChoice(daysOrWeeks);
-                }
-                if (dayOrWeekChoice == 1){
-                    System.out.println("Enter your days");
-                    char nextDayCountChar = sc.nextLine().charAt(0);
-                    if (Character.isDigit(nextDayCountChar)){
-                        int nextDayCount = Integer.parseInt(String.valueOf(nextDayCountChar));
-                        setNextDayCount(nextDayCount);
-                    }
-                }
-                if (dayOrWeekChoice == 2){
-                    System.out.println("Enter your weeks");
-                    char nextDayCountChar = sc.nextLine().charAt(0);
-                    if (Character.isDigit(nextDayCountChar)){
-                        int nextDayCount = Integer.parseInt(String.valueOf(nextDayCountChar));
-                        setNextDayCount(nextDayCount);
-                    }
-                }
-                break;
         }
+    }
+
+    // show data menu
+    public void showDateChoiceMenu() {
+        System.out.println("Enter your date choice: ");
+        System.out.println("(1) A pair of start date and end date (inclusive) (e.g., 1/1/2021 and 8/1/2021)");
+        System.out.println("(2) A number of days or weeks from a particular date (e.g., 2 days from 1/20/2021 " +
+                "means there are 3 days 1/20/2021, 1/21/2021, and 1/22/2021)");
+        System.out.println("(3) A number of days or weeks to a particular date " +
+                "(e.g., 1 week to 1/8/2021 means there are 8 days from 1/1/2021 to 1/8/2021)");
     }
 
     // main
