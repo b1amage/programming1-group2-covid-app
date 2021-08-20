@@ -229,7 +229,7 @@ public class UserInterface {
                     nextDayCount = Integer.parseInt(sc.nextLine()) * 7;
                 }
                 timeRange = new TimeRange(startDate, null, nextDayCount);
-                timeRange = timeRangeChoice == 2 ? new TimeRange(startDate,null, nextDayCount) : new TimeRange(startDate,null, nextDayCount);
+                timeRange = timeRangeChoice == 2 ? new TimeRange(startDate,null, nextDayCount) : new TimeRange(startDate,null, -nextDayCount);
                 break;
 
         }
