@@ -222,14 +222,14 @@ public class UserInterface {
                 }
                 if (dayOrWeekChoice == 1){
                     System.out.println("Enter your weeks");
-                    nextDayCount = Integer.parseInt(sc.nextLine());
+                    nextDayCount = Integer.parseInt(sc.nextLine()) * 7;
                 }
                 else {
                     System.out.println("Enter your days");
-                    nextDayCount = Integer.parseInt(sc.nextLine()) * 7;
+                    nextDayCount = Integer.parseInt(sc.nextLine());
                 }
                 timeRange = new TimeRange(startDate, null, nextDayCount);
-                timeRange = timeRangeChoice == 2 ? new TimeRange(startDate,null, nextDayCount) : new TimeRange(startDate,null, nextDayCount);
+                timeRange = timeRangeChoice == 2 ? new TimeRange(startDate,null, nextDayCount) : new TimeRange(startDate,null, -nextDayCount);
                 break;
 
         }
