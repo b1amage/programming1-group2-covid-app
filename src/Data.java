@@ -29,8 +29,9 @@ public class Data {
     }
 
 
-    public static Data createData1(UserInterface userInterface) throws IOException {
+    public static Data createData1() throws IOException {
         // Create new data object to process
+        UserInterface userInterface = new UserInterface();
         Data data = new Data(userInterface.getLocation(), userInterface.getTimeRange());
 
 //        // Ask for location
