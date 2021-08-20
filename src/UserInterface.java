@@ -189,7 +189,6 @@ public class UserInterface {
         String location = sc.nextLine();
         setLocation(location);
 
-
         // ask user to choose
         showDateChoiceMenu();
         int nextDayCount = 0;
