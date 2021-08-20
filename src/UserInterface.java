@@ -6,6 +6,7 @@ import java.util.Scanner;
 public class UserInterface {
     private ArrayList<Row> data;
     private int groupingMethod;
+    private int group;
     private int metric;
     private int result;
     private int display;
@@ -30,6 +31,14 @@ public class UserInterface {
 
     public void setGroupingMethod(int groupingMethod) {
         this.groupingMethod = groupingMethod;
+    }
+
+    public int getGroup() {
+        return group;
+    }
+
+    public void setGroup(int group) {
+        this.group = group;
     }
 
     public int getMetric() {
@@ -90,6 +99,22 @@ public class UserInterface {
         if (Character.isDigit(groupingChar)) {
             int grouping = Integer.parseInt(String.valueOf(groupingChar));
             setGroupingMethod(grouping);
+        }
+
+        if (groupingMethod == 2){
+            System.out.println("How many groups do you want?");
+            char groupChar = sc.nextLine().charAt(0);
+            if (Character.isDigit(groupChar)) {
+                int group = Integer.parseInt(String.valueOf(groupChar));
+                setGroup(group);
+            }
+        } else if (groupingMethod == 3){
+            System.out.println("How many days in a group do you want?");
+            char groupChar = sc.nextLine().charAt(0);
+            if (Character.isDigit(groupChar)) {
+                int group = Integer.parseInt(String.valueOf(groupChar));
+                setGroup(group);
+            }
         }
 
         System.out.println("Choose your metric \n (1) Positive cases \n (2) New deaths \n (3) People vaccinated");
