@@ -95,6 +95,7 @@ public class Data {
                     }
                 }
             } else { // No start or end date found
+                System.out.println("=========");
                 System.out.println("Error in date or location");
                 rowsFromStartDate = null;
                 return;
@@ -151,10 +152,6 @@ public class Data {
 //                "(e.g., 1 week to 1/8/2021 means there are 8 days from 1/1/2021 to 1/8/2021)");
 //    }
 
-    /**
-     * This method is used to get the area input from user
-     * @return String location
-     */
 //    private static String areaInput() {
 //        Scanner sc = new Scanner(System.in);
 //
