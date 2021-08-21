@@ -109,7 +109,7 @@ public class UserInterface {
 //            DataProcess.displayRows(data.getRowsFromStartDate());
             // Ask for data range
             dataRange();
-            Data data = Data.createData1(getLocation(), getTimeRange());
+            Data data = Data.createData(getLocation(), getTimeRange());
             data.createRowData();
             setData(data.getRowsFromStartDate());
             DataProcess.displayRows(data.getRowsFromStartDate());
