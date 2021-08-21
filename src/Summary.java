@@ -68,6 +68,7 @@ public class Summary {
 
         if (groupedData == null) {
             groupings = null;
+            return;
         }
 
         for (ArrayList<Row> rows : groupedData) {
