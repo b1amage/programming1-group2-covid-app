@@ -200,12 +200,12 @@ public class UserInterface {
             setTimeRangeChoice(timeRange);
         }
         // Check user input for time range
-        checkTimeRangeChoice();
+        setTimeRangeFromChoice();
 
     }
 
     // Input time range
-    public void checkTimeRangeChoice(){
+    public void setTimeRangeFromChoice(){
         int nextDayCount = 0;
         switch(timeRangeChoice){
             case 1:
