@@ -49,7 +49,7 @@ public class Summary {
     }
 
     public void processData() {
-        groupData groupData = new groupData(data);
+        GroupData groupData = new GroupData(data);
         ArrayList<ArrayList<Row>> groupedData = new ArrayList<>();
         if (groupingMethod == 1) {
             groupData.noGrouping();
@@ -84,11 +84,11 @@ public class Summary {
     }
 }
 
-class groupData {
+class GroupData {
     private ArrayList<Row> rawData;
     private ArrayList<ArrayList<Row>> groupedData;
 
-    public groupData(ArrayList<Row> rawData) {
+    public GroupData(ArrayList<Row> rawData) {
         setRawData(rawData);
     }
 
