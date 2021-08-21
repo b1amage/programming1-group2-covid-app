@@ -104,15 +104,21 @@ public class UserInterface {
     public void displayUI() throws IOException {
         boolean isRunning = true;
         while (isRunning){
-//            Data data = Data.createData();
-//            data.createRowData();
-//            DataProcess.displayRows(data.getRowsFromStartDate());
-            // Ask for data range
-            dataRange();
-            Data data = Data.createData(getLocation(), getTimeRange());
-            data.createRowData();
-            setData(data.getRowsFromStartDate());
-            DataProcess.displayRows(data.getRowsFromStartDate());
+            boolean checkInputDataRange = true;
+            boolean checkInputGroupingMethod = true;
+            boolean checkDisplayMethod = true;
+            // Ask for data range and check if user input right
+            while(checkInputDataRange) {
+                inputDataRange();
+                Data data = Data.createData(getLocation(), getTimeRange());
+                data.createRowData();
+                setData(data.getRowsFromStartDate());
+                if (getData() == null){
+                    checkInputDataRange = true;
+                } else {
+                    checkInputDataRange = false;
+                }
+            }
             // Ask for summary method
             inputGroupingMethod();
             // Ask for display method
@@ -181,21 +187,26 @@ public class UserInterface {
     }
 
     // Input data method
-    public void dataRange(){
+    public void inputDataRange(){
         System.out.println("Choose your location:");
         String location = sc.nextLine();
         setLocation(location);
 
         // ask user to choose
         showDateChoiceMenu();
-        int nextDayCount = 0;
-
         char timeRangeChar = sc.nextLine().charAt(0);
         if (Character.isDigit(timeRangeChar)){
             int timeRange = Integer.parseInt(String.valueOf(timeRangeChar));
             setTimeRangeChoice(timeRange);
         }
+        // Check user input for time range
+        checkTimeRangeChoice();
 
+    }
+
+    // Input time range
+    public void checkTimeRangeChoice(){
+        int nextDayCount = 0;
         switch(timeRangeChoice){
             case 1:
                 System.out.println("Enter start date");
@@ -230,6 +241,7 @@ public class UserInterface {
                 break;
 
         }
+
     }
 
     // Show data menu
