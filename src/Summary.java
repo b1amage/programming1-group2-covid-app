@@ -51,6 +51,7 @@ public class Summary {
     public void processData() {
         GroupData groupData = new GroupData(data);
         ArrayList<ArrayList<Row>> groupedData = new ArrayList<>();
+        groupings = new LinkedHashMap<>();
         if (groupingMethod == 1) {
             groupData.noGrouping();
             groupedData = groupData.getGroupedData();
@@ -69,18 +70,18 @@ public class Summary {
         if (groupedData == null) {
             groupings = null;
             return;
-        }
-
-        for (ArrayList<Row> rows : groupedData) {
-            System.out.println("---------");
-            for (Row row : rows) {
-                System.out.println(row.getDate());
+        } else {
+            for (ArrayList<Row> rows : groupedData) {
+                if (rows != null) {
+                    groupings.put(rows.get(0).getDate() + " - " + rows.get(rows.size() - 1).getDate(), 1);
+                }
             }
         }
+
+        System.out.println(groupings);
     }
 
     public static void main(String[] args) throws IOException {
-
     }
 }
 
