@@ -96,6 +96,7 @@ public class Data {
                 }
             } else { // No start or end date found
                 System.out.println("Error in date or location");
+                rowsFromStartDate = null;
             }
 
         } else { // User choose option (2) or (3)
@@ -206,7 +207,6 @@ public class Data {
     }
 
     // Getters and Setters
-
     public ArrayList<Row> getRows() {
         return rows;
     }
