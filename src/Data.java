@@ -97,9 +97,28 @@ public class Data {
             } else { // No start or end date found
                 System.out.println("Error in date or location");
                 rowsFromStartDate = null;
+                return;
             }
 
         } else { // User choose option (2) or (3)
+            // Check if location is exist
+            boolean locationExist = false;
+
+            for (Row row : rows) {
+                if (row.getLocation().equals(location)) {
+                    locationExist = true;
+                }
+            }
+
+            // If location not exist, throw a message and return
+            if (!locationExist) {
+                System.out.println("=========");
+                System.out.println("Location not found");
+                rowsFromStartDate = null;
+                return;
+            }
+
+            // If location exist
             for (Row row : rows) { // Loop through rows
 
                 // If start date and location match, start processing array list
@@ -118,11 +137,6 @@ public class Data {
                     }
                     // Break after loop to save time
                     break;
-                } else {
-                    System.out.println("=============");
-                    System.out.println("Location not found");
-                    rowsFromStartDate = null;
-                    return;
                 }
             }
         }
