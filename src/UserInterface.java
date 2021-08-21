@@ -104,27 +104,32 @@ public class UserInterface {
     public void displayUI() throws IOException {
         boolean isRunning = true;
         while (isRunning){
-            boolean checkInputDataRange = true;
-            boolean checkInputGroupingMethod = true;
-            boolean checkDisplayMethod = true;
+            boolean checkInputDataRange = false;
+            boolean checkInputGroupingMethod = false;
+            boolean checkDisplayMethod = false;
             // Ask for data range and check if user input right
-            while(checkInputDataRange) {
+            while(!checkInputDataRange) {
                 inputDataRange();
                 Data data = Data.createData(getLocation(), getTimeRange());
                 data.createRowData();
                 setData(data.getRowsFromStartDate());
                 if (getData() == null){
-                    checkInputDataRange = true;
-                } else {
                     checkInputDataRange = false;
+                } else {
+                    checkInputDataRange = true;
                 }
             }
             // Ask for summary method
-            inputGroupingMethod();
-
-            Summary summary = Summary.createSummary(this.getData(), this.getGroupingMethod(), this.getMetric(), this.getResult(), this.getDividingNumber());
-            summary.processData();
-
+            while(!checkInputGroupingMethod) {
+                inputGroupingMethod();
+                Summary summary = Summary.createSummary(this.getData(), this.getGroupingMethod(), this.getMetric(), this.getResult(), this.getDividingNumber());
+                summary.processData();
+                if (summary.getGroupings() == null){
+                    checkInputGroupingMethod = false;
+                } else {
+                    checkInputGroupingMethod = true;
+                }
+            }
             // Ask for display method
             displayMethod();
 
