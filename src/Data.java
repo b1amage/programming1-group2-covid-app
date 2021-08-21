@@ -28,7 +28,7 @@ public class Data {
     }
 
 
-    public static Data createData1(UserInterface userInterface) throws IOException {
+    public static Data createData1(String location, TimeRange timeRange) throws IOException {
         // Create new data object to process
 
 
@@ -44,7 +44,7 @@ public class Data {
 //         Use setter to set value to the time range
 //        data.setTimeRange(dateInformation);
 
-        return new Data(userInterface.getLocation(), userInterface.getTimeRange());
+        return new Data(location, timeRange);
     }
 
     public static Data createData() throws IOException {
