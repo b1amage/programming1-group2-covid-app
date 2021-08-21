@@ -118,6 +118,11 @@ public class Data {
                     }
                     // Break after loop to save time
                     break;
+                } else {
+                    System.out.println("=============");
+                    System.out.println("Location not found");
+                    rowsFromStartDate = null;
+                    return;
                 }
             }
         }
