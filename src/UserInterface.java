@@ -117,7 +117,7 @@ public class UserInterface {
             inputGroupingMethod();
             // Ask for display method
             displayMethod();
-            Summary summary = Summary.createSummary(this.getData(), this);
+            Summary summary = Summary.createSummary(this.getData(), this.getGroupingMethod(), this.getMetric(), this.getResult(), this.getDividingNumber());
             summary.processData();
             // Ask the user if they want to continue
             System.out.println("===========================");

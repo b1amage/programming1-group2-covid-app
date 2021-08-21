@@ -40,11 +40,7 @@ public class Summary {
         this.dividingNumber = dividingNumber;
     }
 
-    public static Summary createSummary(ArrayList<Row> data, UserInterface userInterface) {
-        int groupingOption = userInterface.getGroupingMethod();
-        int metricOption = userInterface.getMetric();
-        int resultOption = userInterface.getResult();
-        int dividingNumber = userInterface.getDividingNumber();
+    public static Summary createSummary(ArrayList<Row> data, int groupingOption, int metricOption, int resultOption, int dividingNumber) {
         return new Summary(data, groupingOption, metricOption, resultOption, dividingNumber);
     }
 
@@ -75,10 +71,7 @@ public class Summary {
     }
 
     public static void main(String[] args) throws IOException {
-        UserInterface ui = new UserInterface();
-        ui.displayUI();
-        Summary summary = Summary.createSummary(ui.getData(), ui);
-        summary.processData();
+
     }
 }
 
