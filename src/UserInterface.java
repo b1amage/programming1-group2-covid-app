@@ -1,10 +1,9 @@
 import java.io.IOException;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
 public class UserInterface {
+    private static Scanner sc = new Scanner(System.in);
     private ArrayList<Row> data;
     private int groupingMethod;
     private int dividingNumber;
@@ -16,13 +15,10 @@ public class UserInterface {
     private TimeRange timeRange;
     private int dayOrWeekChoice;
 
-
-    //constructor
+    //Constructor
     public UserInterface(){}
 
-
-    //getter setter
-
+    //Getters and Setters
     public ArrayList<Row> getData() {
         return data;
     }
@@ -103,9 +99,8 @@ public class UserInterface {
         this.dayOrWeekChoice = dayOrWeekChoice;
     }
 
-    private static Scanner sc = new Scanner(System.in);
 
-    //display UI
+    //Display UI
     public void displayUI() throws IOException {
         boolean isRunning = true;
         while (isRunning){
@@ -114,7 +109,7 @@ public class UserInterface {
 //            DataProcess.displayRows(data.getRowsFromStartDate());
             // Ask for data range
             dataRange();
-            Data data = Data.createData1(this);
+            Data data = Data.createData1(getLocation(), getTimeRange());
             data.createRowData();
             setData(data.getRowsFromStartDate());
             DataProcess.displayRows(data.getRowsFromStartDate());
@@ -175,7 +170,7 @@ public class UserInterface {
         }
     }
 
-    // input display method
+    // Input display method
     public void displayMethod(){
         System.out.println("Choose your display method \n (1) Tabular \n (2) Chart");
         char displayChar = sc.nextLine().charAt(0);
@@ -185,8 +180,7 @@ public class UserInterface {
         }
     }
 
-
-    // input data method
+    // Input data method
     public void dataRange(){
         System.out.println("Choose your location:");
         String location = sc.nextLine();
@@ -238,7 +232,7 @@ public class UserInterface {
         }
     }
 
-    // show data menu
+    // Show data menu
     public void showDateChoiceMenu() {
         System.out.println("Enter your date choice: ");
         System.out.println("(1) A pair of start date and end date (inclusive) (e.g., 1/1/2021 and 8/1/2021)");
@@ -248,7 +242,7 @@ public class UserInterface {
                 "(e.g., 1 week to 1/8/2021 means there are 8 days from 1/1/2021 to 1/8/2021)");
     }
 
-    // main
+    // Main
     public static void main(String[] args) throws IOException {
         UserInterface userInterface = new UserInterface();
         userInterface.displayUI();
