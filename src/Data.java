@@ -28,7 +28,7 @@ public class Data {
     }
 
 
-    public static Data createData1(String location, TimeRange timeRange) throws IOException {
+    public static Data createData(String location, TimeRange timeRange) throws IOException {
         // Create new data object to process
 
 
@@ -47,24 +47,24 @@ public class Data {
         return new Data(location, timeRange);
     }
 
-    public static Data createData() throws IOException {
-        // Create new data object to process
-        Data data = new Data();
-
-//        // Ask for location
-//        String location = areaInput();
+//    public static Data createData() throws IOException {
+//        // Create new data object to process
+//        Data data = new Data();
 //
-//        // Set location to the data object
-//        data.setLocation(location);
+////        // Ask for location
+////        String location = areaInput();
+////
+////        // Set location to the data object
+////        data.setLocation(location);
+////
+////        // Ask kind of date
+////        TimeRange dateInformation = dateOptionInput();
+////
+////         Use setter to set value to the time range
+////        data.setTimeRange(dateInformation);
 //
-//        // Ask kind of date
-//        TimeRange dateInformation = dateOptionInput();
-//
-//         Use setter to set value to the time range
-//        data.setTimeRange(dateInformation);
-
-        return data;
-    }
+//        return data;
+//    }
 
     public void createRowData() {
         if (timeRange.getEndDate() != null) { // If user use option (1) start date and end date

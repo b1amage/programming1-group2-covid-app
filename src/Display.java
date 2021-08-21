@@ -127,9 +127,9 @@ public class Display {
     }
 
     public static void main(String[] args) throws IOException {
-        Data data = Data.createData();
-        data.createRowData();
-        tabularDisplay(data);
-        chartDisplay(data);
+//        Data data = Data.createData();
+//        data.createRowData();
+//        tabularDisplay(data);
+//        chartDisplay(data);
     }
 }
