@@ -40,6 +40,10 @@ public class Summary {
         this.dividingNumber = dividingNumber;
     }
 
+    public LinkedHashMap<String, Integer> getGroupings() {
+        return groupings;
+    }
+
     public static Summary createSummary(ArrayList<Row> data, int groupingOption, int metricOption, int resultOption, int dividingNumber) {
         return new Summary(data, groupingOption, metricOption, resultOption, dividingNumber);
     }
@@ -60,6 +64,10 @@ public class Summary {
             int numOfDays = dividingNumber;
             groupData.groupDataByNumberOfDays(numOfDays);
             groupedData = groupData.getGroupedData();
+        }
+
+        if (groupedData == null) {
+            groupings = null;
         }
 
         for (ArrayList<Row> rows : groupedData) {
@@ -127,6 +135,7 @@ class groupData {
 
         if (rawData.size() % numOfDays != 0) {
             System.out.println("Cannot divide the data into that number of days");
+            groupedData = null;
             return;
         }
 

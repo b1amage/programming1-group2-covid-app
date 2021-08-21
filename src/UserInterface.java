@@ -121,10 +121,13 @@ public class UserInterface {
             }
             // Ask for summary method
             inputGroupingMethod();
-            // Ask for display method
-            displayMethod();
+
             Summary summary = Summary.createSummary(this.getData(), this.getGroupingMethod(), this.getMetric(), this.getResult(), this.getDividingNumber());
             summary.processData();
+
+            // Ask for display method
+            displayMethod();
+
             // Ask the user if they want to continue
             System.out.println("===========================");
             System.out.println("Do you wish to continue \n (1) Yes \n (2) No");
