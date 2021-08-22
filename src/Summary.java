@@ -1,10 +1,8 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Scanner;
 
 public class Summary {
-    private final static Scanner scanner = new Scanner(System.in);
     private ArrayList<Row> data;
     private int groupingMethod;
     private int metricType;
@@ -49,34 +47,48 @@ public class Summary {
     }
 
     public void processData() {
+        boolean isVaccinatedData = false;
         GroupData groupData = new GroupData(data);
         ArrayList<ArrayList<Row>> groupedData = new ArrayList<>();
+
         groupings = new LinkedHashMap<>();
         if (groupingMethod == 1) {
             groupData.noGrouping();
-            groupedData = groupData.getGroupedData();
 
         } else if (groupingMethod == 2) {
             int numOfGroups = dividingNumber;
             groupData.groupDataByNumberOfGroups(numOfGroups);
-            groupedData = groupData.getGroupedData();
 
         } else if (groupingMethod == 3) {
             int numOfDays = dividingNumber;
             groupData.groupDataByNumberOfDays(numOfDays);
-            groupedData = groupData.getGroupedData();
         }
+        groupedData = groupData.getGroupedData();
 
-        if (groupedData == null) {
-            groupings = null;
-            return;
+        MetricData metricData = new MetricData(groupedData);
+        ArrayList<ArrayList<Integer>> valuesOfEachRow = new ArrayList<>();
+        if (metricType == 1) {
+            metricData.getCase();
+        } else if (metricType == 2) {
+            metricData.getDeaths();
+        } else if (metricType == 3){
+            metricData.getVaccinated();
+            isVaccinatedData = true;
+        }
+        valuesOfEachRow = metricData.getValuesOfEachRow();
+
+        ResultData resultData = new ResultData(valuesOfEachRow);
+        ArrayList<Integer> valuesOfEachGroup = new ArrayList<>();
+        if (isVaccinatedData) {
+            resultData.calculateByUpTo();
         } else {
-            for (ArrayList<Row> rows : groupedData) {
-                if (rows != null) {
-                    groupings.put(rows.get(0).getDate() + " - " + rows.get(rows.size() - 1).getDate(), 1);
-                }
+            if (resultType == 1) {
+                resultData.calculateByNewTotal();
+            } else if (resultType == 2) {
+                resultData.calculateByUpTo();
             }
         }
+        valuesOfEachGroup = resultData.getValuesOfEachGroup();
 
         System.out.println(groupings);
     }
@@ -155,4 +167,75 @@ class GroupData {
         return groupedData;
     }
 }
+class MetricData {
+    private ArrayList<ArrayList<Row>> groupedData;
+    private ArrayList<ArrayList<Integer>> valuesOfEachRow;
 
+    public MetricData(ArrayList<ArrayList<Row>> groupedData) {
+        setGroupedData(groupedData);
+    }
+
+    public void setGroupedData(ArrayList<ArrayList<Row>> groupedData) {
+        this.groupedData = groupedData;
+    }
+
+    public void getCase() {
+        for (int i = 0; i < groupedData.size(); i++) {
+            valuesOfEachRow.add(new ArrayList<>());
+            for (Row row : groupedData.get(i)) {
+                valuesOfEachRow.get(i).add(row.getNewCases());
+            }
+        }
+    }
+    public void getDeaths() {
+        for (int i = 0; i < groupedData.size(); i++) {
+            valuesOfEachRow.add(new ArrayList<>());
+            for (Row row : groupedData.get(i)) {
+                valuesOfEachRow.get(i).add(row.getNewDeaths());
+            }
+        }
+    }
+    public void getVaccinated() {
+        for (int i = 0; i < groupedData.size(); i++) {
+            valuesOfEachRow.add(new ArrayList<>());
+            for (Row row : groupedData.get(i)) {
+                valuesOfEachRow.get(i).add(row.getPeopleVaccinated());
+            }
+        }
+    }
+
+    public ArrayList<ArrayList<Integer>> getValuesOfEachRow() {
+        return valuesOfEachRow;
+    }
+}
+
+class ResultData {
+    private ArrayList<ArrayList<Integer>> valuesOfEachRow;
+    private ArrayList<Integer> valuesOfEachGroup;
+
+    public ResultData(ArrayList<ArrayList<Integer>> valuesOfEachRow) {
+        setValuesOfEachRow(valuesOfEachRow);
+    }
+
+    public void setValuesOfEachRow(ArrayList<ArrayList<Integer>> valuesOfEachRow) {
+        this.valuesOfEachRow = valuesOfEachRow;
+    }
+
+    public void calculateByNewTotal() {
+        for (ArrayList<Integer> group : valuesOfEachRow) {
+            int total = 0;
+            for (int value : group) {
+                total += value;
+            }
+            valuesOfEachGroup.add(total);
+        }
+    }
+
+    public void calculateByUpTo() {
+
+    }
+
+    public ArrayList<Integer> getValuesOfEachGroup() {
+        return valuesOfEachGroup;
+    }
+}
