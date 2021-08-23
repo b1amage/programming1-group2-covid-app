@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -64,15 +63,16 @@ public class Summary {
             groupData.groupDataByNumberOfDays(numOfDays);
         }
         groupsOfDates = groupData.getGroupedData();
+        if (groupsOfDates == null) {
+            groupings = null;
+            return;
+        }
 
         MetricData metricData = new MetricData(groupsOfDates);
         ArrayList<ArrayList<Integer>> valuesOfEachRow;
-        if (metricType.equals("positive cases")) {
-            metricData.getCase();
-        } else if (metricType.equals("new deaths")) {
-            metricData.getDeaths();
-        } else if (metricType.equals("people vaccinated")){
-            metricData.getVaccinated();
+        metricData.getValues(metricType);
+
+        if (metricType.equals("people vaccinated")) {
             isVaccinatedData = true;
         }
         valuesOfEachRow = metricData.getValuesOfEachRow();
@@ -80,21 +80,33 @@ public class Summary {
         ResultData resultData = new ResultData(valuesOfEachRow);
         ArrayList<Integer> valuesOfEachGroup;
         if (isVaccinatedData) {
-            resultData.calculateByUpTo();
+            if (resultType.equals("new total")) {
+                resultData.calculateByNewTotalForAccumulatedValue();
+            } else if (resultType.equals("up to")) {
+                resultData.calculateByUpToForAccumulatedValue();
+            }
         } else {
             if (resultType.equals("new total")) {
                 resultData.calculateByNewTotal();
             } else if (resultType.equals("up to")) {
-                resultData.calculateByUpTo();
+                resultData.calculateByUpTo(metricType);
             }
         }
+
         valuesOfEachGroup = resultData.getValuesOfEachGroup();
 
+        if (groupingMethod.equals("no grouping")) {
+            for (int i = 0; i < groupsOfDates.size(); i++) {
+                groupings.put(groupsOfDates.get(i).get(0).getDate(), valuesOfEachGroup.get(i));
+            }
+        } else {
+            for (int i = 0; i < groupsOfDates.size(); i++) {
+                int groupSize = groupsOfDates.get(i).size();
+                groupings.put(groupsOfDates.get(i).get(0).getDate() + " - " + groupsOfDates.get(i).get(groupSize - 1).getDate(), valuesOfEachGroup.get(i));
+            }
+        }
+
         System.out.println(groupings);
-    }
-
-    public static void main(String[] args) throws IOException {
-
     }
 }
 
@@ -180,45 +192,20 @@ class MetricData {
         this.groupedData = groupedData;
     }
 
-    public void getCase() {
+    public void getValues(String metricOption) {
         for (int i = 0; i < groupedData.size(); i++) {
             valuesOfEachRow.add(new ArrayList<>());
             for (Row row : groupedData.get(i)) {
-                valuesOfEachRow.get(i).add(row.getNewCases());
+                if (metricOption.equals("new cases")) {
+                    valuesOfEachRow.get(i).add(row.getNewCases());
+                } else if (metricOption.equals("new deaths")) {
+                    valuesOfEachRow.get(i).add(row.getNewDeaths());
+                } else if (metricOption.equals("people vaccinated")){
+                    valuesOfEachRow.get(i).add(row.getPeopleVaccinated());
+                }
             }
         }
     }
-    public void getDeaths() {
-        for (int i = 0; i < groupedData.size(); i++) {
-            valuesOfEachRow.add(new ArrayList<>());
-            for (Row row : groupedData.get(i)) {
-                valuesOfEachRow.get(i).add(row.getNewDeaths());
-            }
-        }
-    }
-    public void getVaccinated() {
-        for (int i = 0; i < groupedData.size(); i++) {
-            valuesOfEachRow.add(new ArrayList<>());
-            for (Row row : groupedData.get(i)) {
-                valuesOfEachRow.get(i).add(row.getPeopleVaccinated());
-            }
-        }
-    }
-
-//    public void getData(String kind) {
-//        for (int i = 0; i < groupedData.size(); i++) {
-//            valuesOfEachRow.add(new ArrayList<>());
-//            for (Row row : groupedData.get(i)) {
-//                if (kind == "case") {
-//                    valuesOfEachRow.get(i).add(row.getNewCases());
-//                } else if (kind == "death"){
-//                    valuesOfEachRow.get(i).add(row.getNewDeaths());
-//                } else {
-//                    valuesOfEachRow.get(i).add(row.getPeopleVaccinated());
-//                }
-//            }
-//        }
-//    }
 
     public ArrayList<ArrayList<Integer>> getValuesOfEachRow() {
         return valuesOfEachRow;
@@ -226,6 +213,8 @@ class MetricData {
 }
 
 class ResultData {
+    private Data data;
+    private String metricOption;
     private ArrayList<ArrayList<Integer>> valuesOfEachRow;
     private ArrayList<Integer> valuesOfEachGroup = new ArrayList<>();
 
@@ -246,8 +235,40 @@ class ResultData {
             valuesOfEachGroup.add(total);
         }
     }
-    public void calculateByUpTo() {
 
+    public void calculateByUpTo(String metricOption) {
+        int upToValue = 0;
+        String firstDateOfFirstGroup = data.getRowsFromStartDate().get(0).getDate();
+        ArrayList<Row> rowsFromCSV = data.getRows();
+        for (Row row : rowsFromCSV) {
+            if (row.getDate().equals(firstDateOfFirstGroup)) {break;}
+            if (row.getLocation().equals(data.getLocation())) {
+                if (metricOption.equals("new cases")) {
+                    upToValue += row.getNewCases();
+                }
+                if (metricOption.equals("new deaths")) {
+                    upToValue += row.getNewDeaths();
+                }
+            }
+        }
+        for (ArrayList<Integer> group : valuesOfEachRow) {
+            for (int value : group) {
+                upToValue += value;
+            }
+            valuesOfEachGroup.add(upToValue);
+        }
+    }
+
+    public void calculateByNewTotalForAccumulatedValue() {
+        for (ArrayList<Integer> group : valuesOfEachRow) {
+            valuesOfEachGroup.add(group.get(group.size() - 1) - group.get(0));
+        }
+    }
+
+    public void calculateByUpToForAccumulatedValue() {
+        for (ArrayList<Integer> group : valuesOfEachRow) {
+            valuesOfEachGroup.add(group.get(group.size() - 1));
+        }
     }
 
     public ArrayList<Integer> getValuesOfEachGroup() {
