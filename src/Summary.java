@@ -4,13 +4,13 @@ import java.util.LinkedHashMap;
 
 public class Summary {
     private Data data;
-    private int groupingMethod;
-    private int metricType;
-    private int resultType;
+    private String groupingMethod;
+    private String metricType;
+    private String resultType;
     private int dividingNumber;
     private LinkedHashMap<String, Integer> groupings;
 
-    public Summary(Data data, int groupingMethod, int metricType, int resultType, int dividingNumber) {
+    public Summary(Data data, String groupingMethod, String metricType, String resultType, int dividingNumber) {
         setData(data);
         setGroupingMethod(groupingMethod);
         setMetricType(metricType);
@@ -22,15 +22,15 @@ public class Summary {
         this.data = data;
     }
 
-    public void setGroupingMethod(int groupingMethod) {
+    public void setGroupingMethod(String groupingMethod) {
         this.groupingMethod = groupingMethod;
     }
 
-    public void setMetricType(int metricType) {
+    public void setMetricType(String metricType) {
         this.metricType = metricType;
     }
 
-    public void setResultType(int resultType) {
+    public void setResultType(String resultType) {
         this.resultType = resultType;
     }
 
@@ -42,7 +42,7 @@ public class Summary {
         return groupings;
     }
 
-    public static Summary createSummary(Data data, int groupingOption, int metricOption, int resultOption, int dividingNumber) {
+    public static Summary createSummary(Data data, String groupingOption, String metricOption, String resultOption, int dividingNumber) {
         return new Summary(data, groupingOption, metricOption, resultOption, dividingNumber);
     }
 
@@ -52,14 +52,14 @@ public class Summary {
         ArrayList<ArrayList<Row>> groupsOfDates;
 
         groupings = new LinkedHashMap<>();
-        if (groupingMethod == 1) {
+        if (groupingMethod.equals("no grouping")) {
             groupData.noGrouping();
 
-        } else if (groupingMethod == 2) {
+        } else if (groupingMethod.equals("number of groups")) {
             int numOfGroups = dividingNumber;
             groupData.groupDataByNumberOfGroups(numOfGroups);
 
-        } else if (groupingMethod == 3) {
+        } else if (groupingMethod.equals("number of days")) {
             int numOfDays = dividingNumber;
             groupData.groupDataByNumberOfDays(numOfDays);
         }
@@ -67,11 +67,11 @@ public class Summary {
 
         MetricData metricData = new MetricData(groupsOfDates);
         ArrayList<ArrayList<Integer>> valuesOfEachRow;
-        if (metricType == 1) {
+        if (metricType.equals("positive cases")) {
             metricData.getCase();
-        } else if (metricType == 2) {
+        } else if (metricType.equals("new deaths")) {
             metricData.getDeaths();
-        } else if (metricType == 3){
+        } else if (metricType.equals("people vaccinated")){
             metricData.getVaccinated();
             isVaccinatedData = true;
         }
@@ -82,9 +82,9 @@ public class Summary {
         if (isVaccinatedData) {
             resultData.calculateByUpTo();
         } else {
-            if (resultType == 1) {
+            if (resultType.equals("new total")) {
                 resultData.calculateByNewTotal();
-            } else if (resultType == 2) {
+            } else if (resultType.equals("up to")) {
                 resultData.calculateByUpTo();
             }
         }

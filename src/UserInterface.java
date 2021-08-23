@@ -1,15 +1,16 @@
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class UserInterface {
     private static Scanner sc = new Scanner(System.in);
     private Data data;
-    private int groupingMethod;
     private int dividingNumber;
-    private int metric;
-    private int result;
-    private int display;
+    private String groupingMethod;
+    private String metric;
+    private String result;
+    private String display;
     private String location;
     private int timeRangeChoice;
     private TimeRange timeRange;
@@ -27,11 +28,11 @@ public class UserInterface {
         this.data = data;
     }
 
-    public int getGroupingMethod() {
+    public String getGroupingMethod() {
         return groupingMethod;
     }
 
-    public void setGroupingMethod(int groupingMethod) {
+    public void setGroupingMethod(String groupingMethod) {
         this.groupingMethod = groupingMethod;
     }
 
@@ -43,27 +44,27 @@ public class UserInterface {
         this.dividingNumber = dividingNumber;
     }
 
-    public int getMetric() {
+    public String getMetric() {
         return metric;
     }
 
-    public void setMetric(int metric) {
+    public void setMetric(String metric) {
         this.metric = metric;
     }
 
-    public int getResult() {
+    public String getResult() {
         return result;
     }
 
-    public void setResult(int result) {
+    public void setResult(String result) {
         this.result = result;
     }
 
-    public int getDisplay() {
+    public String getDisplay() {
         return display;
     }
 
-    public void setDisplay(int display) {
+    public void setDisplay(String display) {
         this.display = display;
     }
 
@@ -147,20 +148,26 @@ public class UserInterface {
     // input grouping method
     public void inputGroupingMethod(){
         System.out.println("Choose your grouping method \n (1) No grouping \n (2) Number of groups \n (3) Number of days");
-        char groupingChar = sc.nextLine().charAt(0);
-        if (Character.isDigit(groupingChar)) {
-            int grouping = Integer.parseInt(String.valueOf(groupingChar));
-            setGroupingMethod(grouping);
+        String groupingChar = sc.nextLine().trim();
+
+        if (groupingChar.equals("1")) {
+            setGroupingMethod("no grouping");
         }
 
-        if (groupingMethod == 2){
+        if (groupingChar.equals("2")){
+            setGroupingMethod("number of groups");
+
             System.out.println("How many groups do you want?");
             char dividingChar = sc.nextLine().charAt(0);
             if (Character.isDigit(dividingChar)) {
                 int dividing = Integer.parseInt(String.valueOf(dividingChar));
                 setDividingNumber(dividing);
             }
-        } else if (groupingMethod == 3){
+        }
+
+        if (groupingChar.equals("3")){
+            setGroupingMethod("number of days");
+
             System.out.println("How many days in a group do you want?");
             char dividingChar = sc.nextLine().charAt(0);
             if (Character.isDigit(dividingChar)) {
@@ -170,27 +177,43 @@ public class UserInterface {
         }
 
         System.out.println("Choose your metric \n (1) Positive cases \n (2) New deaths \n (3) People vaccinated");
-        char metricChar = sc.nextLine().charAt(0);
-        if (Character.isDigit(metricChar)) {
-            int metric = Integer.parseInt(String.valueOf(metricChar));
-            setMetric(metric);
+        String metricChar = sc.nextLine().trim();
+
+        if (metricChar.equals("1")) {
+            setMetric("positive cases");
+        }
+
+        if (metricChar.equals("2")) {
+            setMetric("new deaths");
+        }
+
+        if (metricChar.equals("3")) {
+            setMetric("people vaccinated");
         }
 
         System.out.println("Choose your result type \n (1) New total \n (2) Up to");
-        char resultChar = sc.nextLine().charAt(0);
-        if (Character.isDigit(resultChar)) {
-            int result = Integer.parseInt(String.valueOf(resultChar));
-            setResult(result);
+        String resultChar = sc.nextLine().trim();
+
+        if (resultChar.equals("1")) {
+            setResult("new total");
+        }
+
+        if (resultChar.equals("2")) {
+            setResult("up to");
         }
     }
 
     // Input display method
     public void displayMethod(){
         System.out.println("Choose your display method \n (1) Tabular \n (2) Chart");
-        char displayChar = sc.nextLine().charAt(0);
-        if (Character.isDigit(displayChar)) {
-            int display = Integer.parseInt(String.valueOf(displayChar));
-            setDisplay(display);
+        String displayChar = sc.nextLine().trim();
+
+        if (displayChar.equals("1")) {
+            setDisplay("tabular");
+        }
+
+        if (displayChar.equals("2")) {
+            setDisplay("chart");
         }
     }
 
