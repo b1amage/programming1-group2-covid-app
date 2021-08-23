@@ -36,10 +36,6 @@ public class TimeRange {
     public void display() {
         System.out.println("Start date: " + startDate);
     }
-
-
-
-
 }
 
 

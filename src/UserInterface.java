@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class UserInterface {
     private static Scanner sc = new Scanner(System.in);
-    private ArrayList<Row> data;
+    private Data data;
     private int groupingMethod;
     private int dividingNumber;
     private int metric;
@@ -19,11 +19,11 @@ public class UserInterface {
     public UserInterface(){}
 
     //Getters and Setters
-    public ArrayList<Row> getData() {
+    public Data getData() {
         return data;
     }
 
-    public void setData(ArrayList<Row> data) {
+    public void setData(Data data) {
         this.data = data;
     }
 
@@ -112,8 +112,8 @@ public class UserInterface {
                 inputDataRange();
                 Data data = Data.createData(getLocation(), getTimeRange());
                 data.createRowData();
-                setData(data.getRowsFromStartDate());
-                if (getData() == null){
+                setData(data);
+                if (getData().getRowsFromStartDate() == null){
                     checkInputDataRange = false;
                 } else {
                     checkInputDataRange = true;
@@ -122,7 +122,7 @@ public class UserInterface {
             // Ask for summary method
             while(!checkInputGroupingMethod) {
                 inputGroupingMethod();
-                Summary summary = Summary.createSummary(this.getData(), this.getGroupingMethod(), this.getMetric(), this.getResult(), this.getDividingNumber());
+                Summary summary = Summary.createSummary(getData(), getGroupingMethod(), getMetric(), getResult(), getDividingNumber());
                 summary.processData();
                 if (summary.getGroupings() == null){
                     checkInputGroupingMethod = false;
