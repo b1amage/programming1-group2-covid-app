@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
@@ -149,6 +150,10 @@ public class UserInterface {
     public void inputGroupingMethod(){
         System.out.println("Choose your grouping method \n (1) No grouping \n (2) Number of groups \n (3) Number of days");
         String groupingChar = sc.nextLine().trim();
+        while (!groupingChar.equals("1") && !groupingChar.equals("2") && !groupingChar.equals("3")){
+            System.out.println("Wrong option, please insert again: ");
+            groupingChar = sc.nextLine().trim();
+        }
 
         if (groupingChar.equals("1")) {
             setGroupingMethod("no grouping");
@@ -178,6 +183,10 @@ public class UserInterface {
 
         System.out.println("Choose your metric \n (1) Positive cases \n (2) New deaths \n (3) People vaccinated");
         String metricChar = sc.nextLine().trim();
+        while (!metricChar.equals("1") && !metricChar.equals("2") && !metricChar.equals("3")){
+            System.out.println("Wrong option, please insert again: ");
+            metricChar = sc.nextLine().trim();
+        }
 
         if (metricChar.equals("1")) {
             setMetric("positive cases");
@@ -207,6 +216,10 @@ public class UserInterface {
     public void displayMethod(){
         System.out.println("Choose your display method \n (1) Tabular \n (2) Chart");
         String displayChar = sc.nextLine().trim();
+        while (!displayChar.equals("1") && !displayChar.equals("2")){
+            System.out.println("Wrong option, please insert again: ");
+            displayChar = sc.nextLine().trim();
+        }
 
         if (displayChar.equals("1")) {
             setDisplay("tabular");
@@ -229,6 +242,14 @@ public class UserInterface {
         if (Character.isDigit(timeRangeChar)){
             int timeRange = Integer.parseInt(String.valueOf(timeRangeChar));
             setTimeRangeChoice(timeRange);
+        }
+        while (getTimeRangeChoice() != 1 && getTimeRangeChoice() != 2 && getTimeRangeChoice() != 3){
+            System.out.println("Wrong option, please insert again: ");
+            timeRangeChar = sc.nextLine().charAt(0);
+            if (Character.isDigit(timeRangeChar)){
+                int timeRange = Integer.parseInt(String.valueOf(timeRangeChar));
+                setTimeRangeChoice(timeRange);
+            }
         }
         // Check user input for time range
         setTimeRangeFromChoice();
