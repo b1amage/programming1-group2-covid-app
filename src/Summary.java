@@ -77,7 +77,7 @@ public class Summary {
         }
         valuesOfEachRow = metricData.getValuesOfEachRow();
 
-        ResultData resultData = new ResultData(valuesOfEachRow);
+        ResultData resultData = new ResultData(data, valuesOfEachRow);
         ArrayList<Integer> valuesOfEachGroup;
         if (isVaccinatedData) {
             if (resultType.equals("new total")) {
@@ -161,6 +161,7 @@ class GroupData {
         int groupIndex = 0;
 
         if (rawData.size() % numOfDays != 0) {
+            System.out.println("=========");
             System.out.println("Cannot divide the data into that number of days");
             groupedData = null;
             return;
@@ -196,7 +197,7 @@ class MetricData {
         for (int i = 0; i < groupedData.size(); i++) {
             valuesOfEachRow.add(new ArrayList<>());
             for (Row row : groupedData.get(i)) {
-                if (metricOption.equals("new cases")) {
+                if (metricOption.equals("positive cases")) {
                     valuesOfEachRow.get(i).add(row.getNewCases());
                 } else if (metricOption.equals("new deaths")) {
                     valuesOfEachRow.get(i).add(row.getNewDeaths());
@@ -218,8 +219,13 @@ class ResultData {
     private ArrayList<ArrayList<Integer>> valuesOfEachRow;
     private ArrayList<Integer> valuesOfEachGroup = new ArrayList<>();
 
-    public ResultData(ArrayList<ArrayList<Integer>> valuesOfEachRow) {
+    public ResultData(Data data, ArrayList<ArrayList<Integer>> valuesOfEachRow) {
+        setData(data);
         setValuesOfEachRow(valuesOfEachRow);
+    }
+
+    public void setData(Data data) {
+        this.data = data;
     }
 
     public void setValuesOfEachRow(ArrayList<ArrayList<Integer>> valuesOfEachRow) {
@@ -241,9 +247,9 @@ class ResultData {
         String firstDateOfFirstGroup = data.getRowsFromStartDate().get(0).getDate();
         ArrayList<Row> rowsFromCSV = data.getRows();
         for (Row row : rowsFromCSV) {
-            if (row.getDate().equals(firstDateOfFirstGroup)) {break;}
             if (row.getLocation().equals(data.getLocation())) {
-                if (metricOption.equals("new cases")) {
+                if (row.getDate().equals(firstDateOfFirstGroup)) {break;}
+                if (metricOption.equals("positive cases")) {
                     upToValue += row.getNewCases();
                 }
                 if (metricOption.equals("new deaths")) {
