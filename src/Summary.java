@@ -205,6 +205,21 @@ class MetricData {
         }
     }
 
+//    public void getData(String kind) {
+//        for (int i = 0; i < groupedData.size(); i++) {
+//            valuesOfEachRow.add(new ArrayList<>());
+//            for (Row row : groupedData.get(i)) {
+//                if (kind == "case") {
+//                    valuesOfEachRow.get(i).add(row.getNewCases());
+//                } else if (kind == "death"){
+//                    valuesOfEachRow.get(i).add(row.getNewDeaths());
+//                } else {
+//                    valuesOfEachRow.get(i).add(row.getPeopleVaccinated());
+//                }
+//            }
+//        }
+//    }
+
     public ArrayList<ArrayList<Integer>> getValuesOfEachRow() {
         return valuesOfEachRow;
     }
