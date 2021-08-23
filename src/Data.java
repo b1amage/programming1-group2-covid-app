@@ -222,6 +222,15 @@ public class Data {
         timeRange.display();
     }
 
+//    public static String getDayOfFirstCase(String areaToSearch) {
+//        for (Row row : rows) {
+//            if (row.getLocation().equals(areaToSearch.trim())) {
+//                return row.getDate();
+//            }
+//        }
+//        return "No area found";
+//    }
+
     // Getters and Setters
     public ArrayList<Row> getRows() {
         return rows;
