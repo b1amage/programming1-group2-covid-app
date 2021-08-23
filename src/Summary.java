@@ -3,14 +3,14 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class Summary {
-    private ArrayList<Row> data;
+    private Data data;
     private int groupingMethod;
     private int metricType;
     private int resultType;
     private int dividingNumber;
     private LinkedHashMap<String, Integer> groupings;
 
-    public Summary(ArrayList<Row> data, int groupingMethod, int metricType, int resultType, int dividingNumber) {
+    public Summary(Data data, int groupingMethod, int metricType, int resultType, int dividingNumber) {
         setData(data);
         setGroupingMethod(groupingMethod);
         setMetricType(metricType);
@@ -18,7 +18,7 @@ public class Summary {
         setDividingNumber(dividingNumber);
     }
 
-    public void setData(ArrayList<Row> data) {
+    public void setData(Data data) {
         this.data = data;
     }
 
@@ -42,14 +42,14 @@ public class Summary {
         return groupings;
     }
 
-    public static Summary createSummary(ArrayList<Row> data, int groupingOption, int metricOption, int resultOption, int dividingNumber) {
+    public static Summary createSummary(Data data, int groupingOption, int metricOption, int resultOption, int dividingNumber) {
         return new Summary(data, groupingOption, metricOption, resultOption, dividingNumber);
     }
 
     public void processData() {
         boolean isVaccinatedData = false;
-        GroupData groupData = new GroupData(data);
-        ArrayList<ArrayList<Row>> groupedData = new ArrayList<>();
+        GroupData groupData = new GroupData(data.getRowsFromStartDate());
+        ArrayList<ArrayList<Row>> groupsOfDates;
 
         groupings = new LinkedHashMap<>();
         if (groupingMethod == 1) {
@@ -63,10 +63,10 @@ public class Summary {
             int numOfDays = dividingNumber;
             groupData.groupDataByNumberOfDays(numOfDays);
         }
-        groupedData = groupData.getGroupedData();
+        groupsOfDates = groupData.getGroupedData();
 
-        MetricData metricData = new MetricData(groupedData);
-        ArrayList<ArrayList<Integer>> valuesOfEachRow = new ArrayList<>();
+        MetricData metricData = new MetricData(groupsOfDates);
+        ArrayList<ArrayList<Integer>> valuesOfEachRow;
         if (metricType == 1) {
             metricData.getCase();
         } else if (metricType == 2) {
@@ -78,7 +78,7 @@ public class Summary {
         valuesOfEachRow = metricData.getValuesOfEachRow();
 
         ResultData resultData = new ResultData(valuesOfEachRow);
-        ArrayList<Integer> valuesOfEachGroup = new ArrayList<>();
+        ArrayList<Integer> valuesOfEachGroup;
         if (isVaccinatedData) {
             resultData.calculateByUpTo();
         } else {
@@ -169,7 +169,7 @@ class GroupData {
 }
 class MetricData {
     private ArrayList<ArrayList<Row>> groupedData;
-    private ArrayList<ArrayList<Integer>> valuesOfEachRow;
+    private ArrayList<ArrayList<Integer>> valuesOfEachRow = new ArrayList<>();
 
     public MetricData(ArrayList<ArrayList<Row>> groupedData) {
         setGroupedData(groupedData);
@@ -211,7 +211,7 @@ class MetricData {
 
 class ResultData {
     private ArrayList<ArrayList<Integer>> valuesOfEachRow;
-    private ArrayList<Integer> valuesOfEachGroup;
+    private ArrayList<Integer> valuesOfEachGroup = new ArrayList<>();
 
     public ResultData(ArrayList<ArrayList<Integer>> valuesOfEachRow) {
         setValuesOfEachRow(valuesOfEachRow);
