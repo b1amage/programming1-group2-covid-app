@@ -113,7 +113,7 @@ public class UserInterface {
                 Data data = Data.createData(getLocation(), getTimeRange());
                 data.createRowData();
                 setData(data);
-                if (getData() == null){
+                if (getData().getRowsFromStartDate() == null){
                     checkInputDataRange = false;
                 } else {
                     checkInputDataRange = true;
