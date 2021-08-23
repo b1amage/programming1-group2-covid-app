@@ -230,7 +230,6 @@ class ResultData {
             valuesOfEachGroup.add(total);
         }
     }
-
     public void calculateByUpTo() {
 
     }
