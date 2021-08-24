@@ -52,10 +52,17 @@ public class DataProcess {
 
     public static void processVaccinatedPeople(ArrayList<Row> rows) {
         for (int i = 0; i < rows.size(); i++) {
-            if (rows.get(i).getPeopleVaccinated() == -1 && i > 0) {
+            if (rows.get(i).getPeopleVaccinated() == -1 && i > 0 && rows.get(i).getLocation().equals(rows.get(i-1).getLocation())) {
                 rows.get(i).setPeopleVaccinated(rows.get(i-1).getPeopleVaccinated());
             }
         }
+
+        for (int i = 0; i < rows.size(); i++) {
+            if (rows.get(i).getPeopleVaccinated() == -1) {
+                rows.get(i).setPeopleVaccinated(0);
+            }
+        }
+
     }
 
     public static Row createNewRowFromMap(HashMap<String, String> map) {
