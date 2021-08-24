@@ -38,6 +38,14 @@ public class Summary {
         this.dividingNumber = dividingNumber;
     }
 
+    public Data getData() {
+        return data;
+    }
+
+    public String getMetricType() {
+        return metricType;
+    }
+
     public LinkedHashMap<String, Integer> getGroupings() {
         return groupings;
     }
@@ -161,7 +169,7 @@ class GroupData {
         groupedData = new ArrayList<>();
         int groupIndex = 0;
 
-        if (rawData.size() % numOfDays != 0) {
+        if (rawData.size() % numOfDays != 0 || rawData.size() == numOfDays) {
             System.out.println("=========");
             System.out.println("Cannot divide the data into that number of days");
             groupedData = null;

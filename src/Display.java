@@ -1,40 +1,103 @@
-import java.io.IOException;
 import java.util.*;
 
 public class Display {
-    public static void tabularDisplay(Data data) {
-        System.out.printf("\n%s\n", "TABULAR DISPLAY");
-        System.out.println("Range" + "\t\t\t\t" + "Value");
+    private Summary summary;
+    private String display;
 
-        for (Row row : data.getRowsFromStartDate()) {
-            System.out.println(row.getDate() + "\t\t\t" + row.getNewCases());
+    public Display(Summary summary, String display) {
+        setSummary(summary);
+        setDisplay(display);
+    }
+
+    public void setSummary(Summary summary) {
+        this.summary = summary;
+    }
+
+    public String getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(String display) {
+        this.display = display;
+    }
+
+    public static Display createDisplay(Summary summary, String display) {
+        return new Display(summary, display);
+    }
+
+    public void createDisplay() {
+        switch (display) {
+            case "tabular":
+                tabularDisplay(summary);
+                break;
+            case "chart":
+                chartDisplay(summary);
+                break;
+            default:
+                System.out.println("Cannot display this chart");
+                break;
         }
     }
 
-    public static void chartDisplay(Data data) {
+    public void tabularDisplay(Summary summary) {
+        System.out.printf("\n%s\n", "TABULAR DISPLAY");
+        int maxLengthOfGroupName = 0;
+        for (String groupName : summary.getGroupings().keySet()) {
+            if (groupName.length() > maxLengthOfGroupName) {
+                maxLengthOfGroupName = groupName.length();
+            }
+        }
+        System.out.println("Range" + " ".repeat(maxLengthOfGroupName) + "Value");
+
+        for (String groupName : summary.getGroupings().keySet()) {
+            System.out.println(groupName + " ".repeat(5 + (maxLengthOfGroupName - groupName.length())) + summary.getGroupings().get(groupName));
+        }
+    }
+
+    public void chartDisplay(Summary summary) {
         int numOfRows = 24;
         int numOfCols = 80;
-        int numOfGroups = data.getRowsFromStartDate().size();
+        LinkedHashMap<String, Integer> summaryData = summary.getGroupings();
+        int numOfGroups = summaryData.size();
 
-        String valueName = "New Cases";
-
-        if (numOfGroups == 0 || numOfGroups > 26) {
-            System.out.println("Cannot display this data");
-            return;
+        String valueName;
+        switch (summary.getMetricType()) {
+            case "positive cases":
+                valueName = "Positive Cases";
+                break;
+            case "new deaths":
+                valueName = "Deaths";
+                break;
+            case "people vaccinated":
+                valueName = "People Vaccinated";
+                break;
+            default:
+                valueName = "Metric Type";
+                break;
         }
 
         SortedSet<Integer> summaryResults = new TreeSet<>();
-        for (int i = 0; i < numOfGroups; i++) {
-            summaryResults.add(data.getRowsFromStartDate().get(i).getNewCases());
+        for (String groupName : summaryData.keySet()) {
+            summaryResults.add(summaryData.get(groupName));
         }
 
-        String[] groups = new String[numOfGroups];
-        for (int i = 0; i < numOfGroups; i++) {
-            groups[i] = data.getRowsFromStartDate().get(i).getDate();
+        if (numOfGroups == 0 || numOfGroups > 26 || summaryResults.last() <= 0) {
+            System.out.println("=========");
+            System.out.println("There is no data or the data is to large to display by chart");
+            display = null;
+            return;
         }
+
+        if (numOfGroups == 1) {
+            System.out.println("=========");
+            System.out.println("You should use tabular display to show the data of only one group");
+            display = null;
+            return;
+        }
+
+        ArrayList<String> groups = new ArrayList<>(summaryData.keySet());
 
         int indentation = Integer.toString(summaryResults.last()).length();
-//        int unit = (summaryResults.last() - summaryResults.first()) / (numOfRows - 1);
         int positionOfLabelOnY_axis = 0;
 
         int spaceBetweenLabelOnX_axis = (numOfCols - numOfGroups - 1) / (numOfGroups - 1);
@@ -45,8 +108,10 @@ public class Display {
 
         // Map the position on X axis to a result on Y axis
         LinkedHashMap<Integer, Integer> mapPositionOnXtoResult = new LinkedHashMap<>();
-        for (int i = 0; i < numOfGroups; i++) {
-            mapPositionOnXtoResult.put(positionOfGroupOnX_axis.get(i), data.getRowsFromStartDate().get(i).getNewCases());
+        int index = 0;
+        for (String groupName : summaryData.keySet()) {
+            mapPositionOnXtoResult.put(positionOfGroupOnX_axis.get(index), summaryData.get(groupName));
+            index++;
         }
 
         // Store summary results in LinkedList to iterate backward.
@@ -59,7 +124,11 @@ public class Display {
             Iterator<Integer> iterator = results.descendingIterator();
             while (iterator.hasNext()) {
                 int result = iterator.next();
-                positionOfLabelOnY_axis = ((result - summaryResults.first()) * (numOfRows - 2)) / (summaryResults.last() - summaryResults.first()) + 1;
+                if (summaryResults.first().equals(summaryResults.last())) {
+                    positionOfLabelOnY_axis = 1;
+                } else {
+                    positionOfLabelOnY_axis = ((result - summaryResults.first()) * (numOfRows - 2)) / (summaryResults.last() - summaryResults.first()) + 1;
+                }
 
                 if (i == positionOfLabelOnY_axis) {
                     resultOnThisRow = result;
@@ -121,15 +190,7 @@ public class Display {
         System.out.println("\n" + " ".repeat(indentation + 1) + "\t" + " ".repeat(numOfCols / 2 - 5) + "Group");
 
         for (int i = 0; i < numOfGroups; i++) {
-            System.out.printf("Group %d: %s\n", i + 1, groups[i]);
+            System.out.printf("Group %d: %s\n", i + 1, groups.get(i));
         }
-
-    }
-
-    public static void main(String[] args) throws IOException {
-//        Data data = Data.createData();
-//        data.createRowData();
-//        tabularDisplay(data);
-//        chartDisplay(data);
     }
 }
