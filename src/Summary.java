@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 public class Summary {
@@ -206,6 +207,8 @@ class MetricData {
                 }
             }
         }
+
+        System.out.println(Arrays.deepToString(valuesOfEachRow.toArray()));
     }
 
     public ArrayList<ArrayList<Integer>> getValuesOfEachRow() {

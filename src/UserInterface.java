@@ -233,24 +233,19 @@ public class UserInterface {
     // Input data method
     public void inputDataRange(){
         System.out.println("Choose your location:");
-        String location = sc.nextLine();
+        String location = sc.nextLine().trim();
         setLocation(location);
 
         // ask user to choose
         showDateChoiceMenu();
-        char timeRangeChar = sc.nextLine().charAt(0);
-        if (Character.isDigit(timeRangeChar)){
-            int timeRange = Integer.parseInt(String.valueOf(timeRangeChar));
-            setTimeRangeChoice(timeRange);
-        }
-        while (getTimeRangeChoice() != 1 && getTimeRangeChoice() != 2 && getTimeRangeChoice() != 3){
+        String timeRangeChar = sc.nextLine().trim();
+        while (!timeRangeChar.equals("1") && !timeRangeChar.equals("2") && !timeRangeChar.equals("3")){
             System.out.println("Wrong option, please insert again: ");
-            timeRangeChar = sc.nextLine().charAt(0);
-            if (Character.isDigit(timeRangeChar)){
-                int timeRange = Integer.parseInt(String.valueOf(timeRangeChar));
-                setTimeRangeChoice(timeRange);
-            }
+            timeRangeChar = sc.nextLine().trim();
         }
+
+        int timeRangeChoice = Integer.parseInt(timeRangeChar);
+        setTimeRangeChoice(timeRangeChoice);
         // Check user input for time range
         setTimeRangeFromChoice();
 
