@@ -149,17 +149,11 @@ public class UserInterface {
     // input grouping method
     public void inputGroupingMethod(){
         System.out.println("Choose your grouping method \n (1) No grouping \n (2) Number of groups \n (3) Number of days");
-<<<<<<< HEAD
-        char groupingChar = sc.nextLine().trim().charAt(0);
-        if (Character.isDigit(groupingChar)) {
-            int grouping = Integer.parseInt(String.valueOf(groupingChar));
-            setGroupingMethod(grouping);
-=======
         String groupingChar = sc.nextLine().trim();
         while (!groupingChar.equals("1") && !groupingChar.equals("2") && !groupingChar.equals("3")){
             System.out.println("Wrong option, please insert again: ");
             groupingChar = sc.nextLine().trim();
->>>>>>> 83adf203f899cb2cb493af53cd6fb68c848fead9
+
         }
 
         if (groupingChar.equals("1")) {
