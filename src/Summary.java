@@ -207,8 +207,6 @@ class MetricData {
                 }
             }
         }
-
-        System.out.println(Arrays.deepToString(valuesOfEachRow.toArray()));
     }
 
     public ArrayList<ArrayList<Integer>> getValuesOfEachRow() {
