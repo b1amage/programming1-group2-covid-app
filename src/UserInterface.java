@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class UserInterface {
-    private static Scanner sc = new Scanner(System.in);
+    private static final Scanner sc = new Scanner(System.in);
     private Data data;
     private Summary summary;
     private int dividingNumber;
@@ -120,11 +120,7 @@ public class UserInterface {
                 Data data = Data.createData(getLocation(), getTimeRange());
                 data.createRowData();
                 setData(data);
-                if (getData().getRowsFromStartDate() == null){
-                    checkInputDataRange = false;
-                } else {
-                    checkInputDataRange = true;
-                }
+                checkInputDataRange = getData().getRowsFromStartDate() != null;
             }
             // Ask for summary method
             while(!checkInputGroupingMethod) {
@@ -132,23 +128,14 @@ public class UserInterface {
                 Summary summary = Summary.createSummary(getData(), getGroupingMethod(), getMetric(), getResult(), getDividingNumber());
                 summary.processData();
                 setSummary(summary);
-                if (summary.getGroupings() == null){
-                    checkInputGroupingMethod = false;
-                } else {
-                    checkInputGroupingMethod = true;
-                }
+                checkInputGroupingMethod = summary.getGroupings() != null;
             }
             // Ask for display method
             while (!checkDisplayMethod) {
                 inputDisplayMethod();
                 Display display = Display.createDisplay(getSummary(), getDisplay());
                 display.createDisplay();
-
-                if (display.getDisplay() == null) {
-                    checkDisplayMethod = false;
-                } else {
-                    checkDisplayMethod = true;
-                }
+                checkDisplayMethod = display.getDisplay() != null;
             }
 
             // Ask the user if they want to continue
@@ -180,6 +167,10 @@ public class UserInterface {
 
             System.out.println("How many groups do you want?");
             String dividingChar = sc.nextLine().trim();
+            while (!dividingChar.matches("[0-9]+")) {
+                System.out.println("This is not a number, please insert again: ");
+                dividingChar = sc.nextLine().trim();
+            }
             int dividing = Integer.parseInt(dividingChar);
             setDividingNumber(dividing);
         }
@@ -189,6 +180,10 @@ public class UserInterface {
 
             System.out.println("How many days in a group do you want?");
             String dividingChar = sc.nextLine().trim();
+            while (!dividingChar.matches("[0-9]+")) {
+                System.out.println("This is not a number, please insert again: ");
+                dividingChar = sc.nextLine().trim();
+            }
             int dividing = Integer.parseInt(dividingChar);
             setDividingNumber(dividing);
         }

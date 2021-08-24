@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 public class Summary {
@@ -55,80 +54,87 @@ public class Summary {
     }
 
     public void processData() {
-        boolean isVaccinatedData = false;
-        GroupData groupData = new GroupData(data.getRowsFromStartDate());
-        ArrayList<ArrayList<Row>> groupsOfDates;
-
         groupings = new LinkedHashMap<>();
-        if (groupingMethod.equals("no grouping")) {
-            groupData.noGrouping();
 
-        } else if (groupingMethod.equals("number of groups")) {
-            int numOfGroups = dividingNumber;
-            groupData.groupDataByNumberOfGroups(numOfGroups);
+        GroupData groupData = new GroupData(data.getRowsFromStartDate(), groupingMethod, dividingNumber);
+        groupData.createGroupData();
 
-        } else if (groupingMethod.equals("number of days")) {
-            int numOfDays = dividingNumber;
-            groupData.groupDataByNumberOfDays(numOfDays);
-        }
+        ArrayList<ArrayList<Row>> groupsOfDates;
         groupsOfDates = groupData.getGroupedData();
         if (groupsOfDates == null) {
             groupings = null;
             return;
         }
 
-        MetricData metricData = new MetricData(groupsOfDates);
+        MetricData metricData = new MetricData(groupsOfDates, metricType);
+        metricData.createMetricData();
         ArrayList<ArrayList<Integer>> valuesOfEachRow;
-        metricData.getValues(metricType);
 
-        if (metricType.equals("people vaccinated")) {
-            isVaccinatedData = true;
-        }
         valuesOfEachRow = metricData.getValuesOfEachRow();
 
-        ResultData resultData = new ResultData(data, valuesOfEachRow);
-        ArrayList<Integer> valuesOfEachGroup;
-        if (isVaccinatedData) {
-            if (resultType.equals("new total")) {
-                resultData.calculateByNewTotalForAccumulatedValue();
-            } else if (resultType.equals("up to")) {
-                resultData.calculateByUpToForAccumulatedValue();
-            }
+        ResultData resultData;
+
+        if (metricType.equals("people vaccinated")) {
+            resultData = new ResultDataForAccumulateValue(getData(), resultType, metricType, valuesOfEachRow);
         } else {
-            if (resultType.equals("new total")) {
-                resultData.calculateByNewTotal();
-            } else if (resultType.equals("up to")) {
-                resultData.calculateByUpTo(metricType);
-            }
+            resultData = new ResultData(getData(), resultType, metricType, valuesOfEachRow);
         }
+
+        resultData.createResultData();
+        ArrayList<Integer> valuesOfEachGroup;
 
         valuesOfEachGroup = resultData.getValuesOfEachGroup();
 
-        if (groupingMethod.equals("no grouping")) {
-            for (int i = 0; i < groupsOfDates.size(); i++) {
+        for (int i = 0; i < groupsOfDates.size(); i++) {
+            int groupSize = groupsOfDates.get(i).size();
+            if (groupSize == 1) {
                 groupings.put(groupsOfDates.get(i).get(0).getDate(), valuesOfEachGroup.get(i));
+                continue;
             }
-        } else {
-            for (int i = 0; i < groupsOfDates.size(); i++) {
-                int groupSize = groupsOfDates.get(i).size();
-                groupings.put(groupsOfDates.get(i).get(0).getDate() + " - " + groupsOfDates.get(i).get(groupSize - 1).getDate(), valuesOfEachGroup.get(i));
-            }
+            groupings.put(groupsOfDates.get(i).get(0).getDate() + " - " + groupsOfDates.get(i).get(groupSize - 1).getDate(), valuesOfEachGroup.get(i));
         }
-
-        System.out.println(groupings);
     }
 }
 
 class GroupData {
     private ArrayList<Row> rawData;
     private ArrayList<ArrayList<Row>> groupedData;
+    private String groupingMethod;
+    private int dividingNumber;
 
-    public GroupData(ArrayList<Row> rawData) {
+    public GroupData(ArrayList<Row> rawData, String groupingMethod, int dividingNumber) {
         setRawData(rawData);
+        setGroupingMethod(groupingMethod);
+        setDividingNumber(dividingNumber);
     }
+
 
     public void setRawData(ArrayList<Row> rawData) {
         this.rawData = rawData;
+    }
+
+    public void setGroupingMethod(String groupingMethod) {
+        this.groupingMethod = groupingMethod;
+    }
+
+    public void setDividingNumber(int dividingNumber) {
+        this.dividingNumber = dividingNumber;
+    }
+
+    public void createGroupData() {
+        switch (groupingMethod) {
+            case "no grouping":
+                noGrouping();
+                break;
+            case "number of groups":
+                int numOfGroups = dividingNumber;
+                groupDataByNumberOfGroups(numOfGroups);
+                break;
+            case "number of days":
+                int numOfDays = dividingNumber;
+                groupDataByNumberOfDays(numOfDays);
+                break;
+        }
     }
 
     public void noGrouping() {
@@ -144,7 +150,7 @@ class GroupData {
     public void groupDataByNumberOfGroups(int numOfGroups) {
         groupedData = new ArrayList<>();
         int numOfRows = rawData.size() / numOfGroups;
-        int groupIndexToIncreaseSize = rawData.size() / numOfGroups;
+        int groupIndexToIncreaseSize = numOfGroups;
         int groupIndex = 0;
 
         if (rawData.size() % numOfGroups != 0) {
@@ -192,26 +198,37 @@ class GroupData {
 }
 class MetricData {
     private ArrayList<ArrayList<Row>> groupedData;
-    private ArrayList<ArrayList<Integer>> valuesOfEachRow = new ArrayList<>();
+    private String metricType;
+    private ArrayList<ArrayList<Integer>> valuesOfEachRow;
 
-    public MetricData(ArrayList<ArrayList<Row>> groupedData) {
+    public MetricData(ArrayList<ArrayList<Row>> groupedData, String metricType) {
         setGroupedData(groupedData);
+        setMetricType(metricType);
     }
 
     public void setGroupedData(ArrayList<ArrayList<Row>> groupedData) {
         this.groupedData = groupedData;
     }
 
-    public void getValues(String metricOption) {
+    public void setMetricType(String metricType) {
+        this.metricType = metricType;
+    }
+
+    public void createMetricData() {
+        valuesOfEachRow = new ArrayList<>();
         for (int i = 0; i < groupedData.size(); i++) {
             valuesOfEachRow.add(new ArrayList<>());
             for (Row row : groupedData.get(i)) {
-                if (metricOption.equals("positive cases")) {
-                    valuesOfEachRow.get(i).add(row.getNewCases());
-                } else if (metricOption.equals("new deaths")) {
-                    valuesOfEachRow.get(i).add(row.getNewDeaths());
-                } else if (metricOption.equals("people vaccinated")){
-                    valuesOfEachRow.get(i).add(row.getPeopleVaccinated());
+                switch (metricType) {
+                    case "positive cases":
+                        valuesOfEachRow.get(i).add(row.getNewCases());
+                        break;
+                    case "new deaths":
+                        valuesOfEachRow.get(i).add(row.getNewDeaths());
+                        break;
+                    case "people vaccinated":
+                        valuesOfEachRow.get(i).add(row.getPeopleVaccinated());
+                        break;
                 }
             }
         }
@@ -223,13 +240,16 @@ class MetricData {
 }
 
 class ResultData {
-    private Data data;
-    private String metricOption;
-    private ArrayList<ArrayList<Integer>> valuesOfEachRow;
-    private ArrayList<Integer> valuesOfEachGroup = new ArrayList<>();
+    protected Data data;
+    protected String resultType;
+    protected String metricType;
+    protected ArrayList<ArrayList<Integer>> valuesOfEachRow;
+    protected  ArrayList<Integer> valuesOfEachGroup = new ArrayList<>();
 
-    public ResultData(Data data, ArrayList<ArrayList<Integer>> valuesOfEachRow) {
+    public ResultData(Data data, String resultType, String metricType, ArrayList<ArrayList<Integer>> valuesOfEachRow) {
         setData(data);
+        setResultType(resultType);
+        setMetricType(metricType);
         setValuesOfEachRow(valuesOfEachRow);
     }
 
@@ -237,8 +257,24 @@ class ResultData {
         this.data = data;
     }
 
+    public void setResultType(String resultType) {
+        this.resultType = resultType;
+    }
+
+    public void setMetricType(String metricType) {
+        this.metricType = metricType;
+    }
+
     public void setValuesOfEachRow(ArrayList<ArrayList<Integer>> valuesOfEachRow) {
         this.valuesOfEachRow = valuesOfEachRow;
+    }
+
+    public void createResultData() {
+        if (resultType.equals("new total")) {
+            calculateByNewTotal();
+        } else if (resultType.equals("up to")) {
+            calculateByUpTo();
+        }
     }
 
     public void calculateByNewTotal() {
@@ -251,17 +287,17 @@ class ResultData {
         }
     }
 
-    public void calculateByUpTo(String metricOption) {
+    public void calculateByUpTo() {
         int upToValue = 0;
         String firstDateOfFirstGroup = data.getRowsFromStartDate().get(0).getDate();
         ArrayList<Row> rowsFromCSV = data.getRows();
         for (Row row : rowsFromCSV) {
             if (row.getLocation().equals(data.getLocation())) {
                 if (row.getDate().equals(firstDateOfFirstGroup)) {break;}
-                if (metricOption.equals("positive cases")) {
+                if (metricType.equals("positive cases")) {
                     upToValue += row.getNewCases();
                 }
-                if (metricOption.equals("new deaths")) {
+                if (metricType.equals("new deaths")) {
                     upToValue += row.getNewDeaths();
                 }
             }
@@ -271,6 +307,28 @@ class ResultData {
                 upToValue += value;
             }
             valuesOfEachGroup.add(upToValue);
+        }
+    }
+
+    public ArrayList<Integer> getValuesOfEachGroup() {
+        return valuesOfEachGroup;
+    }
+}
+
+class ResultDataForAccumulateValue extends ResultData{
+    public ResultDataForAccumulateValue(Data data, String resultType, String metricType, ArrayList<ArrayList<Integer>> valuesOfEachRow) {
+        super(data, resultType, metricType, valuesOfEachRow);
+    }
+
+    public void createResultData() {
+        if (metricType.equals("people vaccinated")) {
+            if (resultType.equals("new total")) {
+                calculateByNewTotalForAccumulatedValue();
+            }
+
+            if (resultType.equals("up to")) {
+                calculateByUpToForAccumulatedValue();
+            }
         }
     }
 
@@ -284,9 +342,5 @@ class ResultData {
         for (ArrayList<Integer> group : valuesOfEachRow) {
             valuesOfEachGroup.add(group.get(group.size() - 1));
         }
-    }
-
-    public ArrayList<Integer> getValuesOfEachGroup() {
-        return valuesOfEachGroup;
     }
 }
