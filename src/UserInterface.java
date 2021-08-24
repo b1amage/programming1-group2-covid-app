@@ -147,7 +147,7 @@ public class UserInterface {
     // input grouping method
     public void inputGroupingMethod(){
         System.out.println("Choose your grouping method \n (1) No grouping \n (2) Number of groups \n (3) Number of days");
-        char groupingChar = sc.nextLine().charAt(0);
+        char groupingChar = sc.nextLine().trim().charAt(0);
         if (Character.isDigit(groupingChar)) {
             int grouping = Integer.parseInt(String.valueOf(groupingChar));
             setGroupingMethod(grouping);
