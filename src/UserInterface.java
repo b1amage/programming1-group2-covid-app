@@ -259,11 +259,19 @@ public class UserInterface {
                 startDate = sc.nextLine();
 
                 System.out.println("Use (1) weeks or (2) days");
-                char daysOrWeeksChar = sc.nextLine().charAt(0);
-                if (Character.isDigit(daysOrWeeksChar)){
-                    int daysOrWeeks = Integer.parseInt(String.valueOf(daysOrWeeksChar));
-                    setDayOrWeekChoice(daysOrWeeks);
+                String daysOrWeeksChar = sc.nextLine().trim();
+                while (!daysOrWeeksChar.equals("1") && !daysOrWeeksChar.equals("2")){
+                    System.out.println("Wrong option, please insert again: ");
+                    daysOrWeeksChar = sc.nextLine().trim();
                 }
+
+                int daysOrWeeks = Integer.parseInt(daysOrWeeksChar);
+                setDayOrWeekChoice(daysOrWeeks);
+
+//                if (Character.isDigit(daysOrWeeksChar)){
+//                    int daysOrWeeks = Integer.parseInt(String.valueOf(daysOrWeeksChar));
+//                    setDayOrWeekChoice(daysOrWeeks);
+//                }
                 if (dayOrWeekChoice == 1){
                     System.out.println("Enter your weeks");
                     nextDayCount = Integer.parseInt(sc.nextLine()) * 7;

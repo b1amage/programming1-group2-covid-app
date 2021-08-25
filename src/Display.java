@@ -101,16 +101,16 @@ public class Display {
         int positionOfLabelOnY_axis = 0;
 
         int spaceBetweenLabelOnX_axis = (numOfCols - numOfGroups - 1) / (numOfGroups - 1);
-        ArrayList<Integer> positionOfGroupOnX_axis = new ArrayList<>();
-        for (int i = 0; i < numOfGroups; i++) {
-            positionOfGroupOnX_axis.add((spaceBetweenLabelOnX_axis + 1) * i + 1);
-        }
+//        ArrayList<Integer> positionOfGroupOnX_axis = new ArrayList<>();
+//        for (int i = 0; i < numOfGroups; i++) {
+//            positionOfGroupOnX_axis.add((spaceBetweenLabelOnX_axis + 1) * i + 1);
+//        }
 
         // Map the position on X axis to a result on Y axis
-        LinkedHashMap<Integer, Integer> mapPositionOnXtoResult = new LinkedHashMap<>();
+        LinkedHashMap<Integer, Integer> mapPositionOnXtoGroup = new LinkedHashMap<>();
         int index = 0;
         for (String groupName : summaryData.keySet()) {
-            mapPositionOnXtoResult.put(positionOfGroupOnX_axis.get(index), summaryData.get(groupName));
+            mapPositionOnXtoGroup.put((spaceBetweenLabelOnX_axis + 1) * index + 1, summaryData.get(groupName));
             index++;
         }
 
@@ -151,8 +151,8 @@ public class Display {
                 }
 
                 if (i == positionOfLabelOnY_axis) {
-                    if (positionOfGroupOnX_axis.contains(j)) {
-                        int resultAtThisGroup = mapPositionOnXtoResult.get(j);
+                    if (mapPositionOnXtoGroup.containsKey(j)) {
+                        int resultAtThisGroup = mapPositionOnXtoGroup.get(j);
                         if (resultAtThisGroup == resultOnThisRow) {
                             System.out.print('*');
                             continue;
