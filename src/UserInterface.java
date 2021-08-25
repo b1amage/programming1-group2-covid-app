@@ -268,10 +268,6 @@ public class UserInterface {
                 int daysOrWeeks = Integer.parseInt(daysOrWeeksChar);
                 setDayOrWeekChoice(daysOrWeeks);
 
-//                if (Character.isDigit(daysOrWeeksChar)){
-//                    int daysOrWeeks = Integer.parseInt(String.valueOf(daysOrWeeksChar));
-//                    setDayOrWeekChoice(daysOrWeeks);
-//                }
                 if (dayOrWeekChoice == 1){
                     System.out.println("Enter your weeks");
                     nextDayCount = Integer.parseInt(sc.nextLine()) * 7;

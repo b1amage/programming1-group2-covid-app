@@ -101,10 +101,6 @@ public class Display {
         int positionOfLabelOnY_axis = 0;
 
         int spaceBetweenLabelOnX_axis = (numOfCols - numOfGroups - 1) / (numOfGroups - 1);
-//        ArrayList<Integer> positionOfGroupOnX_axis = new ArrayList<>();
-//        for (int i = 0; i < numOfGroups; i++) {
-//            positionOfGroupOnX_axis.add((spaceBetweenLabelOnX_axis + 1) * i + 1);
-//        }
 
         // Map the position on X axis to a result on Y axis
         LinkedHashMap<Integer, Integer> mapPositionOnXtoGroup = new LinkedHashMap<>();
@@ -133,6 +129,7 @@ public class Display {
                 if (i == positionOfLabelOnY_axis) {
                     resultOnThisRow = result;
                     System.out.print(result + " ".repeat(indentation - Integer.toString(result).length()) + "\t|");
+                    results.removeLast();
                     break;
                 }
             }
@@ -157,9 +154,7 @@ public class Display {
                             System.out.print('*');
                             continue;
                         } else {
-                            int positionOfThisGroup;
-                            positionOfThisGroup = ((resultAtThisGroup - summaryResults.first()) * (numOfRows - 2)) / (summaryResults.last() - summaryResults.first()) + 1;
-
+                            int positionOfThisGroup = ((resultAtThisGroup - summaryResults.first()) * (numOfRows - 2)) / (summaryResults.last() - summaryResults.first()) + 1;
                             if (positionOfThisGroup == i) {
                                 System.out.print('*');
                                 continue;
