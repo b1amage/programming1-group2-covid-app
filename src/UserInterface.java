@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class UserInterface {
@@ -209,6 +210,10 @@ public class UserInterface {
 
         System.out.println("Choose your result type \n (1) New total \n (2) Up to");
         String resultChar = sc.nextLine().trim();
+        while (!resultChar.equals("1") && !resultChar.equals("2")){
+            System.out.println("Wrong option, please insert again: ");
+            resultChar = sc.nextLine().trim();
+        }
 
         if (resultChar.equals("1")) {
             setResult("new total");
