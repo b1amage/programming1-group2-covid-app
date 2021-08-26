@@ -1,3 +1,12 @@
+/*
+  Class: DataProcess
+  Purpose: Use to process data
+  Contributors: Quoc Bao
+  Created date: 23/7/2021
+  Last modified: 26/8/2021
+  Version 1.0
+ */
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -46,7 +55,7 @@ public class DataProcess {
 
         // Process the vaccinated people
         processVaccinatedPeople(rows);
-//        displayRows(rows);
+
         return rows;
     }
 
@@ -63,9 +72,9 @@ public class DataProcess {
 //            }
 //        }
 
-        for (int i = 0; i < rows.size(); i++) {
-            if (rows.get(i).getPeopleVaccinated() == -1) {
-                rows.get(i).setPeopleVaccinated(0);
+        for (Row row : rows) {
+            if (row.getPeopleVaccinated() == -1) {
+                row.setPeopleVaccinated(0);
             }
         }
     }
@@ -92,7 +101,7 @@ public class DataProcess {
 
     public static void displayRows(ArrayList<Row> rowArrayList) {
         for (Row row : rowArrayList) {
-            row.display();
+            System.out.println(row);
         }
     }
 

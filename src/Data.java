@@ -1,9 +1,17 @@
+/*
+  Class: Data
+  Purpose: Use to store data of the processed csv file
+  Contributors: Quoc Bao, Kha Tuan, Minh Long
+  Created date: 25/7/2021
+  Last modified: 26/8/2021
+  Version 1.0
+ */
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class Data {
-    // Attributes
+    // Fields
     private static ArrayList<Row> rows; // Whole data
 
     static {
@@ -27,11 +35,21 @@ public class Data {
         this.timeRange = timeRange;
     }
 
+    /**
+     * This method create a Data object base on location and object TimeRange
+     * @param location location of the country
+     * @param timeRange TimeRange object
+     * @return new Data object
+     * @throws IOException file not found
+     */
     public static Data createData(String location, TimeRange timeRange) throws IOException {
         // Create new data object to process
         return new Data(location, timeRange);
     }
 
+    /**
+     * This method create data from a timeRange based on user input
+     */
     public void createRowData() {
         if (timeRange.getEndDate() != null) { // If user use option (1) start date and end date
             // Set initial to -1
@@ -72,9 +90,7 @@ public class Data {
             boolean locationExist = false;
 
             for (Row row : rows) {
-                if (row.getLocation().equals(location)) {
-                    locationExist = true;
-                }
+                if (row.getLocation().equals(location)) locationExist = true;
             }
 
             // If location not exist, throw a message and return
@@ -109,10 +125,6 @@ public class Data {
         }
     }
 
-    public void display() {
-        System.out.println("Location: " + location);
-        timeRange.display();
-    }
 
     // Getters and Setters
     public ArrayList<Row> getRows() {
@@ -130,7 +142,6 @@ public class Data {
     public void setLocation(String location) {
         this.location = location;
     }
-
 
     public TimeRange getTimeRange() {
         return timeRange;

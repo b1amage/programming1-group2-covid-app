@@ -1,4 +1,14 @@
+/*
+  Class: Row
+  Purpose: Use to group each row of the csv file
+  Contributors: Quoc Bao
+  Created date: 1/8/2021
+  Last modified: 26/8/2021
+  Version 1.0
+ */
 public class Row {
+
+    // Fields
     private String continent;
     private String date;
     private int peopleVaccinated;
@@ -8,9 +18,11 @@ public class Row {
     private String isoCode;
     private long population;
 
-    // 3 Constructors
+    // Constructors
     public Row() {}
+
     public Row(String continent, String date, int peopleVaccinated, int newCases, int newDeaths, String location, String isoCode, long population) {
+        // Use setters to avoid duplicate criteria codes
         setContinent(continent);
         setDate(date);
         setPeopleVaccinated(peopleVaccinated);
@@ -22,6 +34,7 @@ public class Row {
     }
 
     public Row(String continent, String date, String peopleVaccinated, String newCases, String newDeaths, String location, String isoCode, String population) {
+        // Treat all parameters as string for easier process and validate
         setContinent(continent);
         setDate(date);
         setPeopleVaccinated(peopleVaccinated);
@@ -146,15 +159,9 @@ public class Row {
     }
 
     // toString method
-    public void display() {
-        System.out.println("continent: " + continent);
-        System.out.println("date: " + date);
-        System.out.println("people_vaccinated: " + peopleVaccinated);
-        System.out.println("new_cases: " + newCases);
-        System.out.println("new_deaths: " + newDeaths);
-        System.out.println("location: " + location);
-        System.out.println("iso_code: " + isoCode);
-        System.out.println("population: " + population);
-        System.out.println("========================================");
+    public String toString() {
+        return "{continent: " + continent + "\ndate: " + date + "\npeople_vaccinated: " + peopleVaccinated +
+                "\nnew_cases: " + newCases + "\nnew_deaths: " + newDeaths + "\nlocation: " + location + "\niso_code: "
+                + isoCode +  "\npopulation: " + population + "}\n";
     }
 }
