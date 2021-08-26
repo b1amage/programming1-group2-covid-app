@@ -81,7 +81,7 @@ public class Display {
             summaryResults.add(summaryData.get(groupName));
         }
 
-        if (numOfGroups == 0 || numOfGroups > 26 || summaryResults.last() <= 0) {
+        if (numOfGroups == 0 || numOfGroups > 26 || summaryResults.last() == 0) {
             System.out.println("=========");
             System.out.println("There is no data or the data is to large to display by chart");
             display = null;
