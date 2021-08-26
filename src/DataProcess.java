@@ -81,7 +81,10 @@ public class DataProcess {
         // This loop add the new people vaccinated to an arrayList
         for (int i = 1; i < rows.size(); i++) {
             if (rows.get(i).getPeopleVaccinated() != 0 && rows.get(i).getLocation().equals(rows.get(i-1).getLocation())) {
-                processedVacinatedPeople.add(rows.get(i).getPeopleVaccinated() - rows.get(i-1).getPeopleVaccinated());
+                int indexNearestNonZero = getNearestCaseNotZeroIndex(rows, i);
+                if (indexNearestNonZero != -1) {
+                    processedVacinatedPeople.add(rows.get(i).getPeopleVaccinated() - rows.get(indexNearestNonZero).getPeopleVaccinated());
+                }
             }
         }
 
@@ -89,13 +92,32 @@ public class DataProcess {
         int idxProcess = 0;
 
         // This loop use to set each value in array list to the rows
+<<<<<<< HEAD
         for (int i = 1; i < rows.size(); i++) {
             if (rows.get(i).getPeopleVaccinated() != 0 && rows.get(i).getLocation().equals(rows.get(i-1).getLocation())) {
                 rows.get(i).setPeopleVaccinated(processedVacinatedPeople.get(idxProcess));
                 idxProcess++;
+=======
+        for (int i = 0; i < rows.size(); i++) {
+            if (rows.get(i).getPeopleVaccinated() != 0 && i > 0 && rows.get(i).getLocation().equals(rows.get(i-1).getLocation())) {
+                int indexNearestNonZero = getNearestCaseNotZeroIndex(rows, i);
+                if (indexNearestNonZero != -1) {
+                    rows.get(i).setPeopleVaccinated(processedVacinatedPeople.get(idxProcess));
+                    idxProcess++;
+                }
+>>>>>>> 7b5a3d9178c7b6d38f4d10df0bcb0e52f46cdc19
             }
         }
+    }
 
+    private static int getNearestCaseNotZeroIndex(ArrayList<Row> rows, int currentIndex) {
+        int index = -1;
+        for (int i = 0; i < currentIndex; i++) {
+            if (rows.get(i).getPeopleVaccinated() != 0 && rows.get(i).getLocation().equals(rows.get(currentIndex).getLocation())) {
+                index = i;
+            }
+        }
+        return index;
     }
 
     /**
