@@ -72,11 +72,11 @@ public class DataProcess {
         ArrayList<Integer> processedVacinatedPeople = new ArrayList<>();
 
         // This loop use to fill those empty to 0
-        for (int i = 0; i < rows.size(); i++) {
-            if (rows.get(i).getPeopleVaccinated() == -1) {
-                rows.get(i).setPeopleVaccinated(0);
-            }
-        }
+//        for (int i = 0; i < rows.size(); i++) {
+//            if (rows.get(i).getPeopleVaccinated() == -1) {
+//                rows.get(i).setPeopleVaccinated(0);
+//            }
+//        }
 
         // This loop add the new people vaccinated to an arrayList
         for (int i = 1; i < rows.size(); i++) {
@@ -104,13 +104,12 @@ public class DataProcess {
     }
 
     private static int getNearestCaseNotZeroIndex(ArrayList<Row> rows, int currentIndex) {
-        int index = -1;
-        for (int i = 0; i < currentIndex; i++) {
+        for (int i = currentIndex; i > -1; i--) {
             if (rows.get(i).getPeopleVaccinated() != 0 && rows.get(i).getLocation().equals(rows.get(currentIndex).getLocation())) {
-                index = i;
+                return i;
             }
         }
-        return index;
+        return -1;
     }
 
     /**

@@ -76,7 +76,7 @@ public class Row {
 
     public void setPeopleVaccinated(String peopleVaccinated) {
         if (peopleVaccinated.isEmpty() || Integer.parseInt(peopleVaccinated.trim()) < 0) {
-            this.peopleVaccinated = -1;
+            this.peopleVaccinated = 0;
         } else {
             this.peopleVaccinated = Integer.parseInt(peopleVaccinated.trim());
         }
