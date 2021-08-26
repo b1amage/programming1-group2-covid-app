@@ -79,6 +79,7 @@ public class TimeRange {
                 startDate = sc.nextLine();
 
                 System.out.println("Use (1) weeks or (2) days");
+                // We use string to avoid bug if user enter a string, we will parse the value later
                 String daysOrWeeksChar = sc.nextLine().trim();
 
                 while (!daysOrWeeksChar.equals("1") && !daysOrWeeksChar.equals("2")) {
@@ -95,9 +96,10 @@ public class TimeRange {
                     System.out.println("Enter your days");
                     nextDayCount = Integer.parseInt(sc.nextLine());
                 }
-
+                // Use ternary operator to decide which object returned
                 return timeRangeChoice == 2 ? new TimeRange(startDate, null, nextDayCount) : new TimeRange(startDate, null, -nextDayCount);
         }
+        // No case found, we don't use default for easier upgrading
         return null;
     }
 }

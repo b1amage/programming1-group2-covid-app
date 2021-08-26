@@ -125,7 +125,6 @@ public class Data {
         }
     }
 
-
     // Getters and Setters
     public ArrayList<Row> getRows() {
         return rows;

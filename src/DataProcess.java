@@ -1,6 +1,6 @@
 /*
   Class: DataProcess
-  Purpose: Use to process data
+  Purpose: Use to process data from csv file and for Data class usage
   Contributors: Quoc Bao
   Created date: 23/7/2021
   Last modified: 26/8/2021
@@ -22,6 +22,11 @@ public class DataProcess {
         displayRows(rows);
     }
 
+    /**
+     * This function create the row list from csv file
+     * @return ArrayList rows
+     * @throws FileNotFoundException
+     */
     public static ArrayList<Row> createRowList() throws FileNotFoundException {
         // Read CSV file to an array list
         ArrayList<String> dataByRow = readCsvFile("src/data.csv");
@@ -55,33 +60,35 @@ public class DataProcess {
 
         // Process the vaccinated people
         processVaccinatedPeople(rows);
-//        displayRows(rows);
+
         return rows;
     }
 
+    /**
+     * This method process the vaccinated people to the new vaccinated people as in csv it is the accumulate type
+     * @param rows: the ArrayList to process the vaccinated people
+     */
     public static void processVaccinatedPeople(ArrayList<Row> rows) {
         ArrayList<Integer> processedVacinatedPeople = new ArrayList<>();
 
+        // This loop use to fill those empty to 0
         for (int i = 0; i < rows.size(); i++) {
             if (rows.get(i).getPeopleVaccinated() == -1) {
                 rows.get(i).setPeopleVaccinated(0);
             }
         }
 
-//        for (int i = 0; i < rows.size(); i++) {
-//            if (rows.get(i).getPeopleVaccinated() == -1 && i > 0 && rows.get(i).getLocation().equals(rows.get(i-1).getLocation())) {
-//                rows.get(i).setPeopleVaccinated(rows.get(i-1).getPeopleVaccinated());
-//            }
-//        }
-
-
-        for (int i = 0; i < rows.size(); i++) {
-            if (rows.get(i).getPeopleVaccinated() != 0 && i > 0 && rows.get(i).getLocation().equals(rows.get(i-1).getLocation())) {
+        // This loop add the new people vaccinated to an arrayList
+        for (int i = 1; i < rows.size(); i++) {
+            if (rows.get(i).getPeopleVaccinated() != 0 && rows.get(i).getLocation().equals(rows.get(i-1).getLocation())) {
                 processedVacinatedPeople.add(rows.get(i).getPeopleVaccinated() - rows.get(i-1).getPeopleVaccinated());
             }
         }
 
+        // Index of array list to avoid out of bound exception
         int idxProcess = 0;
+
+        // This loop use to set each value in array list to the rows
         for (int i = 0; i < rows.size(); i++) {
             if (rows.get(i).getPeopleVaccinated() != 0 && i > 0 && rows.get(i).getLocation().equals(rows.get(i-1).getLocation())) {
                 rows.get(i).setPeopleVaccinated(processedVacinatedPeople.get(idxProcess));
@@ -89,9 +96,13 @@ public class DataProcess {
             }
         }
 
-
     }
 
+    /**
+     * This method is to create a Row object from a HashMap
+     * @param map: a hash map to store the key and value of data processed below
+     * @return a Row object
+     */
     public static Row createNewRowFromMap(HashMap<String, String> map) {
         return new Row(map.get("continent"), map.get("date"), map.get("people_vaccinated"), map.get("new_cases"),
                 map.get("new_deaths"), map.get("location"), map.get("iso_code"), map.get("population"));
@@ -101,6 +112,12 @@ public class DataProcess {
         return dataByRow.get(0).split(",");
     }
 
+    /**
+     * This method is used to read the csv file
+     * @param pathName: the absolute path of the file
+     * @return ArrayList of each row in the csv file
+     * @throws FileNotFoundException
+     */
     public static ArrayList<String> readCsvFile(String pathName) throws FileNotFoundException {
         Scanner sc = new Scanner(new File(pathName));
         ArrayList<String> dataByRow = new ArrayList<>();
