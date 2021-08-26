@@ -141,7 +141,7 @@ public class UserInterface {
 
             // Ask the user if they want to continue
             System.out.println("===========================");
-            System.out.println("Do you wish to continue \n (1) Yes \n (*) No");
+            System.out.println("Do you wish to continue? \n (1) Yes \n (*) No");
             String cont = sc.nextLine().trim();
 
             // If user choose 1 then continue, if 2 then break and stop the cycle
