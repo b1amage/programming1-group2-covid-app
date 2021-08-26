@@ -1,22 +1,37 @@
+/*
+  Class: UserInterface
+  Purpose: Get input from the user and display result to the console
+  Contributors: Minh Long, Quoc Bao, Kha Tuan, Anh Duy
+  Created date: 14/8/2021
+  Last modified: 26/8/2021
+  Version 1.0
+ */
+
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class UserInterface {
-    private static final Scanner sc = new Scanner(System.in);
+    // Fields
+    private static final Scanner sc = new Scanner(System.in); // For avoid duplicate code of init scanner
+
+    // Data fields
     private Data data;
+    private int timeRangeChoice;
+    private TimeRange timeRange;
+    private int dayOrWeekChoice;
+    private String location;
+
+    // Summary fields
     private Summary summary;
     private int dividingNumber;
     private String groupingMethod;
     private String metric;
     private String result;
-    private String display;
-    private String location;
-    private int timeRangeChoice;
-    private TimeRange timeRange;
-    private int dayOrWeekChoice;
 
-    //Constructor
+    // UserInterface field
+    private String display;
+
+    // Constructor
     public UserInterface(){}
 
     //Getters and Setters
@@ -108,13 +123,20 @@ public class UserInterface {
         this.summary = summary;
     }
 
-    //Display UI
+    // Logic handle methods
+
+    /**
+     *
+     * @throws IOException
+     */
     public void displayUI() throws IOException {
         boolean isRunning = true;
         while (isRunning){
+
             boolean checkInputDataRange = false;
             boolean checkInputGroupingMethod = false;
             boolean checkDisplayMethod = false;
+
             // Ask for data range and check if user input right
             while(!checkInputDataRange) {
                 inputDataRange();
@@ -123,6 +145,7 @@ public class UserInterface {
                 setData(data);
                 checkInputDataRange = getData().getRowsFromStartDate() != null;
             }
+
             // Ask for summary method
             while(!checkInputGroupingMethod) {
                 inputGroupingMethod();
@@ -131,6 +154,7 @@ public class UserInterface {
                 setSummary(summary);
                 checkInputGroupingMethod = summary.getGroupings() != null;
             }
+
             // Ask for display method
             while (!checkDisplayMethod) {
                 inputDisplayMethod();
@@ -140,8 +164,8 @@ public class UserInterface {
             }
 
             // Ask the user if they want to continue
-            System.out.println("===========================");
-            System.out.println("Do you wish to continue? \n (1) Yes \n (*) No");
+            displayContinueOrNot();
+
             String cont = sc.nextLine().trim();
 
             // If user choose 1 then continue, if 2 then break and stop the cycle
@@ -149,7 +173,10 @@ public class UserInterface {
         }
     }
 
-    // input grouping method
+
+    /**
+     *
+     */
     public void inputGroupingMethod(){
         System.out.println("Choose your grouping method \n (1) No grouping \n (2) Number of groups \n (3) Number of days");
         String groupingChar = sc.nextLine().trim();
@@ -158,36 +185,7 @@ public class UserInterface {
             groupingChar = sc.nextLine().trim();
 
         }
-
-        if (groupingChar.equals("1")) {
-            setGroupingMethod("no grouping");
-        }
-
-        if (groupingChar.equals("2")){
-            setGroupingMethod("number of groups");
-
-            System.out.println("How many groups do you want?");
-            String dividingChar = sc.nextLine().trim();
-            while (!dividingChar.matches("[0-9]+")) {
-                System.out.println("This is not a number, please insert again: ");
-                dividingChar = sc.nextLine().trim();
-            }
-            int dividing = Integer.parseInt(dividingChar);
-            setDividingNumber(dividing);
-        }
-
-        if (groupingChar.equals("3")){
-            setGroupingMethod("number of days");
-
-            System.out.println("How many days in a group do you want?");
-            String dividingChar = sc.nextLine().trim();
-            while (!dividingChar.matches("[0-9]+")) {
-                System.out.println("This is not a number, please insert again: ");
-                dividingChar = sc.nextLine().trim();
-            }
-            int dividing = Integer.parseInt(dividingChar);
-            setDividingNumber(dividing);
-        }
+        checkAndSetGroupingMethod(groupingChar);
 
         System.out.println("Choose your metric \n (1) Positive cases \n (2) New deaths \n (3) People vaccinated");
         String metricChar = sc.nextLine().trim();
@@ -224,15 +222,55 @@ public class UserInterface {
         }
     }
 
-    // Input data method
+    /**
+     *
+     * @param grouping
+     */
+    public void checkAndSetGroupingMethod(String grouping) {
+        if (grouping.equals("1")) {
+            setGroupingMethod("no grouping");
+        }
+
+        if (grouping.equals("2")){
+            setGroupingMethod("number of groups");
+
+            System.out.println("How many groups do you want?");
+            String dividingChar = sc.nextLine().trim();
+            while (!dividingChar.matches("[0-9]+")) {
+                System.out.println("This is not a number, please insert again: ");
+                dividingChar = sc.nextLine().trim();
+            }
+            int dividing = Integer.parseInt(dividingChar);
+            setDividingNumber(dividing);
+        }
+
+        if (grouping.equals("3")){
+            setGroupingMethod("number of days");
+
+            System.out.println("How many days in a group do you want?");
+            String dividingChar = sc.nextLine().trim();
+            while (!dividingChar.matches("[0-9]+")) {
+                System.out.println("This is not a number, please insert again: ");
+                dividingChar = sc.nextLine().trim();
+            }
+            int dividing = Integer.parseInt(dividingChar);
+            setDividingNumber(dividing);
+        }
+    }
+
+    /**
+     *
+     */
     public void inputDataRange(){
         System.out.println("Choose your location:");
         String location = sc.nextLine().trim();
+
         setLocation(location);
 
         // ask user to choose
         showDateChoiceMenu();
         String timeRangeChar = sc.nextLine().trim();
+
         while (!timeRangeChar.equals("1") && !timeRangeChar.equals("2") && !timeRangeChar.equals("3")){
             System.out.println("Wrong option, please insert again: ");
             timeRangeChar = sc.nextLine().trim();
@@ -240,66 +278,16 @@ public class UserInterface {
 
         int timeRangeChoice = Integer.parseInt(timeRangeChar);
         setTimeRangeChoice(timeRangeChoice);
+
         // Check user input for time range
-        setTimeRangeFromChoice();
+        timeRange = TimeRange.setTimeRangeFromChoice(timeRangeChoice);
 
     }
 
-    // Input time range
-    public void setTimeRangeFromChoice(){
-        int nextDayCount;
-        switch(timeRangeChoice){
-            case 1:
-                System.out.println("Enter start date");
-                String startDate = sc.nextLine();
 
-                System.out.println("Enter end date");
-                String endDate = sc.nextLine();
-                timeRange = new TimeRange(startDate, endDate, 0);
-                break;
-
-            case 2:
-            case 3: //User enter the date days and choose how many days or week from the start
-                System.out.println("Enter your start date");
-                startDate = sc.nextLine();
-
-                System.out.println("Use (1) weeks or (2) days");
-                String daysOrWeeksChar = sc.nextLine().trim();
-                while (!daysOrWeeksChar.equals("1") && !daysOrWeeksChar.equals("2")){
-                    System.out.println("Wrong option, please insert again: ");
-                    daysOrWeeksChar = sc.nextLine().trim();
-                }
-
-                int daysOrWeeks = Integer.parseInt(daysOrWeeksChar);
-                setDayOrWeekChoice(daysOrWeeks);
-
-                if (dayOrWeekChoice == 1){
-                    System.out.println("Enter your weeks");
-                    nextDayCount = Integer.parseInt(sc.nextLine()) * 7;
-                }
-                else {
-                    System.out.println("Enter your days");
-                    nextDayCount = Integer.parseInt(sc.nextLine());
-                }
-                timeRange = new TimeRange(startDate, null, nextDayCount);
-                timeRange = timeRangeChoice == 2 ? new TimeRange(startDate,null, nextDayCount) : new TimeRange(startDate,null, -nextDayCount);
-                break;
-
-        }
-
-    }
-
-    // Show data menu
-    public void showDateChoiceMenu() {
-        System.out.println("Enter your date choice: ");
-        System.out.println("(1) A pair of start date and end date (inclusive) (e.g., 1/1/2021 and 8/1/2021)");
-        System.out.println("(2) A number of days or weeks from a particular date (e.g., 2 days from 1/20/2021 " +
-                "means there are 3 days 1/20/2021, 1/21/2021, and 1/22/2021)");
-        System.out.println("(3) A number of days or weeks to a particular date " +
-                "(e.g., 1 week to 1/8/2021 means there are 8 days from 1/1/2021 to 1/8/2021)");
-    }
-
-    // Input display method
+    /**
+     *
+     */
     public void inputDisplayMethod(){
         System.out.println("Choose your display method \n (1) Tabular \n (2) Chart");
         String displayChar = sc.nextLine().trim();
@@ -317,6 +305,27 @@ public class UserInterface {
         }
     }
 
+    // Display methods
+
+    /**
+     *
+     */
+    public void showDateChoiceMenu() {
+        System.out.println("Enter your date choice: ");
+        System.out.println("(1) A pair of start date and end date (inclusive) (e.g., 1/1/2021 and 8/1/2021)");
+        System.out.println("(2) A number of days or weeks from a particular date (e.g., 2 days from 1/20/2021 " +
+                "means there are 3 days 1/20/2021, 1/21/2021, and 1/22/2021)");
+        System.out.println("(3) A number of days or weeks to a particular date " +
+                "(e.g., 1 week to 1/8/2021 means there are 8 days from 1/1/2021 to 1/8/2021)");
+    }
+
+    /**
+     *
+     */
+    public void displayContinueOrNot() {
+        System.out.println("===========================");
+        System.out.println("Do you wish to continue? \n (1) Yes \n (*) No");
+    }
 
     // Main
     public static void main(String[] args) throws IOException {
