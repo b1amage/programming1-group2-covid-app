@@ -82,6 +82,7 @@ public class Summary {
             int groupSize = group.getDataPerGroup().size();
             if (groupSize == 1) {
                 groupings.put(group.getDataPerGroup().get(0).getDate(), valuesOfEachGroup.get(groupIndex));
+                groupIndex++;
                 continue;
             }
 
@@ -222,7 +223,7 @@ class GroupValue{
 class MetricData {
     private ArrayList<Group> groupedData;
     private String metricType;
-    private ArrayList<GroupValue> valuesOfEachRow;
+    private final ArrayList<GroupValue> valuesOfEachRow;
 
     public MetricData(ArrayList<Group> groupedData, String metricType) {
         setGroupedData(groupedData);
@@ -341,6 +342,8 @@ class ResultData {
             }
             valuesOfEachGroup.add(upToValue);
         }
+
+        System.out.println(Arrays.deepToString(valuesOfEachGroup.toArray()));
     }
 
     public ArrayList<Integer> getValuesOfEachGroup() {
