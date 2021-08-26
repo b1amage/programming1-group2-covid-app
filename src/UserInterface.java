@@ -126,7 +126,7 @@ public class UserInterface {
     // Logic handle methods
 
     /**
-     *
+     * This function ask user to input their option and display the resut
      * @throws IOException
      */
     public void displayUI() throws IOException {
@@ -175,7 +175,7 @@ public class UserInterface {
 
 
     /**
-     *
+     * This function ask user to input their desire grouping medthod
      */
     public void inputGroupingMethod(){
         System.out.println("Choose your grouping method \n (1) No grouping \n (2) Number of groups \n (3) Number of days");
@@ -223,8 +223,8 @@ public class UserInterface {
     }
 
     /**
-     *
-     * @param grouping
+     *Base on the grouping method option, this function check which option the user choose
+     * @param grouping option the user choose
      */
     public void checkAndSetGroupingMethod(String grouping) {
         if (grouping.equals("1")) {
@@ -259,7 +259,7 @@ public class UserInterface {
     }
 
     /**
-     *
+     * This function help user input the data range
      */
     public void inputDataRange(){
         System.out.println("Choose your location:");
@@ -286,7 +286,7 @@ public class UserInterface {
 
 
     /**
-     *
+     * This function help user choose display option
      */
     public void inputDisplayMethod(){
         System.out.println("Choose your display method \n (1) Tabular \n (2) Chart");
@@ -308,7 +308,7 @@ public class UserInterface {
     // Display methods
 
     /**
-     *
+     * This function display date choice
      */
     public void showDateChoiceMenu() {
         System.out.println("Enter your date choice: ");
@@ -320,7 +320,7 @@ public class UserInterface {
     }
 
     /**
-     *
+     * This function ask user to continue or exit the program
      */
     public void displayContinueOrNot() {
         System.out.println("===========================");
