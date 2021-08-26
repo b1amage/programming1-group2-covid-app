@@ -81,16 +81,9 @@ public class Display {
             summaryResults.add(summaryData.get(groupName));
         }
 
-        if (numOfGroups == 0 || numOfGroups > 26 || summaryResults.last() == 0) {
+        if (numOfGroups == 0 || numOfGroups > 26) {
             System.out.println("=========");
             System.out.println("There is no data or the data is to large to display by chart");
-            display = null;
-            return;
-        }
-
-        if (numOfGroups == 1) {
-            System.out.println("=========");
-            System.out.println("You should use tabular display to show the data of only one group");
             display = null;
             return;
         }
@@ -100,12 +93,22 @@ public class Display {
         int indentation = Integer.toString(summaryResults.last()).length();
         int positionOfLabelOnY_axis = 0;
 
-        int spaceBetweenLabelOnX_axis = (numOfCols - numOfGroups - 1) / (numOfGroups - 1);
+        int spaceBetweenLabelOnX_axis;
+        if (numOfGroups == 1) {
+            spaceBetweenLabelOnX_axis = (numOfCols - 1) / 2;
+        } else {
+            spaceBetweenLabelOnX_axis = (numOfCols - numOfGroups - 1) / (numOfGroups - 1);
+        }
 
         // Map the position on X axis to a result on Y axis
         LinkedHashMap<Integer, Integer> mapPositionOnXtoGroup = new LinkedHashMap<>();
         int index = 0;
         for (String groupName : summaryData.keySet()) {
+            if (numOfGroups == 1) {
+                mapPositionOnXtoGroup.put(spaceBetweenLabelOnX_axis, summaryData.get(groupName));
+                continue;
+            }
+
             mapPositionOnXtoGroup.put((spaceBetweenLabelOnX_axis + 1) * index + 1, summaryData.get(groupName));
             index++;
         }
@@ -171,7 +174,11 @@ public class Display {
 
         for (int i = 0; i < numOfGroups; i++) {
             if (i == 0) {
-                System.out.print(" ".repeat(indentation) + "\t " + (i + 1));
+                if (numOfGroups == 1) {
+                    System.out.print(" ".repeat(indentation) + "\t" + " ".repeat(spaceBetweenLabelOnX_axis) + (i + 1));
+                } else {
+                    System.out.print(" ".repeat(indentation) + "\t " + (i + 1));
+                }
                 continue;
             }
 
@@ -179,6 +186,7 @@ public class Display {
                 System.out.print(" ".repeat(spaceBetweenLabelOnX_axis - Integer.toString(i).length() + 1) + (i + 1));
                 continue;
             }
+
             System.out.print(" ".repeat(spaceBetweenLabelOnX_axis) + (i + 1));
         }
 
