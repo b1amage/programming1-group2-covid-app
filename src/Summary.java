@@ -238,28 +238,27 @@ class MetricData {
         this.metricType = metricType;
     }
 
-    public GroupValue getMetricData(String metricOption, Row row) {
-        GroupValue groupValue = new GroupValue();
+    public int getMetricData(String metricOption, Row row) {
         switch (metricOption) {
             case "positive cases":
-                groupValue.addValue(row.getNewCases());
-                break;
+                return row.getNewCases();
             case "new deaths":
-                groupValue.addValue(row.getNewDeaths());
-                break;
+                return row.getNewDeaths();
             case "people vaccinated":
-                groupValue.addValue(row.getPeopleVaccinated());
-                break;
+                return row.getPeopleVaccinated();
+            default:
+                return 0;
         }
-
-        return groupValue;
     }
 
     public void createMetricData() {
         for (Group group : groupedData) {
+            GroupValue groupValue = new GroupValue();
             for (Row row : group.getDataPerGroup()) {
-                valuesOfEachRow.add(getMetricData(metricType, row));
+                groupValue.addValue(getMetricData(metricType, row));
             }
+
+            valuesOfEachRow.add(groupValue);
         }
     }
 
