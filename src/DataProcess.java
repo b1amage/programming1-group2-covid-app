@@ -55,16 +55,12 @@ public class DataProcess {
 
         // Process the vaccinated people
         processVaccinatedPeople(rows);
-        displayRows(rows);
+//        displayRows(rows);
         return rows;
     }
 
     public static void processVaccinatedPeople(ArrayList<Row> rows) {
-        for (int i = 0; i < rows.size(); i++) {
-            if (rows.get(i).getPeopleVaccinated() == -1 && i > 0 && rows.get(i).getLocation().equals(rows.get(i-1).getLocation())) {
-                rows.get(i).setPeopleVaccinated(rows.get(i-1).getPeopleVaccinated());
-            }
-        }
+        ArrayList<Integer> processedVacinatedPeople = new ArrayList<>();
 
         for (int i = 0; i < rows.size(); i++) {
             if (rows.get(i).getPeopleVaccinated() == -1) {
@@ -72,11 +68,28 @@ public class DataProcess {
             }
         }
 
+//        for (int i = 0; i < rows.size(); i++) {
+//            if (rows.get(i).getPeopleVaccinated() == -1 && i > 0 && rows.get(i).getLocation().equals(rows.get(i-1).getLocation())) {
+//                rows.get(i).setPeopleVaccinated(rows.get(i-1).getPeopleVaccinated());
+//            }
+//        }
+
+
         for (int i = 0; i < rows.size(); i++) {
             if (rows.get(i).getPeopleVaccinated() != 0 && i > 0 && rows.get(i).getLocation().equals(rows.get(i-1).getLocation())) {
-                rows.get(i).setPeopleVaccinated(rows.get(i).getPeopleVaccinated() - rows.get(i-1).getPeopleVaccinated());
+                processedVacinatedPeople.add(rows.get(i).getPeopleVaccinated() - rows.get(i-1).getPeopleVaccinated());
             }
         }
+
+        int idxProcess = 0;
+        for (int i = 0; i < rows.size(); i++) {
+            if (rows.get(i).getPeopleVaccinated() != 0 && i > 0 && rows.get(i).getLocation().equals(rows.get(i-1).getLocation())) {
+                rows.get(i).setPeopleVaccinated(processedVacinatedPeople.get(idxProcess));
+                idxProcess++;
+            }
+        }
+
+
     }
 
     public static Row createNewRowFromMap(HashMap<String, String> map) {
