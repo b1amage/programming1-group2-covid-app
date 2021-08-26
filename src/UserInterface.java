@@ -141,11 +141,11 @@ public class UserInterface {
 
             // Ask the user if they want to continue
             System.out.println("===========================");
-            System.out.println("Do you wish to continue \n (1) Yes \n (2) No");
-            int cont = Integer.parseInt(sc.nextLine());
+            System.out.println("Do you wish to continue \n (1) Yes \n (*) No");
+            String cont = sc.nextLine().trim();
 
             // If user choose 1 then continue, if 2 then break and stop the cycle
-            isRunning = (1 == cont);
+            isRunning = (cont.equals("1"));
         }
     }
 
