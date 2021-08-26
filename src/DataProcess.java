@@ -92,8 +92,8 @@ public class DataProcess {
         int idxProcess = 0;
 
         // This loop use to set each value in array list to the rows
-        for (int i = 0; i < rows.size(); i++) {
-            if (rows.get(i).getPeopleVaccinated() != 0 && i > 0 && rows.get(i).getLocation().equals(rows.get(i-1).getLocation())) {
+        for (int i = 1; i < rows.size(); i++) {
+            if (rows.get(i).getPeopleVaccinated() != 0 && rows.get(i).getLocation().equals(rows.get(i-1).getLocation())) {
                 int indexNearestNonZero = getNearestCaseNotZeroIndex(rows, i);
                 if (indexNearestNonZero != -1) {
                     rows.get(i).setPeopleVaccinated(processedVacinatedPeople.get(idxProcess));
@@ -104,8 +104,9 @@ public class DataProcess {
     }
 
     private static int getNearestCaseNotZeroIndex(ArrayList<Row> rows, int currentIndex) {
-        for (int i = currentIndex; i > -1; i--) {
-            if (rows.get(i).getPeopleVaccinated() != 0 && rows.get(i).getLocation().equals(rows.get(currentIndex).getLocation())) {
+        for (int i = currentIndex - 1; i > -1; i--) {
+            if (!rows.get(i).getLocation().equals(rows.get(currentIndex).getLocation())) break;
+            if (rows.get(i).getPeopleVaccinated() != 0) {
                 return i;
             }
         }
