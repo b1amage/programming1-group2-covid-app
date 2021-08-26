@@ -153,6 +153,7 @@ class GroupData {
         for (Row row : rawData) {
             Group group = new Group();
             group.addRow(row);
+            groupedData.add(group);
         }
     }
 
