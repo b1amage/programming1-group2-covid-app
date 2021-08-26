@@ -89,8 +89,8 @@ public class DataProcess {
         int idxProcess = 0;
 
         // This loop use to set each value in array list to the rows
-        for (int i = 0; i < rows.size(); i++) {
-            if (rows.get(i).getPeopleVaccinated() != 0 && i > 0 && rows.get(i).getLocation().equals(rows.get(i-1).getLocation())) {
+        for (int i = 1; i < rows.size(); i++) {
+            if (rows.get(i).getPeopleVaccinated() != 0 && rows.get(i).getLocation().equals(rows.get(i-1).getLocation())) {
                 rows.get(i).setPeopleVaccinated(processedVacinatedPeople.get(idxProcess));
                 idxProcess++;
             }
