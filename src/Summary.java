@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 public class Summary {
@@ -342,8 +341,6 @@ class ResultData {
             }
             valuesOfEachGroup.add(upToValue);
         }
-
-        System.out.println(Arrays.deepToString(valuesOfEachGroup.toArray()));
     }
 
     public ArrayList<Integer> getValuesOfEachGroup() {
