@@ -25,7 +25,7 @@ public class DataProcess {
     /**
      * This function create the row list from csv file
      * @return ArrayList rows
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException the file is not exist
      */
     public static ArrayList<Row> createRowList() throws FileNotFoundException {
         // Read CSV file to an array list
@@ -131,7 +131,7 @@ public class DataProcess {
      * This method is used to read the csv file
      * @param pathName: the absolute path of the file
      * @return ArrayList of each row in the csv file
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException the file is not exist
      */
     public static ArrayList<String> readCsvFile(String pathName) throws FileNotFoundException {
         Scanner sc = new Scanner(new File(pathName));
