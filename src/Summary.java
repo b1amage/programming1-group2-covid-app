@@ -332,7 +332,6 @@ class ResultData {
                     upToValue += row.getNewDeaths();
                 }
                 if (metricType.equals("people vaccinated")){
-                    System.out.println(row.getPeopleVaccinated());
                     upToValue += row.getPeopleVaccinated();
                 }
             }
