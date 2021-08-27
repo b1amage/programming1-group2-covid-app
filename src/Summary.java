@@ -53,6 +53,11 @@ public class Summary {
         return new Summary(data, groupingOption, metricOption, resultOption, dividingNumber);
     }
 
+    /**
+     * This method generates values for the LinkedHashMap to store the appropriate data that user have input
+     * The keys will be the group name which is categorized from the groupingMethod
+     * The values will be the data from the metricType & resultType
+     */
     public void processData() {
         groupings = new LinkedHashMap<>();
 
@@ -133,6 +138,9 @@ class GroupData {
         this.dividingNumber = dividingNumber;
     }
 
+    /**
+     * This function create groups data based on the groupingMethod
+     */
     public void createGroupData() {
         switch (groupingMethod) {
             case "no grouping":
@@ -149,6 +157,9 @@ class GroupData {
         }
     }
 
+    /**
+     * This function generates the groups based on noGrouping Option
+     */
     public void noGrouping() {
         for (Row row : rawData) {
             Group group = new Group();
@@ -157,6 +168,9 @@ class GroupData {
         }
     }
 
+    /**
+     * This function generates the groups based on NumberOfGroups Option
+     */
     public void groupDataByNumberOfGroups(int numOfGroups) {
         int numOfRows = rawData.size() / numOfGroups;
         int groupIndexToIncreaseSize = numOfGroups;
@@ -181,6 +195,9 @@ class GroupData {
         }
     }
 
+    /**
+     * This function generates the groups based on NumberOfDays Option
+     */
     public void groupDataByNumberOfDays(int numOfDays) {
         if (rawData.size() % numOfDays != 0) {
             System.out.println("=========");
@@ -238,6 +255,11 @@ class MetricData {
         this.metricType = metricType;
     }
 
+    /**
+     * This function get the metric data based on metricOption
+     * @param metricOption metric type that user have input
+     * @param row row in each group
+     */
     public int getMetricData(String metricOption, Row row) {
         switch (metricOption) {
             case "positive cases":
@@ -251,6 +273,9 @@ class MetricData {
         }
     }
 
+    /**
+     * This function gets all the rows value based on the metricType for each group
+     */
     public void createMetricData() {
         for (Group group : groupedData) {
             GroupValue groupValue = new GroupValue();
@@ -306,6 +331,9 @@ class ResultData {
         }
     }
 
+    /**
+     * This function calculates the NewTotal value for each group
+     */
     public void calculateByNewTotal() {
         for (GroupValue groupValue : valuesOfEachRow) {
             int total = 0;
@@ -316,6 +344,9 @@ class ResultData {
         }
     }
 
+    /**
+     * This function calculates the UpTo value for each group
+     */
     public void calculateByUpTo() {
         int upToValue = 0;
         String firstDateOfFirstGroup = data.getRowsFromStartDate().get(0).getDate();
