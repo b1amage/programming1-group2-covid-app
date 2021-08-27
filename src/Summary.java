@@ -182,7 +182,7 @@ class GroupData {
     }
 
     public void groupDataByNumberOfDays(int numOfDays) {
-        if (rawData.size() % numOfDays != 0 || rawData.size() == numOfDays) {
+        if (rawData.size() % numOfDays != 0) {
             System.out.println("=========");
             System.out.println("Cannot divide the data into that number of days");
             groupedData = null;
