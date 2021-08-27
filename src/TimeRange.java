@@ -75,7 +75,12 @@ public class TimeRange {
 
             case 2:
             case 3: //User enter the date days and choose how many days or week from the start
-                System.out.println("Enter your start date");
+                if (timeRangeChoice == 2) {
+                    System.out.println("Enter your start date: ");
+                } else if (timeRangeChoice == 3) {
+                    System.out.println("Enter your end date: ");
+                }
+
                 startDate = sc.nextLine();
 
                 System.out.println("Use (1) weeks or (2) days");
