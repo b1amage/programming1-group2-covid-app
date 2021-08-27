@@ -127,7 +127,7 @@ public class UserInterface {
 
     /**
      * This function ask user to input their option and display the resut
-     * @throws IOException
+     * @throws IOException file not found
      */
     public void displayUI() throws IOException {
         boolean isRunning = true;
