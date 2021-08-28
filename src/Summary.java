@@ -184,6 +184,13 @@ class GroupData {
         int groupIndexToIncreaseSize = numOfGroups;
         int groupIndex = 0;
 
+        if (numOfGroups > rawData.size()) {
+            System.out.println("=========");
+            System.out.println("The number of groups is bigger than the number of days in the data");
+            groupedData = null;
+            return;
+        }
+
         if (rawData.size() % numOfGroups != 0) {
             groupIndexToIncreaseSize = numOfGroups - (rawData.size() % numOfGroups);
         }
