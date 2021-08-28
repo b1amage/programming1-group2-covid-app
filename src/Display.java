@@ -109,6 +109,7 @@ public class Display {
             summaryResults.add(summaryData.get(groupName));
         }
 
+        System.out.println(summaryResults);
         int smallestResult = summaryResults.first();
         int largestResult = summaryResults.last();
 
