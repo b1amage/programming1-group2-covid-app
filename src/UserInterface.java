@@ -7,7 +7,6 @@
   Version 1.0
  */
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class UserInterface {
@@ -132,24 +131,30 @@ public class UserInterface {
         boolean isRunning = true;
         while (isRunning){
 
-            boolean checkInputDataRange = false;
+            boolean checkInputTimeRange = false;
             boolean checkInputGroupingMethod = false;
             boolean checkDisplayMethod = false;
+            boolean checkInputLocation = false;
+
+            // Ask to enter location
+            while (!checkInputLocation) {
+                inputLocation();
+                Data tempData = new Data();
+                checkInputLocation = !(tempData.isLocationNotExist(location));
+
+                if (checkInputLocation) {
+                    break;
+                } else {
+                    System.out.println("Location not found, please try again");
+                }
+            }
 
             // Ask for data range and check if user input right
-            while(!checkInputDataRange) {
-                inputDataRange();
+            while(!checkInputTimeRange) {
+                inputTimeRange();
                 Data data = Data.createData(getLocation(), getTimeRange());
                 data.createRowData();
                 setData(data);
-
-                // If location not exit, ask user to input again
-                while (getData().isHasLocationError()) {
-                    inputDataRange();
-                    data = Data.createData(getLocation(), getTimeRange());
-                    data.createRowData();
-                    setData(data);
-                }
 
                 // If the time range has error, ask user to input again
                 while (getData().isHasTimeRangeError()) {
@@ -158,7 +163,7 @@ public class UserInterface {
                     data.createRowData();
                     setData(data);
                 }
-                checkInputDataRange = getData().getRowsFromStartDate() != null;
+                checkInputTimeRange = getData().getRowsFromStartDate() != null;
             }
 
             // Ask for summary method
@@ -276,13 +281,8 @@ public class UserInterface {
     /**
      * This function help user input the data range
      */
-    public void inputDataRange(){
-        System.out.println("Choose your location:");
-        String location = sc.nextLine().trim();
-
-        setLocation(location);
-
-        // ask user to choose
+    public void inputTimeRange(){
+        // Ask user to choose
         showDateChoiceMenu();
         String timeRangeChar = sc.nextLine().trim();
 
@@ -297,6 +297,16 @@ public class UserInterface {
         // Check user input for time range
         timeRange = TimeRange.setTimeRangeFromChoice(timeRangeChoice);
 
+    }
+
+    /**
+     * This function get input of location from user
+     */
+    public void inputLocation() {
+        System.out.println("Choose your location:");
+        String location = sc.nextLine().trim();
+
+        setLocation(location);
     }
 
 
