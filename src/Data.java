@@ -26,7 +26,6 @@ public class Data {
     private TimeRange timeRange;
 
     // Error field for user interface
-    private boolean hasLocationError = false;
     private boolean hasTimeRangeError = false;
 
     // Empty constructor
@@ -75,7 +74,6 @@ public class Data {
                 System.out.println("=========");
                 System.out.println("Location not found");
                 rowsFromStartDate = null;
-                hasLocationError = true;
                 return;
             }
 
@@ -111,7 +109,6 @@ public class Data {
                 System.out.println("=========");
                 System.out.println("Location not found");
                 rowsFromStartDate = null;
-                hasLocationError = true;
                 return;
             }
 
@@ -173,6 +170,15 @@ public class Data {
         return true;
     }
 
+    public boolean isLocationNotExist(String location) {
+        for (Row row : rows) {
+            if (row.getLocation().equals(location)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // Getters and Setters
     public ArrayList<Row> getRows() {
         return rows;
@@ -196,10 +202,6 @@ public class Data {
 
     public void setTimeRange(TimeRange timeRange) {
         this.timeRange = timeRange;
-    }
-
-    public boolean isHasLocationError() {
-        return hasLocationError;
     }
 
     public boolean isHasTimeRangeError() {
