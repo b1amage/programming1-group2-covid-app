@@ -113,6 +113,10 @@ public class Summary {
         }
     }
 
+    /**
+     * This method checks if the grouping method is valid
+     * @return a boolean to check if the data can be grouped or not
+     */
     public boolean isValidGroupingMethod() {
         GroupData groupData = new GroupData(getData().getRowsFromStartDate(), groupingMethod, dividingNumber);
         groupData.createGroupData();
