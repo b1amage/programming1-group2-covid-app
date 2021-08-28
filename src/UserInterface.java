@@ -142,9 +142,7 @@ public class UserInterface {
                 Data tempData = new Data();
                 checkInputLocation = !(tempData.isLocationNotExist(location));
 
-                if (checkInputLocation) {
-                    break;
-                } else {
+                if (!checkInputLocation) {
                     System.out.println("Location not found, please try again");
                 }
             }
