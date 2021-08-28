@@ -17,6 +17,12 @@ public class Summary {
     private int dividingNumber;
     private LinkedHashMap<String, Integer> groupings;
 
+    public Summary(Data data, String groupingMethod, int dividingNumber) {
+        setData(data);
+        setGroupingMethod(groupingMethod);
+        setDividingNumber(dividingNumber);
+    }
+
     public Summary(Data data, String groupingMethod, String metricType, String resultType, int dividingNumber) {
         setData(data);
         setGroupingMethod(groupingMethod);
@@ -55,6 +61,10 @@ public class Summary {
 
     public LinkedHashMap<String, Integer> getGroupings() {
         return groupings;
+    }
+
+    public static Summary createTempSummary(Data data, String groupingOption, int dividingNumber) {
+        return new Summary(data, groupingOption, dividingNumber);
     }
 
     public static Summary createSummary(Data data, String groupingOption, String metricOption, String resultOption, int dividingNumber) {
@@ -102,8 +112,16 @@ public class Summary {
             groupIndex++;
         }
     }
-}
 
+    public boolean isValidGroupingMethod() {
+        GroupData groupData = new GroupData(getData().getRowsFromStartDate(), groupingMethod, dividingNumber);
+        groupData.createGroupData();
+        ArrayList<Group> groupsOfDates;
+        groupsOfDates = groupData.getGroupedData();
+        return groupsOfDates != null;
+    }
+
+}
 class Group {
     private final ArrayList<Row> dataPerGroup;
 

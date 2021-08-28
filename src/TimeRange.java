@@ -96,10 +96,20 @@ public class TimeRange {
 
                 if (daysOrWeeks == 1) {
                     System.out.println("Enter your weeks");
-                    nextDayCount = Integer.parseInt(sc.nextLine()) * 7;
+                    String nextDayCountString = sc.nextLine().trim();
+                    while (!nextDayCountString.matches("[0-9]+")) {
+                        System.out.println("This is not a number, please insert again: ");
+                        nextDayCountString = sc.nextLine().trim();
+                    }
+                    nextDayCount = Integer.parseInt(nextDayCountString) * 7;
                 } else {
                     System.out.println("Enter your days");
-                    nextDayCount = Integer.parseInt(sc.nextLine());
+                    String nextDayCountString = sc.nextLine().trim();
+                    while (!nextDayCountString.matches("[0-9]+")) {
+                        System.out.println("This is not a number, please insert again: ");
+                        nextDayCountString = sc.nextLine().trim();
+                    }
+                    nextDayCount = Integer.parseInt(nextDayCountString);
                 }
                 // Use ternary operator to decide which object returned
                 return timeRangeChoice == 2 ? new TimeRange(startDate, null, nextDayCount) : new TimeRange(startDate, null, -nextDayCount);

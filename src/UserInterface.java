@@ -167,11 +167,15 @@ public class UserInterface {
             // Ask for summary method
             while(!checkInputGroupingMethod) {
                 inputGroupingMethod();
-                Summary summary = Summary.createSummary(getData(), getGroupingMethod(), getMetric(), getResult(), getDividingNumber());
-                summary.processData();
-                setSummary(summary);
-                checkInputGroupingMethod = summary.getGroupings() != null;
+                Summary tempSummary = Summary.createTempSummary(getData(), getGroupingMethod(), getDividingNumber());
+                setSummary(tempSummary);
+                checkInputGroupingMethod = summary.isValidGroupingMethod();
             }
+
+            inputMetricAndResultType();
+            Summary summary = Summary.createSummary(getData(), getGroupingMethod(), getMetric(), getResult(), getDividingNumber());
+            summary.processData();
+            setSummary(summary);
 
             // Ask for display method
             while (!checkDisplayMethod) {
@@ -193,7 +197,7 @@ public class UserInterface {
 
 
     /**
-     * This function ask user to input their desire grouping medthod
+     * This function ask user to input their desire grouping method
      */
     public void inputGroupingMethod(){
         System.out.println("Choose your grouping method \n (1) No grouping \n (2) Number of groups \n (3) Number of days");
@@ -204,7 +208,11 @@ public class UserInterface {
 
         }
         checkAndSetGroupingMethod(groupingChar);
-
+    }
+    /**
+     * This function ask user to input their desire metric and result types
+     */
+    public void inputMetricAndResultType() {
         System.out.println("Choose your metric \n (1) Positive cases \n (2) New deaths \n (3) People vaccinated");
         String metricChar = sc.nextLine().trim();
         while (!metricChar.equals("1") && !metricChar.equals("2") && !metricChar.equals("3")){
