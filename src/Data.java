@@ -7,7 +7,6 @@
   Version 1.0
  */
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Data {
@@ -40,9 +39,8 @@ public class Data {
      * @param location location of the country
      * @param timeRange TimeRange object
      * @return new Data object
-     * @throws IOException file not found
      */
-    public static Data createData(String location, TimeRange timeRange) throws IOException {
+    public static Data createData(String location, TimeRange timeRange) {
         // Create new data object to process
         return new Data(location, timeRange);
     }
@@ -82,7 +80,7 @@ public class Data {
                 System.out.println("=========");
                 System.out.println("Error in date or location");
                 rowsFromStartDate = null;
-                return;
+//                return;
             }
 
         } else { // User choose option (2) or (3)
@@ -90,7 +88,10 @@ public class Data {
             boolean locationExist = false;
 
             for (Row row : rows) {
-                if (row.getLocation().equals(location)) locationExist = true;
+                if (row.getLocation().equals(location)) {
+                    locationExist = true;
+                    break;
+                }
             }
 
             // If location not exist, throw a message and return
