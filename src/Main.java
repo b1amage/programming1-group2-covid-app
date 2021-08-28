@@ -6,10 +6,9 @@
   Last modified: 28/8/2021
   Version 1.0
  */
-import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         UserInterface userInterface = new UserInterface();
         userInterface.displayUI();
     }

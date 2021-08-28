@@ -342,9 +342,4 @@ public class UserInterface {
         System.out.println("Do you wish to continue? \n (1) Yes \n (*) No");
     }
 
-    // Main
-    public static void main(String[] args)  {
-        UserInterface userInterface = new UserInterface();
-        userInterface.displayUI();
-    }
 }
