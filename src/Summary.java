@@ -271,6 +271,15 @@ class GroupValue{
     public ArrayList<Integer> getGroupValue() {
         return groupValue;
     }
+
+    public int getTotalValue() {
+        int total = 0;
+        for (int value : getGroupValue()) {
+            total += value;
+        }
+
+        return total;
+    }
 }
 
 class MetricData {
@@ -373,11 +382,7 @@ class ResultData {
      */
     public void calculateByNewTotal() {
         for (GroupValue groupValue : valuesOfEachRow) {
-            int total = 0;
-            for (int value : groupValue.getGroupValue()) {
-                total += value;
-            }
-            valuesOfEachGroup.add(total);
+            valuesOfEachGroup.add(groupValue.getTotalValue());
         }
     }
 
@@ -403,9 +408,7 @@ class ResultData {
             }
         }
         for (GroupValue groupValue : valuesOfEachRow) {
-            for (int value : groupValue.getGroupValue()) {
-                upToValue += value;
-            }
+            upToValue += groupValue.getTotalValue();
             valuesOfEachGroup.add(upToValue);
         }
     }
