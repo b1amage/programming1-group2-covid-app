@@ -1,3 +1,11 @@
+/*
+  Class: Display
+  Purpose: Used to display the data after being processed
+  Contributors: Kha Tuan
+  Created date: 25/7/2021
+  Last modified: 26/8/2021
+  Version 1.0
+ */
 import java.util.*;
 
 public class Display {
