@@ -312,7 +312,7 @@ public class UserInterface {
      */
     public void showDateChoiceMenu() {
         System.out.println("Enter your date choice: ");
-        System.out.println("(1) A pair of start date and end date (inclusive) (e.g., 1/1/2021 and 8/1/2021)");
+        System.out.println("(1) A pair of start date and end date (inclusive) (e.g., 1/1/2021 and 1/8/2021)");
         System.out.println("(2) A number of days or weeks from a particular date (e.g., 2 days from 1/20/2021 " +
                 "means there are 3 days 1/20/2021, 1/21/2021, and 1/22/2021)");
         System.out.println("(3) A number of days or weeks to a particular date " +
