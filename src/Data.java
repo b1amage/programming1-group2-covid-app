@@ -80,7 +80,6 @@ public class Data {
                 System.out.println("=========");
                 System.out.println("Error in date or location");
                 rowsFromStartDate = null;
-//                return;
             }
 
         } else { // User choose option (2) or (3)
@@ -104,20 +103,41 @@ public class Data {
 
             // If location exist
             for (Row row : rows) { // Loop through rows
+                // Variable use to check if the message is printed
+                boolean isPrinted = false;
 
                 // If start date and location match, start processing array list
                 if (row.getDate().equals(timeRange.getStartDate()) && (row.getLocation().equals(location))) {
 
                     // Get min value between rows.indexOf(row) and rows.indexOf(row) + nextDayCount (case negative nextDayCount)
-                    for (int i = Math.min(rows.indexOf(row),rows.indexOf(row) + timeRange.getNextDayCount()); i <= Math.max(rows.indexOf(row),rows.indexOf(row) + timeRange.getNextDayCount()) && i < rows.size() && i > -1; i++) {
+                    for (int i = Math.min(rows.indexOf(row),rows.indexOf(row) + timeRange.getNextDayCount()); i <= Math.max(rows.indexOf(row),rows.indexOf(row) + timeRange.getNextDayCount()); i++) {
 
-                        if (rows.get(i) != null) { // Add if the row is not null
-                            // Check if the data of location is end
-                            if (rows.get(i).getLocation().equals(location)) {
-                                rowsFromStartDate.add(rows.get(i));
+                        // Check if i is out of range
+                        if (i >= rows.size() || i < 0) {
+                            // Just print the message once
+                            if (!isPrinted) {
+                                System.out.println("Date out of range, we have tried to add all possible date");
+                                // Switch to true for avoid repeating printing
+                                isPrinted = true;
+                            }
+
+                        } else {
+                            if (rows.get(i) != null) { // Add if the row is not null
+                                // Check if the data of location is end
+                                if (rows.get(i).getLocation().equals(location)) {
+                                    rowsFromStartDate.add(rows.get(i));
+
+                                } else if (!rows.get(i).getLocation().equals(location)){ // Difference in location
+
+                                    // Just print the message once
+                                    if (!isPrinted) {
+                                        System.out.println("Date out of range, we have tried to add all possible date");
+                                        // Switch to true for avoid repeating printing
+                                        isPrinted = true;
+                                    }
+                                }
                             }
                         }
-
                     }
                     // Break after loop to save time
                     break;
