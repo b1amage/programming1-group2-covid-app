@@ -25,6 +25,10 @@ public class Data {
     private String location;
     private TimeRange timeRange;
 
+    // Error field for user interface
+    private boolean hasLocationError = false;
+    private boolean hasTimeRangeError = false;
+
     // Empty constructor
     public Data() {}
 
@@ -66,6 +70,15 @@ public class Data {
                 }
             }
 
+            // If location not exist, throw a message and return
+            if (isLocationNotExist()) {
+                System.out.println("=========");
+                System.out.println("Location not found");
+                rowsFromStartDate = null;
+                hasLocationError = true;
+                return;
+            }
+
             // If start and end index found
             if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
                 // Add each row to the array list
@@ -78,7 +91,8 @@ public class Data {
                 }
             } else { // No start or end date found
                 System.out.println("=========");
-                System.out.println("Error in date or location");
+                System.out.println("Error in date, please try again");
+                hasTimeRangeError = true;
                 rowsFromStartDate = null;
             }
 
@@ -92,34 +106,24 @@ public class Data {
                 }
             }
 
-            if (start == -1) {
-                System.out.println("Error in date, please try again");
-                rowsFromStartDate = null;
-                return;
-            }
-
-            // Check if location is exist
-            boolean locationExist = false;
-
-            for (Row row : rows) {
-                if (row.getLocation().equals(location)) {
-                    locationExist = true;
-                    break;
-                }
-            }
-
             // If location not exist, throw a message and return
-            if (!locationExist) {
+            if (isLocationNotExist()) {
                 System.out.println("=========");
                 System.out.println("Location not found");
                 rowsFromStartDate = null;
+                hasLocationError = true;
+                return;
+            }
+
+            if (start == -1) {
+                System.out.println("Error in date, please try again");
+                rowsFromStartDate = null;
+                hasTimeRangeError = true;
                 return;
             }
 
             // If location exist
             for (Row row : rows) { // Loop through rows
-                // Variable use to check if the message is printed
-                boolean isPrinted = false;
 
                 // If start date and location match, start processing array list
                 if (row.getDate().equals(timeRange.getStartDate()) && (row.getLocation().equals(location))) {
@@ -129,12 +133,10 @@ public class Data {
 
                         // Check if i is out of range
                         if (i >= rows.size() || i < 0) {
-                            // Just print the message once
-                            if (!isPrinted) {
-                                System.out.println("Date out of range, we have tried to add all possible date");
-                                // Switch to true for avoid repeating printing
-                                isPrinted = true;
-                            }
+                            rowsFromStartDate = null;
+                            hasTimeRangeError = true;
+                            System.out.println("Date out of range, please try again");
+                            break;
 
                         } else {
                             if (rows.get(i) != null) { // Add if the row is not null
@@ -143,13 +145,10 @@ public class Data {
                                     rowsFromStartDate.add(rows.get(i));
 
                                 } else if (!rows.get(i).getLocation().equals(location)){ // Difference in location
-
-                                    // Just print the message once
-                                    if (!isPrinted) {
-                                        System.out.println("Date out of range, we have tried to add all possible date");
-                                        // Switch to true for avoid repeating printing
-                                        isPrinted = true;
-                                    }
+                                    rowsFromStartDate = null;
+                                    System.out.println("Date out of range, please try again");
+                                    hasTimeRangeError = true;
+                                    break;
                                 }
                             }
                         }
@@ -159,6 +158,19 @@ public class Data {
                 }
             }
         }
+    }
+
+    /**?
+     * This method is use to check if the location is not exist
+     * @return true or false
+     */
+    private boolean isLocationNotExist() {
+        for (Row row : rows) {
+            if (row.getLocation().equals(location)) {
+                    return false;
+            }
+        }
+        return true;
     }
 
     // Getters and Setters
@@ -185,4 +197,13 @@ public class Data {
     public void setTimeRange(TimeRange timeRange) {
         this.timeRange = timeRange;
     }
+
+    public boolean isHasLocationError() {
+        return hasLocationError;
+    }
+
+    public boolean isHasTimeRangeError() {
+        return hasTimeRangeError;
+    }
+
 }

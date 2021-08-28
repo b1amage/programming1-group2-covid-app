@@ -127,9 +127,8 @@ public class UserInterface {
 
     /**
      * This function ask user to input their option and display the resut
-     * @throws IOException file not found
      */
-    public void displayUI() throws IOException {
+    public void displayUI() {
         boolean isRunning = true;
         while (isRunning){
 
@@ -143,6 +142,22 @@ public class UserInterface {
                 Data data = Data.createData(getLocation(), getTimeRange());
                 data.createRowData();
                 setData(data);
+
+                // If location not exit, ask user to input again
+                while (getData().isHasLocationError()) {
+                    inputDataRange();
+                    data = Data.createData(getLocation(), getTimeRange());
+                    data.createRowData();
+                    setData(data);
+                }
+
+                // If the time range has error, ask user to input again
+                while (getData().isHasTimeRangeError()) {
+                    timeRange = TimeRange.setTimeRangeFromChoice(timeRangeChoice);
+                    data = Data.createData(getLocation(), getTimeRange());
+                    data.createRowData();
+                    setData(data);
+                }
                 checkInputDataRange = getData().getRowsFromStartDate() != null;
             }
 
@@ -327,9 +342,4 @@ public class UserInterface {
         System.out.println("Do you wish to continue? \n (1) Yes \n (*) No");
     }
 
-    // Main
-    public static void main(String[] args) throws IOException {
-        UserInterface userInterface = new UserInterface();
-        userInterface.displayUI();
-    }
 }
