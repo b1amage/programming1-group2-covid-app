@@ -83,6 +83,21 @@ public class Data {
             }
 
         } else { // User choose option (2) or (3)
+            // Check if date exist
+            int start = -1;
+            for (Row row : rows) {
+                // If start date and location match, assign the index to the start
+                if (row.getDate().equals(timeRange.getStartDate()) && row.getLocation().equals(location)) {
+                    start = rows.indexOf(row);
+                }
+            }
+
+            if (start == -1) {
+                System.out.println("Error in date, please try again");
+                rowsFromStartDate = null;
+                return;
+            }
+
             // Check if location is exist
             boolean locationExist = false;
 
