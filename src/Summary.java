@@ -1,3 +1,11 @@
+/*
+  Class: Summary
+  Purpose: Used to process data so it can be ready to display
+  Contributors: Kha Tuan, Anh Duy
+  Created date: 25/7/2021
+  Last modified: 26/8/2021
+  Version 1.0
+ */
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
