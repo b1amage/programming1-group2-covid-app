@@ -163,7 +163,11 @@ public class Display {
                 int result = iterator.next();
 
                 // Calculate the position of a result on Y axis
-                positionOfLabelOnY_axis = ((result - summaryResults.first()) * (numOfRows - 2)) / (summaryResults.last() - summaryResults.first()) + 1;
+                if (result == summaryResults.first()) {
+                    positionOfLabelOnY_axis = 1;
+                } else {
+                    positionOfLabelOnY_axis = ((result - summaryResults.first()) * (numOfRows - 2)) / (summaryResults.last() - summaryResults.first()) + 1;
+                }
 
                 // If the current row index matches with the position of a result on Y axis, then print out that result as the label of the current row
                 if (rowIndex == positionOfLabelOnY_axis) {
