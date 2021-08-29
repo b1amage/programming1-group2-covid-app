@@ -104,13 +104,10 @@ public class Display {
         }
 
         // Use SortedSet to sort the result of each group and prevent duplicate results.
-        SortedSet<Integer> summaryResults = new TreeSet<>();
+        SortedSet<Long> summaryResults = new TreeSet<>();
         for (String groupName : summaryData.keySet()) {
-            summaryResults.add(summaryData.get(groupName));
+            summaryResults.add((long)summaryData.get(groupName));
         }
-
-        int smallestResult = summaryResults.first();
-        int largestResult = summaryResults.last();
 
         // Check if there is no data or the data is too big to use chart display
         if (numOfGroups == 0 || numOfGroups > 26) {
@@ -124,7 +121,7 @@ public class Display {
         ArrayList<String> groups = new ArrayList<>(summaryData.keySet());
 
         // Get the longest length of the result
-        int maxLengthOfResult = Integer.toString(summaryResults.last()).length();
+        int maxLengthOfResult = Long.toString(summaryResults.last()).length();
 
         // This variable stores the number of spaces between 2 positions of group on X axis
         int spaceBetweenLabelOnX_axis;
@@ -152,15 +149,15 @@ public class Display {
         System.out.println(" ".repeat(maxLengthOfResult) + "\t" + valueName);
 
         // Store summary results in LinkedList to iterate backward.
-        LinkedList<Integer> results = new LinkedList<>(summaryResults);
+        LinkedList<Long> results = new LinkedList<>(summaryResults);
 
         for (int rowIndex = numOfRows - 1; rowIndex >= 0; rowIndex--) {
-            int resultOnThisRow = 0;
-            int positionOfLabelOnY_axis = 0;
+            long resultOnThisRow = 0;
+            long positionOfLabelOnY_axis = 0;
 
-            Iterator<Integer> iterator = results.descendingIterator();
+            Iterator<Long> iterator = results.descendingIterator();
             while (iterator.hasNext()) {
-                int result = iterator.next();
+                long result = iterator.next();
 
                 // Calculate the position of a result on Y axis
                 if (result == summaryResults.first()) {
@@ -172,7 +169,7 @@ public class Display {
                 // If the current row index matches with the position of a result on Y axis, then print out that result as the label of the current row
                 if (rowIndex == positionOfLabelOnY_axis) {
                     resultOnThisRow = result;
-                    System.out.print(result + " ".repeat(maxLengthOfResult - Integer.toString(result).length()) + "\t|");
+                    System.out.print(result + " ".repeat(maxLengthOfResult - Long.toString(result).length()) + "\t|");
                     break;
                 }
             }
@@ -202,8 +199,8 @@ public class Display {
                             continue;
                         } else {
                             // If the position of this group on Y axis equals to the current row index, print out "*" to mark this position
-                            int positionOfThisGroup = ((resultOfThisGroup - smallestResult) * (numOfRows - 2)) / (largestResult - smallestResult) + 1;
-                            if (positionOfThisGroup == rowIndex) {
+                            long positionOfThisGroup = ((resultOfThisGroup - summaryResults.first()) * (numOfRows - 2)) / (summaryResults.last() - summaryResults.first()) + 1;
+                            if (positionOfThisGroup == (long) rowIndex) {
                                 System.out.print('*');
                                 continue;
                             }
