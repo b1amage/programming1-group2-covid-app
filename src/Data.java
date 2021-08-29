@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Data {
     // Fields
-    private static ArrayList<Row> rows; // Whole data
+    private static ArrayList<Row> rows; // Whole data, use static for avoid re-create everytime create object
 
     static {
         try {
@@ -112,6 +112,7 @@ public class Data {
                 return;
             }
 
+            // No date found
             if (start == -1) {
                 System.out.println("Error in date, please try again");
                 rowsFromStartDate = null;
@@ -157,7 +158,7 @@ public class Data {
         }
     }
 
-    /**?
+    /**
      * This method is use to check if the location is not exist
      * @return true or false
      */
