@@ -263,7 +263,7 @@ public class UserInterface {
             System.out.println("How many groups do you want?");
             String dividingChar = sc.nextLine().trim();
             while (!dividingChar.matches("[0-9]+")) {
-                System.out.println("This is not a number, please insert again: ");
+                System.out.println("This is not a valid number, please insert again: ");
                 dividingChar = sc.nextLine().trim();
             }
             int dividing = Integer.parseInt(dividingChar);
@@ -276,7 +276,7 @@ public class UserInterface {
             System.out.println("How many days in a group do you want?");
             String dividingChar = sc.nextLine().trim();
             while (!dividingChar.matches("[0-9]+")) {
-                System.out.println("This is not a number, please insert again: ");
+                System.out.println("This is not a valid number, please insert again: ");
                 dividingChar = sc.nextLine().trim();
             }
             int dividing = Integer.parseInt(dividingChar);

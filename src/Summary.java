@@ -202,6 +202,13 @@ class GroupData {
      * This function generates the groups based on NumberOfGroups Option
      */
     public void groupDataByNumberOfGroups(int numOfGroups) {
+        if (numOfGroups <= 0) {
+            System.out.println("=========");
+            System.out.println("The number of groups must be greater than zero");
+            groupedData = null;
+            return;
+        }
+
         int numOfRows = rawData.size() / numOfGroups;
         int groupIndexToIncreaseSize = numOfGroups;
         int groupIndex = 0;
@@ -236,6 +243,13 @@ class GroupData {
      * This function generates the groups based on NumberOfDays Option
      */
     public void groupDataByNumberOfDays(int numOfDays) {
+        if (numOfDays <= 0) {
+            System.out.println("=========");
+            System.out.println("The number of days must be greater than zero");
+            groupedData = null;
+            return;
+        }
+
         if (rawData.size() % numOfDays != 0) {
             System.out.println("=========");
             System.out.println("Cannot divide the data into that number of days");

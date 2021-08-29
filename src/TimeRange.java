@@ -102,8 +102,8 @@ public class TimeRange {
                     System.out.println("Enter your weeks");
                     String nextDayCountString = sc.nextLine().trim();
 
-                    while (!nextDayCountString.matches("[0-9]+")) {
-                        System.out.println("This is not a number, please insert again: ");
+                    while (!nextDayCountString.matches("[0-9]+") || nextDayCountString.equals("0")) {
+                        System.out.println("This is not a valid number, please insert again: ");
                         nextDayCountString = sc.nextLine().trim();
                     }
 
@@ -113,8 +113,8 @@ public class TimeRange {
                     System.out.println("Enter your days");
                     String nextDayCountString = sc.nextLine().trim();
 
-                    while (!nextDayCountString.matches("[0-9]+")) {
-                        System.out.println("This is not a number, please insert again: ");
+                    while (!nextDayCountString.matches("[0-9]+") || nextDayCountString.equals("0")) {
+                        System.out.println("This is not a valid number, please insert again: ");
                         nextDayCountString = sc.nextLine().trim();
                     }
 
