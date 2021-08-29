@@ -151,38 +151,26 @@ public class Display {
         System.out.printf("\n%s\n", "CHART DISPLAY");
         System.out.println(" ".repeat(maxLengthOfResult) + "\t" + valueName);
 
+        // Store summary results in LinkedList to iterate backward.
+        LinkedList<Integer> results = new LinkedList<>(summaryResults);
+
         for (int rowIndex = numOfRows - 1; rowIndex >= 0; rowIndex--) {
-            // Variable to store the result which is the label at the current row
-            int resultOnThisRow = -1;
+            int resultOnThisRow = 0;
+            int positionOfLabelOnY_axis = 0;
 
-            // Variable to store the position of a result on Y axis
-            int positionOfLabelOnY_axis = -1;
+            Iterator<Integer> iterator = results.descendingIterator();
+            while (iterator.hasNext()) {
+                int result = iterator.next();
 
-            // If there is only one result, place it at the lowest position in the chart
-            if (summaryResults.size() == 1) {
-                positionOfLabelOnY_axis = 1;
-            } else if (summaryResults.size() > 1 && summaryResults.first().equals(summaryResults.last())) {
-                // If all of the results are the same, place them at the lowest position in the chart
-                positionOfLabelOnY_axis = 1;
-            } else if (summaryResults.size() > 1 && !summaryResults.first().equals(summaryResults.last())){
-                // if the results are different, calculate the position of each result on Y axis
-                positionOfLabelOnY_axis = ((summaryResults.last() - smallestResult) * (numOfRows - 2)) / (largestResult - smallestResult) + 1;
-            }
+                // Calculate the position of a result on Y axis
+                positionOfLabelOnY_axis = ((result - summaryResults.first()) * (numOfRows - 2)) / (summaryResults.last() - summaryResults.first()) + 1;
 
-            // If the position of a result on Y axis equals to the current row index
-            if (rowIndex == positionOfLabelOnY_axis) {
-                // Then the label of the current row will be that value
-                resultOnThisRow = summaryResults.last();
-
-                // Print out the label for the current row
-                System.out.print(resultOnThisRow + " ".repeat(maxLengthOfResult - Integer.toString(resultOnThisRow).length()) + "\t|");
-
-                // Remove the last result to iterate through all of the smaller results
-                summaryResults.remove(summaryResults.last());
-            } else if (rowIndex + 1 == positionOfLabelOnY_axis) {
-                // If the position of a result on Y axis equals to the row index above, remove this result to iterate to the smaller results
-                // This is because this result has the same position on Y axis as the larger result
-                summaryResults.remove(summaryResults.last());
+                // If the current row index matches with the position of a result on Y axis, then print out that result as the label of the current row
+                if (rowIndex == positionOfLabelOnY_axis) {
+                    resultOnThisRow = result;
+                    System.out.print(result + " ".repeat(maxLengthOfResult - Integer.toString(result).length()) + "\t|");
+                    break;
+                }
             }
 
             for (int columnIndex = 0; columnIndex < numOfCols; columnIndex++) {
