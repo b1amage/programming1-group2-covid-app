@@ -3,7 +3,7 @@
   Purpose: Use to provide kind of TimeRange based on user's choice
   Contributors: Minh Long, Quoc Bao, Kha Tuan, Anh Duy
   Created date: 12/8/2021
-  Last modified: 26/8/2021
+  Last modified: 29/8/2021
   Version 1.0
  */
 
@@ -64,8 +64,9 @@ public class TimeRange {
     public static TimeRange setTimeRangeFromChoice(int timeRangeChoice) {
         Scanner sc = new Scanner(System.in);
         int nextDayCount;
+
         switch (timeRangeChoice) {
-            case 1:
+            case 1: // Use start and end date, so nextDayCount is 0
                 System.out.println("Enter start date");
                 String startDate = sc.nextLine();
 
@@ -73,8 +74,10 @@ public class TimeRange {
                 String endDate = sc.nextLine();
                 return new TimeRange(startDate, endDate, 0);
 
-            case 2:
-            case 3: //User enter the date days and choose how many days or week from the start
+            case 2: //User enter the date days and choose how many days or week from the start
+            case 3: //User enter the date days and choose how many days or week from the end
+
+                // Print suitable message
                 if (timeRangeChoice == 2) {
                     System.out.println("Enter your start date: ");
                 } else {
@@ -84,6 +87,7 @@ public class TimeRange {
                 startDate = sc.nextLine();
 
                 System.out.println("Use (1) weeks or (2) days");
+
                 // We use string to avoid bug if user enter a string, we will parse the value later
                 String daysOrWeeksChar = sc.nextLine().trim();
 
@@ -97,18 +101,23 @@ public class TimeRange {
                 if (daysOrWeeks == 1) {
                     System.out.println("Enter your weeks");
                     String nextDayCountString = sc.nextLine().trim();
+
                     while (!nextDayCountString.matches("[0-9]+")) {
                         System.out.println("This is not a number, please insert again: ");
                         nextDayCountString = sc.nextLine().trim();
                     }
+
                     nextDayCount = Integer.parseInt(nextDayCountString) * 7;
+
                 } else {
                     System.out.println("Enter your days");
                     String nextDayCountString = sc.nextLine().trim();
+
                     while (!nextDayCountString.matches("[0-9]+")) {
                         System.out.println("This is not a number, please insert again: ");
                         nextDayCountString = sc.nextLine().trim();
                     }
+
                     nextDayCount = Integer.parseInt(nextDayCountString);
                 }
                 // Use ternary operator to decide which object returned

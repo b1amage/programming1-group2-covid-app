@@ -3,7 +3,7 @@
   Purpose: Use to group each row of the csv file
   Contributors: Quoc Bao
   Created date: 1/8/2021
-  Last modified: 26/8/2021
+  Last modified: 29/8/2021
   Version 1.0
  */
 public class Row {
@@ -34,7 +34,7 @@ public class Row {
     }
 
     public Row(String continent, String date, String peopleVaccinated, String newCases, String newDeaths, String location, String isoCode, String population) {
-        // Treat all parameters as string for easier process and validate
+        // Treat all parameters as string for easier process and validate as all rows in csv are String
         setContinent(continent);
         setDate(date);
         setPeopleVaccinated(peopleVaccinated);
@@ -75,6 +75,7 @@ public class Row {
     }
 
     public void setPeopleVaccinated(String peopleVaccinated) {
+        // If it is empty or negative, set it to 0
         if (peopleVaccinated.isEmpty() || Integer.parseInt(peopleVaccinated.trim()) < 0) {
             this.peopleVaccinated = 0;
         } else {
