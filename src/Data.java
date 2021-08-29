@@ -3,7 +3,7 @@
   Purpose: Use to store data of the processed csv file
   Contributors: Quoc Bao, Kha Tuan, Minh Long
   Created date: 25/7/2021
-  Last modified: 26/8/2021
+  Last modified: 29/8/2021
   Version 1.0
  */
 import java.io.FileNotFoundException;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Data {
     // Fields
-    private static ArrayList<Row> rows; // Whole data
+    private static ArrayList<Row> rows; // Whole data, use static for avoid re-create everytime create object
 
     static {
         try {
@@ -112,6 +112,7 @@ public class Data {
                 return;
             }
 
+            // No date found
             if (start == -1) {
                 System.out.println("Error in date, please try again");
                 rowsFromStartDate = null;
@@ -157,7 +158,7 @@ public class Data {
         }
     }
 
-    /**?
+    /**
      * This method is use to check if the location is not exist
      * @return true or false
      */
