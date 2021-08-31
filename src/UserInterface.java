@@ -167,22 +167,22 @@ public class UserInterface {
             // Ask for summary method
             while(!checkInputGroupingMethod) {
                 inputGroupingMethod();
-                Summary tempSummary = Summary.createTempSummary(getData(), getGroupingMethod(), getDividingNumber());
+                Summary tempSummary = Summary.createTempSummary(getData().getRowsFromStartDate(), getData().getLocation(), getGroupingMethod(), getDividingNumber());
                 setSummary(tempSummary);
                 checkInputGroupingMethod = summary.isValidGroupingMethod();
             }
 
             inputMetricAndResultType();
-            Summary summary = Summary.createSummary(getData(), getGroupingMethod(), getMetric(), getResult(), getDividingNumber());
+            Summary summary = Summary.createSummary(getData().getRows(), getData().getRowsFromStartDate(), getData().getLocation(), getGroupingMethod(), getMetric(), getResult(), getDividingNumber());
             summary.processData();
             setSummary(summary);
 
             // Ask for display method
             while (!checkDisplayMethod) {
                 inputDisplayMethod();
-                Display display = Display.createDisplay(getSummary(), getDisplay());
+                Display display = Display.createDisplay(getSummary().getGroupings(), getSummary().getMetricType(), getDisplay());
                 display.displayData();
-                checkDisplayMethod = display.getDisplayMethod() != null;
+                checkDisplayMethod = display.getValidDisplay();
             }
 
             // Ask the user if they want to continue

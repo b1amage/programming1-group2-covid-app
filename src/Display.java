@@ -9,28 +9,35 @@
 import java.util.*;
 
 public class Display {
-    private Summary summary;
+    private LinkedHashMap<String, Integer> groupings;
+    private String metricType;
     private String displayMethod;
+    private boolean validDisplay;
 
-    public Display(Summary summary, String displayMethod) {
-        setSummary(summary);
+    public Display(LinkedHashMap<String, Integer> groupings, String metricType, String displayMethod) {
+        setGroupings(groupings);
+        setMetricType(metricType);
         setDisplay(displayMethod);
     }
 
-    public void setSummary(Summary summary) {
-        this.summary = summary;
+    public void setGroupings(LinkedHashMap<String, Integer> groupings) {
+        this.groupings = groupings;
     }
 
-    public String getDisplayMethod() {
-        return displayMethod;
+    public void setMetricType(String metricType) {
+        this.metricType = metricType;
     }
 
     public void setDisplay(String display) {
         this.displayMethod = display;
     }
 
-    public static Display createDisplay(Summary summary, String displayMethod) {
-        return new Display(summary, displayMethod);
+    public boolean getValidDisplay() {
+        return validDisplay;
+    }
+
+    public static Display createDisplay(LinkedHashMap<String, Integer> groupings, String metricType, String displayMethod) {
+        return new Display(groupings, metricType, displayMethod);
     }
 
     /*
@@ -39,27 +46,74 @@ public class Display {
     public void displayData() {
         switch (displayMethod) {
             case "tabular":
-                tabularDisplay(summary);
+                DataDisplay tabularDisplay = new TabularDisplay(groupings);
+                tabularDisplay.display();
+                validDisplay = tabularDisplay.getValidDisplay();
                 break;
             case "chart":
-                chartDisplay(summary);
+                DataDisplay chartDisplay = new ChartDisplay(groupings, metricType);
+                chartDisplay.display();
+                validDisplay = chartDisplay.getValidDisplay();
                 break;
             default:
                 System.out.println("Invalid type of display");
                 break;
         }
     }
+}
 
-    /**
-     * This method displays the data by using table
-     * @param summary : the Summary object used to display
-     */
-    public void tabularDisplay(Summary summary) {
-        System.out.printf("\n%s\n", "TABULAR DISPLAY");
+abstract class DataDisplay {
+    protected LinkedHashMap<String, Integer> groupings;
+    private boolean validDisplay = true;
+    private String displayName;
+
+    public DataDisplay() {
+        groupings = new LinkedHashMap<>();
+    }
+
+    public void addDataPoint(String groupLabel, int result) {
+        groupings.put(groupLabel, result);
+    }
+
+    public void setValidDisplay(boolean validDisplay) {
+        this.validDisplay = validDisplay;
+    }
+
+    public boolean getValidDisplay(){
+        return validDisplay;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setGroupings(LinkedHashMap<String, Integer> groupings) {
+        for (String groupName : groupings.keySet()) {
+            addDataPoint(groupName, groupings.get(groupName));
+        }
+    }
+
+    public abstract void display();
+}
+
+class TabularDisplay extends DataDisplay {
+    public TabularDisplay(LinkedHashMap<String, Integer> groupings) {
+        super();
+        setGroupings(groupings);
+        setDisplayName("TABULAR DISPLAY");
+    }
+
+    @Override
+    public void display() {
+        System.out.printf("\n%s\n", getDisplayName());
 
         // Get the longest length of group name
         int maxLengthOfGroupName = 0;
-        for (String groupName : summary.getGroupings().keySet()) {
+        for (String groupName : groupings.keySet()) {
             if (groupName.length() > maxLengthOfGroupName) {
                 maxLengthOfGroupName = groupName.length();
             }
@@ -69,26 +123,35 @@ public class Display {
         System.out.println("Range" + " ".repeat(maxLengthOfGroupName) + "Value");
 
         // Print the group name and the value of each group with appropriate space between them
-        for (String groupName : summary.getGroupings().keySet()) {
-            System.out.println(groupName + " ".repeat(5 + (maxLengthOfGroupName - groupName.length())) + summary.getGroupings().get(groupName));
+        for (String groupName : groupings.keySet()) {
+            System.out.println(groupName + " ".repeat(5 + (maxLengthOfGroupName - groupName.length())) + groupings.get(groupName));
         }
     }
+}
 
-    /**
-     * This method displays the data by using chart
-     * @param summary: the Summary object used to display
-     */
-    public void chartDisplay(Summary summary) {
-        int numOfRows = 24;
-        int numOfCols = 80;
+class ChartDisplay extends DataDisplay {
+    private final static int NUM_OF_ROWS = 24;
+    private final static int NUM_OF_COLS = 80;
+    private String metricType;
 
-        // LinkedHashMap contains the keys are the group names and the values are the results of each group
-        LinkedHashMap<String, Integer> summaryData = summary.getGroupings();
-        int numOfGroups = summaryData.size();
+    public ChartDisplay(LinkedHashMap<String, Integer> groupings, String metricType) {
+        super();
+        setMetricType(metricType);
+        setGroupings(groupings);
+        setDisplayName("CHART DISPLAY");
+    }
+
+    public void setMetricType(String metricType) {
+        this.metricType = metricType;
+    }
+
+    @Override
+    public void display() {
+        int numOfGroups = groupings.size();
 
         // Get the name of value displayed in the chart
         String valueName;
-        switch (summary.getMetricType()) {
+        switch (metricType) {
             case "positive cases":
                 valueName = "Positive Cases";
                 break;
@@ -105,20 +168,20 @@ public class Display {
 
         // Use SortedSet to sort the result of each group and prevent duplicate results.
         SortedSet<Long> summaryResults = new TreeSet<>();
-        for (String groupName : summaryData.keySet()) {
-            summaryResults.add((long)summaryData.get(groupName));
+        for (String groupName : groupings.keySet()) {
+            summaryResults.add((long)groupings.get(groupName));
         }
 
         // Check if there is no data or the data is too big to use chart display
-        if (numOfGroups == 0 || numOfGroups > 26 || summaryResults.size() > numOfRows - 1) {
+        if (numOfGroups == 0 || numOfGroups > 26 || summaryResults.size() > NUM_OF_ROWS - 1) {
             System.out.println("=========");
             System.out.println("There is no data or the data is to large to display by chart");
-            displayMethod = null;
+            setValidDisplay(false);
             return;
         }
 
         // Store all the group names of the data
-        ArrayList<String> groups = new ArrayList<>(summaryData.keySet());
+        ArrayList<String> groups = new ArrayList<>(groupings.keySet());
 
         // Get the longest length of the result
         int maxLengthOfResult = Long.toString(summaryResults.last()).length();
@@ -126,9 +189,9 @@ public class Display {
         // This variable stores the number of spaces between 2 positions of group on X axis
         int spaceBetweenLabelOnXaxis;
         if (numOfGroups == 1) {
-            spaceBetweenLabelOnXaxis = (numOfCols - 2) / 2;
+            spaceBetweenLabelOnXaxis = (NUM_OF_COLS - 2) / 2;
         } else {
-            spaceBetweenLabelOnXaxis = (numOfCols - numOfGroups - 1) / (numOfGroups - 1);
+            spaceBetweenLabelOnXaxis = (NUM_OF_COLS - numOfGroups - 1) / (numOfGroups - 1);
         }
 
         // This LinkedHashMap stores the positions of groups on X axis and the result of each group
@@ -136,22 +199,22 @@ public class Display {
         int index = 0;
         for (String groupName : groups) {
             if (numOfGroups == 1) {
-                mapPositionOnXtoGroup.put(spaceBetweenLabelOnXaxis, summaryData.get(groupName));
+                mapPositionOnXtoGroup.put(spaceBetweenLabelOnXaxis, groupings.get(groupName));
                 continue;
             }
 
             // Map the position of group on X axis to its result
-            mapPositionOnXtoGroup.put((spaceBetweenLabelOnXaxis + 1) * index, summaryData.get(groupName));
+            mapPositionOnXtoGroup.put((spaceBetweenLabelOnXaxis + 1) * index, groupings.get(groupName));
             index++;
         }
 
-        System.out.printf("\n%s\n", "CHART DISPLAY");
+        System.out.printf("\n%s\n", getDisplayName());
         System.out.println(" ".repeat(maxLengthOfResult) + "\t" + valueName);
 
         // Store summary results in LinkedList to iterate backward.
         LinkedList<Long> results = new LinkedList<>(summaryResults);
 
-        for (int rowIndex = numOfRows - 1; rowIndex >= 0; rowIndex--) {
+        for (int rowIndex = NUM_OF_ROWS - 1; rowIndex >= 0; rowIndex--) {
             long resultOnThisRow = 0;
             long positionOfLabelOnYaxis = 0;
 
@@ -163,7 +226,7 @@ public class Display {
                 if (result == summaryResults.first()) {
                     positionOfLabelOnYaxis = 1;
                 } else {
-                    positionOfLabelOnYaxis = ((result - summaryResults.first()) * (numOfRows - 2)) / (summaryResults.last() - summaryResults.first()) + 1;
+                    positionOfLabelOnYaxis = ((result - summaryResults.first()) * (NUM_OF_ROWS - 2)) / (summaryResults.last() - summaryResults.first()) + 1;
                 }
 
                 // If the current row index matches with the position of a result on Y axis, then print out that result as the label of the current row
@@ -174,7 +237,7 @@ public class Display {
                 }
             }
 
-            for (int columnIndex = 0; columnIndex < numOfCols; columnIndex++) {
+            for (int columnIndex = 0; columnIndex < NUM_OF_COLS; columnIndex++) {
 
                 // If the current column index is 0 and there is no label here, print out the appropriate whitespace for indentation
                 if (columnIndex == 0 && rowIndex != positionOfLabelOnYaxis) {
@@ -199,7 +262,7 @@ public class Display {
                             continue;
                         } else {
                             // If the position of this group on Y axis equals to the current row index, print out "*" to mark this position
-                            long positionOfThisGroup = ((resultOfThisGroup - summaryResults.first()) * (numOfRows - 2)) / (summaryResults.last() - summaryResults.first()) + 1;
+                            long positionOfThisGroup = ((resultOfThisGroup - summaryResults.first()) * (NUM_OF_ROWS - 2)) / (summaryResults.last() - summaryResults.first()) + 1;
                             if (positionOfThisGroup == (long) rowIndex) {
                                 System.out.print('*');
                                 continue;
@@ -241,7 +304,7 @@ public class Display {
         }
 
         System.out.println();
-        System.out.println(" ".repeat(maxLengthOfResult + 1) + "\t" + " ".repeat(numOfCols / 2 - 5) + "Group");
+        System.out.println(" ".repeat(maxLengthOfResult + 1) + "\t" + " ".repeat(NUM_OF_COLS / 2 - 5) + "Group");
 
         // Print out the group number and the group name that it represents
         for (int i = 0; i < numOfGroups; i++) {
