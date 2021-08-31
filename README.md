@@ -18,8 +18,8 @@ https://docs.google.com/presentation/d/19sbf7cSLLDtCZB0M_Rfs2EfvymqxRLMN/edit?us
 https://docs.google.com/document/d/15HeazJqb8XiuljbsPm5qxPLzaAi2tHTmDznaoZzGMOQ/edit?usp=sharing
 
 ## Contribution
-1. Nguyen Luu Quoc Bao: 25% 
-2. Dao Kha Tuan: 25% 
-3. Nguyen Trong Minh Long: 25% 
-4. Nguyen Anh Duy: 25%
+1. Nguyen Luu Quoc Bao: 25% (Data part, Slides, Videos, Script)
+2. Dao Kha Tuan: 25% (Display part, Script, Demonstration)
+3. Nguyen Trong Minh Long: 25% (User Interface, Script)
+4. Nguyen Anh Duy: 25% (Summary, Script, Meeting minutes)
 
