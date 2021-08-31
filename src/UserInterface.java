@@ -309,7 +309,7 @@ public class UserInterface {
      * This function get input of location from user
      */
     public void inputLocation() {
-        System.out.println("Choose your location:");
+        System.out.println("Choose your location (you can choose either country or continent)");
         String location = sc.nextLine().trim();
 
         setLocation(location);
@@ -323,7 +323,7 @@ public class UserInterface {
         System.out.println("Choose your display method \n (1) Tabular \n (2) Chart");
         String displayChar = sc.nextLine().trim();
         while (!displayChar.equals("1") && !displayChar.equals("2")){
-            System.out.println("Wrong option, please insert again: ");
+            System.out.println("Wrong option, please insert again ");
             displayChar = sc.nextLine().trim();
         }
 
