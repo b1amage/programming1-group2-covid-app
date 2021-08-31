@@ -181,8 +181,8 @@ public class UserInterface {
             while (!checkDisplayMethod) {
                 inputDisplayMethod();
                 Display display = Display.createDisplay(getSummary(), getDisplay());
-                display.createDisplay();
-                checkDisplayMethod = display.getDisplay() != null;
+                display.displayData();
+                checkDisplayMethod = display.getDisplayMethod() != null;
             }
 
             // Ask the user if they want to continue

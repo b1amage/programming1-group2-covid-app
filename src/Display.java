@@ -10,34 +10,34 @@ import java.util.*;
 
 public class Display {
     private Summary summary;
-    private String display;
+    private String displayMethod;
 
-    public Display(Summary summary, String display) {
+    public Display(Summary summary, String displayMethod) {
         setSummary(summary);
-        setDisplay(display);
+        setDisplay(displayMethod);
     }
 
     public void setSummary(Summary summary) {
         this.summary = summary;
     }
 
-    public String getDisplay() {
-        return display;
+    public String getDisplayMethod() {
+        return displayMethod;
     }
 
     public void setDisplay(String display) {
-        this.display = display;
+        this.displayMethod = display;
     }
 
-    public static Display createDisplay(Summary summary, String display) {
-        return new Display(summary, display);
+    public static Display createDisplay(Summary summary, String displayMethod) {
+        return new Display(summary, displayMethod);
     }
 
     /*
      This method display the data based on user's choice
      */
-    public void createDisplay() {
-        switch (display) {
+    public void displayData() {
+        switch (displayMethod) {
             case "tabular":
                 tabularDisplay(summary);
                 break;
@@ -45,7 +45,7 @@ public class Display {
                 chartDisplay(summary);
                 break;
             default:
-                System.out.println("Cannot display this chart");
+                System.out.println("Invalid type of display");
                 break;
         }
     }
@@ -110,10 +110,10 @@ public class Display {
         }
 
         // Check if there is no data or the data is too big to use chart display
-        if (numOfGroups == 0 || numOfGroups > 26) {
+        if (numOfGroups == 0 || numOfGroups > 26 || summaryResults.size() > numOfRows - 1) {
             System.out.println("=========");
             System.out.println("There is no data or the data is to large to display by chart");
-            display = null;
+            displayMethod = null;
             return;
         }
 
