@@ -124,11 +124,11 @@ public class Display {
         int maxLengthOfResult = Long.toString(summaryResults.last()).length();
 
         // This variable stores the number of spaces between 2 positions of group on X axis
-        int spaceBetweenLabelOnX_axis;
+        int spaceBetweenLabelOnXaxis;
         if (numOfGroups == 1) {
-            spaceBetweenLabelOnX_axis = (numOfCols - 2) / 2;
+            spaceBetweenLabelOnXaxis = (numOfCols - 2) / 2;
         } else {
-            spaceBetweenLabelOnX_axis = (numOfCols - numOfGroups - 1) / (numOfGroups - 1);
+            spaceBetweenLabelOnXaxis = (numOfCols - numOfGroups - 1) / (numOfGroups - 1);
         }
 
         // This LinkedHashMap stores the positions of groups on X axis and the result of each group
@@ -136,12 +136,12 @@ public class Display {
         int index = 0;
         for (String groupName : groups) {
             if (numOfGroups == 1) {
-                mapPositionOnXtoGroup.put(spaceBetweenLabelOnX_axis, summaryData.get(groupName));
+                mapPositionOnXtoGroup.put(spaceBetweenLabelOnXaxis, summaryData.get(groupName));
                 continue;
             }
 
             // Map the position of group on X axis to its result
-            mapPositionOnXtoGroup.put((spaceBetweenLabelOnX_axis + 1) * index, summaryData.get(groupName));
+            mapPositionOnXtoGroup.put((spaceBetweenLabelOnXaxis + 1) * index, summaryData.get(groupName));
             index++;
         }
 
@@ -153,7 +153,7 @@ public class Display {
 
         for (int rowIndex = numOfRows - 1; rowIndex >= 0; rowIndex--) {
             long resultOnThisRow = 0;
-            long positionOfLabelOnY_axis = 0;
+            long positionOfLabelOnYaxis = 0;
 
             Iterator<Long> iterator = results.descendingIterator();
             while (iterator.hasNext()) {
@@ -161,13 +161,13 @@ public class Display {
 
                 // Calculate the position of a result on Y axis
                 if (result == summaryResults.first()) {
-                    positionOfLabelOnY_axis = 1;
+                    positionOfLabelOnYaxis = 1;
                 } else {
-                    positionOfLabelOnY_axis = ((result - summaryResults.first()) * (numOfRows - 2)) / (summaryResults.last() - summaryResults.first()) + 1;
+                    positionOfLabelOnYaxis = ((result - summaryResults.first()) * (numOfRows - 2)) / (summaryResults.last() - summaryResults.first()) + 1;
                 }
 
                 // If the current row index matches with the position of a result on Y axis, then print out that result as the label of the current row
-                if (rowIndex == positionOfLabelOnY_axis) {
+                if (rowIndex == positionOfLabelOnYaxis) {
                     resultOnThisRow = result;
                     System.out.print(result + " ".repeat(maxLengthOfResult - Long.toString(result).length()) + "\t|");
                     break;
@@ -177,7 +177,7 @@ public class Display {
             for (int columnIndex = 0; columnIndex < numOfCols; columnIndex++) {
 
                 // If the current column index is 0 and there is no label here, print out the appropriate whitespace for indentation
-                if (columnIndex == 0 && rowIndex != positionOfLabelOnY_axis) {
+                if (columnIndex == 0 && rowIndex != positionOfLabelOnYaxis) {
                     System.out.print(" ".repeat(maxLengthOfResult) + "\t|");
                     continue;
                 }
@@ -189,7 +189,7 @@ public class Display {
                 }
 
                 // If the position of a result on Y axis equals to the current row index
-                if (rowIndex == positionOfLabelOnY_axis) {
+                if (rowIndex == positionOfLabelOnYaxis) {
                     // Check if the current column index is the position of a group on X axis
                     if (mapPositionOnXtoGroup.containsKey(columnIndex)) {
                         // If the result of this group equals to the label at the current row, print out "*" to mark this position
@@ -222,7 +222,7 @@ public class Display {
             if (i == 0) {
                 // If there is only one group, place it at the center
                 if (numOfGroups == 1) {
-                    System.out.print(" ".repeat(maxLengthOfResult) + "\t " + " ".repeat(spaceBetweenLabelOnX_axis) + (i + 1));
+                    System.out.print(" ".repeat(maxLengthOfResult) + "\t " + " ".repeat(spaceBetweenLabelOnXaxis) + (i + 1));
                 } else {
                     // If not, place it at the first column in the chart
                     System.out.print(" ".repeat(maxLengthOfResult) + "\t " + (i + 1));
@@ -232,12 +232,12 @@ public class Display {
 
             // If the group number has more than 2 digits, place them appropriately
             if (Integer.toString(i).length() > 1) {
-                System.out.print(" ".repeat(spaceBetweenLabelOnX_axis - Integer.toString(i).length() + 1) + (i + 1));
+                System.out.print(" ".repeat(spaceBetweenLabelOnXaxis - Integer.toString(i).length() + 1) + (i + 1));
                 continue;
             }
 
             // Place all of the group numbers with equal spaces between them
-            System.out.print(" ".repeat(spaceBetweenLabelOnX_axis) + (i + 1));
+            System.out.print(" ".repeat(spaceBetweenLabelOnXaxis) + (i + 1));
         }
 
         System.out.println();
