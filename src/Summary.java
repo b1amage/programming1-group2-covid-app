@@ -19,9 +19,8 @@ public class Summary {
     private int dividingNumber;
     private LinkedHashMap<String, Integer> groupings;
 
-    public Summary(ArrayList<Row> rawData, String location, String groupingMethod, int dividingNumber) {
+    public Summary(ArrayList<Row> rawData, String groupingMethod, int dividingNumber) {
         setRawData(rawData);
-        setLocation(location);
         setGroupingMethod(groupingMethod);
         setDividingNumber(dividingNumber);
     }
@@ -72,8 +71,8 @@ public class Summary {
         return groupings;
     }
 
-    public static Summary createTempSummary(ArrayList<Row> rawData, String location, String groupingOption, int dividingNumber) {
-        return new Summary(rawData, location, groupingOption, dividingNumber);
+    public static Summary createTempSummary(ArrayList<Row> rawData, String groupingOption, int dividingNumber) {
+        return new Summary(rawData, groupingOption, dividingNumber);
     }
 
     public static Summary createSummary(ArrayList<Row> rowsFromFile, ArrayList<Row> rawData,String location, String groupingOption, String metricOption, String resultOption, int dividingNumber) {
@@ -103,7 +102,7 @@ public class Summary {
         valuesOfEachRow = metricData.getValuesOfEachRow();
 
 
-        ResultData resultData = new ResultData(rowsFromFile, location, resultType, metricType, valuesOfEachRow);
+        ResultData resultData = new ResultData(rowsFromFile, rawData, location, resultType, metricType, valuesOfEachRow);
         resultData.createResultData();
         ArrayList<Integer> valuesOfEachGroup;
         valuesOfEachGroup = resultData.getValuesOfEachGroup();
@@ -363,14 +362,16 @@ class MetricData {
 
 class ResultData {
     private ArrayList<Row> rowsFromFile;
+    private ArrayList<Row> rawData;
     private String location;
     private String resultType;
     private String metricType;
     private ArrayList<GroupValue> valuesOfEachRow;
-    private ArrayList<Integer> valuesOfEachGroup;
+    private final ArrayList<Integer> valuesOfEachGroup;
 
-    public ResultData(ArrayList<Row> rowsFromFile, String location, String resultType, String metricType, ArrayList<GroupValue> valuesOfEachRow) {
+    public ResultData(ArrayList<Row> rowsFromFile, ArrayList<Row> rawData, String location, String resultType, String metricType, ArrayList<GroupValue> valuesOfEachRow) {
         setRowsFromFile(rowsFromFile);
+        setRawData(rawData);
         setLocation(location);
         setResultType(resultType);
         setMetricType(metricType);
@@ -380,6 +381,10 @@ class ResultData {
 
     public void setRowsFromFile(ArrayList<Row> rowsFromFile) {
         this.rowsFromFile = rowsFromFile;
+    }
+
+    public void setRawData(ArrayList<Row> rawData) {
+        this.rawData = rawData;
     }
 
     public void setLocation(String location) {
@@ -420,7 +425,7 @@ class ResultData {
      */
     public void calculateByUpTo() {
         int upToValue = 0;
-        String firstDateOfFirstGroup = rowsFromFile.get(0).getDate();
+        String firstDateOfFirstGroup = rawData.get(0).getDate();
         for (Row row : rowsFromFile) {
             if (row.getLocation().equals(location)) {
                 if (row.getDate().equals(firstDateOfFirstGroup)) {break;}

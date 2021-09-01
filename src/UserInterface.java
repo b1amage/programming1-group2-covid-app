@@ -167,7 +167,7 @@ public class UserInterface {
             // Ask for summary method
             while(!checkInputGroupingMethod) {
                 inputGroupingMethod();
-                Summary tempSummary = Summary.createTempSummary(getData().getRowsFromStartDate(), getData().getLocation(), getGroupingMethod(), getDividingNumber());
+                Summary tempSummary = Summary.createTempSummary(getData().getRowsFromStartDate(), getGroupingMethod(), getDividingNumber());
                 setSummary(tempSummary);
                 checkInputGroupingMethod = summary.isValidGroupingMethod();
             }
