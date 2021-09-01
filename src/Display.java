@@ -63,7 +63,7 @@ public class Display {
 }
 
 abstract class DataDisplay {
-    protected LinkedHashMap<String, Integer> groupings;
+    private final LinkedHashMap<String, Integer> groupings;
     private boolean validDisplay = true;
     private String displayName;
 
@@ -73,6 +73,10 @@ abstract class DataDisplay {
 
     public void addDataPoint(String groupLabel, int result) {
         groupings.put(groupLabel, result);
+    }
+
+    public LinkedHashMap<String, Integer> getGroupings() {
+        return groupings;
     }
 
     public void setValidDisplay(boolean validDisplay) {
@@ -113,7 +117,7 @@ class TabularDisplay extends DataDisplay {
 
         // Get the longest length of group name
         int maxLengthOfGroupName = 0;
-        for (String groupName : groupings.keySet()) {
+        for (String groupName : getGroupings().keySet()) {
             if (groupName.length() > maxLengthOfGroupName) {
                 maxLengthOfGroupName = groupName.length();
             }
@@ -123,8 +127,8 @@ class TabularDisplay extends DataDisplay {
         System.out.println("Range" + " ".repeat(maxLengthOfGroupName) + "Value");
 
         // Print the group name and the value of each group with appropriate space between them
-        for (String groupName : groupings.keySet()) {
-            System.out.println(groupName + " ".repeat(5 + (maxLengthOfGroupName - groupName.length())) + groupings.get(groupName));
+        for (String groupName : getGroupings().keySet()) {
+            System.out.println(groupName + " ".repeat(5 + (maxLengthOfGroupName - groupName.length())) + getGroupings().get(groupName));
         }
     }
 }
@@ -147,7 +151,7 @@ class ChartDisplay extends DataDisplay {
 
     @Override
     public void display() {
-        int numOfGroups = groupings.size();
+        int numOfGroups = getGroupings().size();
 
         // Get the name of value displayed in the chart
         String valueName;
@@ -168,8 +172,8 @@ class ChartDisplay extends DataDisplay {
 
         // Use SortedSet to sort the result of each group and prevent duplicate results.
         SortedSet<Long> summaryResults = new TreeSet<>();
-        for (String groupName : groupings.keySet()) {
-            summaryResults.add((long)groupings.get(groupName));
+        for (String groupName : getGroupings().keySet()) {
+            summaryResults.add((long)getGroupings().get(groupName));
         }
 
         // Check if there is no data or the data is too big to use chart display
@@ -181,7 +185,7 @@ class ChartDisplay extends DataDisplay {
         }
 
         // Store all the group names of the data
-        ArrayList<String> groups = new ArrayList<>(groupings.keySet());
+        ArrayList<String> groups = new ArrayList<>(getGroupings().keySet());
 
         // Get the longest length of the result
         int maxLengthOfResult = Long.toString(summaryResults.last()).length();
@@ -199,12 +203,12 @@ class ChartDisplay extends DataDisplay {
         int index = 0;
         for (String groupName : groups) {
             if (numOfGroups == 1) {
-                mapPositionOnXtoGroup.put(spaceBetweenLabelOnXaxis, groupings.get(groupName));
+                mapPositionOnXtoGroup.put(spaceBetweenLabelOnXaxis, getGroupings().get(groupName));
                 continue;
             }
 
             // Map the position of group on X axis to its result
-            mapPositionOnXtoGroup.put((spaceBetweenLabelOnXaxis + 1) * index, groupings.get(groupName));
+            mapPositionOnXtoGroup.put((spaceBetweenLabelOnXaxis + 1) * index, getGroupings().get(groupName));
             index++;
         }
 
