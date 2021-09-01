@@ -8,7 +8,6 @@
  */
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -224,17 +223,7 @@ public class Data {
   Version 1.0
  */
 
-
-
 class DataProcess {
-
-    public static void main(String[] args) throws IOException {
-        // Call createRowList method to create row
-        ArrayList<Row> rows = createRowList();
-
-        // Print processed data
-        displayRows(rows);
-    }
 
     /**
      * This function create the row list from csv file
@@ -284,13 +273,6 @@ class DataProcess {
      */
     public static void processVaccinatedPeople(ArrayList<Row> rows) {
         ArrayList<Integer> processedVacinatedPeople = new ArrayList<>();
-
-        // This loop use to fill those empty to 0
-//        for (int i = 0; i < rows.size(); i++) {
-//            if (rows.get(i).getPeopleVaccinated() == -1) {
-//                rows.get(i).setPeopleVaccinated(0);
-//            }
-//        }
 
         // This loop add the new people vaccinated to an arrayList
         for (int i = 1; i < rows.size(); i++) {
