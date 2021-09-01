@@ -9,7 +9,10 @@
 
 public class Main {
     public static void main(String[] args) {
+        // Create instance of UserInterFace
         UserInterface userInterface = new UserInterface();
+
+        // Call the displayUI method
         userInterface.displayUI();
     }
 }
