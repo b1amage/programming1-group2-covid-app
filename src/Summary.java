@@ -10,8 +10,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class Summary {
-    private ArrayList<Row> rowsFromFile;
-    private ArrayList<Row> rawData;
+//    private ArrayList<Row> rowsFromFile;
+//    private ArrayList<Row> rawData;
+    private Data data;
     private String location;
     private String groupingMethod;
     private String metricType;
@@ -19,15 +20,16 @@ public class Summary {
     private int dividingNumber;
     private LinkedHashMap<String, Integer> groupings;
 
-    public Summary(ArrayList<Row> rawData, String groupingMethod, int dividingNumber) {
-        setRawData(rawData);
+    public Summary(Data data, String groupingMethod, int dividingNumber) {
+        setData(data);
         setGroupingMethod(groupingMethod);
         setDividingNumber(dividingNumber);
     }
 
-    public Summary(ArrayList<Row> rowsFromFile, ArrayList<Row> rawData, String location, String groupingMethod, String metricType, String resultType, int dividingNumber) {
-        setRowsFromFile(rowsFromFile);
-        setRawData(rawData);
+    public Summary(Data data, String location, String groupingMethod, String metricType, String resultType, int dividingNumber) {
+//        setRowsFromFile(rowsFromFile);
+//        setRawData(rawData);
+        setData(data);
         setLocation(location);
         setGroupingMethod(groupingMethod);
         setMetricType(metricType);
@@ -35,13 +37,17 @@ public class Summary {
         setDividingNumber(dividingNumber);
     }
 
-    public void setRowsFromFile(ArrayList<Row> rowsFromFile) {
-        this.rowsFromFile = rowsFromFile;
+    public void setData(Data data) {
+        this.data = data;
     }
 
-    public void setRawData(ArrayList<Row> rawData) {
-        this.rawData = rawData;
-    }
+    //    public void setRowsFromFile(ArrayList<Row> rowsFromFile) {
+//        this.rowsFromFile = rowsFromFile;
+//    }
+//
+//    public void setRawData(ArrayList<Row> rawData) {
+//        this.rawData = rawData;
+//    }
 
     public void setLocation(String location) {
         this.location = location;
@@ -71,12 +77,12 @@ public class Summary {
         return groupings;
     }
 
-    public static Summary createTempSummary(ArrayList<Row> rawData, String groupingOption, int dividingNumber) {
-        return new Summary(rawData, groupingOption, dividingNumber);
+    public static Summary createTempSummary(Data data, String groupingOption, int dividingNumber) {
+        return new Summary(data, groupingOption, dividingNumber);
     }
 
-    public static Summary createSummary(ArrayList<Row> rowsFromFile, ArrayList<Row> rawData,String location, String groupingOption, String metricOption, String resultOption, int dividingNumber) {
-        return new Summary(rowsFromFile, rawData, location, groupingOption, metricOption, resultOption, dividingNumber);
+    public static Summary createSummary(Data data,String location, String groupingOption, String metricOption, String resultOption, int dividingNumber) {
+        return new Summary(data, location, groupingOption, metricOption, resultOption, dividingNumber);
     }
 
     /**
@@ -87,7 +93,7 @@ public class Summary {
     public void processData() {
         groupings = new LinkedHashMap<>();
 
-        GroupData groupData = new GroupData(rawData, groupingMethod, dividingNumber);
+        GroupData groupData = new GroupData(data.getRowsFromStartDate(), groupingMethod, dividingNumber);
         groupData.createGroupData();
         ArrayList<Group> groupsOfDates;
         groupsOfDates = groupData.getGroupedData();
@@ -102,7 +108,7 @@ public class Summary {
         valuesOfEachRow = metricData.getValuesOfEachRow();
 
 
-        ResultData resultData = new ResultData(rowsFromFile, rawData, location, resultType, metricType, valuesOfEachRow);
+        ResultData resultData = new ResultData(data, location, resultType, metricType, valuesOfEachRow);
         resultData.createResultData();
         ArrayList<Integer> valuesOfEachGroup;
         valuesOfEachGroup = resultData.getValuesOfEachGroup();
@@ -126,7 +132,7 @@ public class Summary {
      * @return a boolean to check if the data can be grouped or not
      */
     public boolean isValidGroupingMethod() {
-        GroupData groupData = new GroupData(rawData, groupingMethod, dividingNumber);
+        GroupData groupData = new GroupData(data.getRowsFromStartDate(), groupingMethod, dividingNumber);
         groupData.createGroupData();
         ArrayList<Group> groupsOfDates;
         groupsOfDates = groupData.getGroupedData();
@@ -361,17 +367,19 @@ class MetricData {
 }
 
 class ResultData {
-    private ArrayList<Row> rowsFromFile;
-    private ArrayList<Row> rawData;
+//    private ArrayList<Row> rowsFromFile;
+//    private ArrayList<Row> rawData;
+    private Data data;
     private String location;
     private String resultType;
     private String metricType;
     private ArrayList<GroupValue> valuesOfEachRow;
     private final ArrayList<Integer> valuesOfEachGroup;
 
-    public ResultData(ArrayList<Row> rowsFromFile, ArrayList<Row> rawData, String location, String resultType, String metricType, ArrayList<GroupValue> valuesOfEachRow) {
-        setRowsFromFile(rowsFromFile);
-        setRawData(rawData);
+    public ResultData(Data data, String location, String resultType, String metricType, ArrayList<GroupValue> valuesOfEachRow) {
+//        setRowsFromFile(rowsFromFile);
+//        setRawData(rawData);
+        setData(data);
         setLocation(location);
         setResultType(resultType);
         setMetricType(metricType);
@@ -379,12 +387,17 @@ class ResultData {
         valuesOfEachGroup = new ArrayList<>();
     }
 
-    public void setRowsFromFile(ArrayList<Row> rowsFromFile) {
-        this.rowsFromFile = rowsFromFile;
-    }
+//    public void setRowsFromFile(ArrayList<Row> rowsFromFile) {
+//        this.rowsFromFile = rowsFromFile;
+//    }
+//
+//    public void setRawData(ArrayList<Row> rawData) {
+//        this.rawData = rawData;
+//    }
 
-    public void setRawData(ArrayList<Row> rawData) {
-        this.rawData = rawData;
+
+    public void setData(Data data) {
+        this.data = data;
     }
 
     public void setLocation(String location) {
@@ -425,8 +438,8 @@ class ResultData {
      */
     public void calculateByUpTo() {
         int upToValue = 0;
-        String firstDateOfFirstGroup = rawData.get(0).getDate();
-        for (Row row : rowsFromFile) {
+        String firstDateOfFirstGroup = data.getRowsFromStartDate().get(0).getDate();
+        for (Row row : data.getRows()) {
             if (row.getLocation().equals(location)) {
                 if (row.getDate().equals(firstDateOfFirstGroup)) {break;}
                 if (metricType.equals("positive cases")) {
