@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class Summary {
-//    private ArrayList<Row> rowsFromFile;
-//    private ArrayList<Row> rawData;
     private Data data;
     private String location;
     private String groupingMethod;
@@ -27,8 +25,6 @@ public class Summary {
     }
 
     public Summary(Data data, String location, String groupingMethod, String metricType, String resultType, int dividingNumber) {
-//        setRowsFromFile(rowsFromFile);
-//        setRawData(rawData);
         setData(data);
         setLocation(location);
         setGroupingMethod(groupingMethod);
@@ -40,14 +36,6 @@ public class Summary {
     public void setData(Data data) {
         this.data = data;
     }
-
-    //    public void setRowsFromFile(ArrayList<Row> rowsFromFile) {
-//        this.rowsFromFile = rowsFromFile;
-//    }
-//
-//    public void setRawData(ArrayList<Row> rawData) {
-//        this.rawData = rawData;
-//    }
 
     public void setLocation(String location) {
         this.location = location;
@@ -367,8 +355,6 @@ class MetricData {
 }
 
 class ResultData {
-//    private ArrayList<Row> rowsFromFile;
-//    private ArrayList<Row> rawData;
     private Data data;
     private String location;
     private String resultType;
@@ -377,8 +363,6 @@ class ResultData {
     private final ArrayList<Integer> valuesOfEachGroup;
 
     public ResultData(Data data, String location, String resultType, String metricType, ArrayList<GroupValue> valuesOfEachRow) {
-//        setRowsFromFile(rowsFromFile);
-//        setRawData(rawData);
         setData(data);
         setLocation(location);
         setResultType(resultType);
@@ -386,15 +370,6 @@ class ResultData {
         setValuesOfEachRow(valuesOfEachRow);
         valuesOfEachGroup = new ArrayList<>();
     }
-
-//    public void setRowsFromFile(ArrayList<Row> rowsFromFile) {
-//        this.rowsFromFile = rowsFromFile;
-//    }
-//
-//    public void setRawData(ArrayList<Row> rawData) {
-//        this.rawData = rawData;
-//    }
-
 
     public void setData(Data data) {
         this.data = data;
